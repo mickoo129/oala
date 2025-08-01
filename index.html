@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <title>香港醫院查詢</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>香港醫院查詢</h1>
+  <input type="text" id="search" placeholder="輸入醫院名稱..." onkeyup="filterTable()" />
+  <table id="hospitalTable">
+    <thead>
+      <tr>
+        <th>名稱</th>
+        <th>類別</th>
+        <th>地區</th>
+        <th>電話</th>
+        <th>開放時間</th>
+        <th>專科</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <script>
+    async function loadHospitals() {
+      const res = await fetch('hospitals.json');
+      const data = await res.json();
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = data.map(h => \`
+        <tr>
+          <td>\${h.name}</td>
+          <td>\${h.type}</td>
+          <td>\${h.district}</td>
+          <td>\${h.phone}</td>
+          <td>\${h.hours}</td>
+          <td>\${h.specialties}</td>
+        </tr>
+      \`).join('');
+    }
+
+    function filterTable() {
+      const input = document.getElementById("search").value.toLowerCase();
+      const rows = document.querySelectorAll("#tableBody tr");
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(input) ? "" : "none";
+      });
+    }
+
+    loadHospitals();
+  </script>
+</body>
+</html>
