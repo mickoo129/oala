@@ -1,57 +1,1658 @@
-
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <title>香港醫院查詢</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香港醫院查詢目錄</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0F3460',
+                        secondary: '#1A73E8',
+                        accent: '#E94560',
+                        neutral: '#5F6368',
+                        light: '#F8F9FA',
+                        dark: '#202124'
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans HK', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .shadow-pro {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .transition-pro {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .card-hover {
+                @apply hover:shadow-lg hover:-translate-y-1 transition-pro;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-  <h1>香港醫院查詢</h1>
-  <input type="text" id="search" placeholder="輸入醫院名稱..." onkeyup="filterTable()" />
-  <table id="hospitalTable">
-    <thead>
-      <tr>
-        <th>名稱</th>
-        <th>類別</th>
-        <th>地區</th>
-        <th>電話</th>
-        <th>開放時間</th>
-        <th>專科</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
-  <script>
-    async function loadHospitals() {
-      const res = await fetch('hospitals.json');
-      const data = await res.json();
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = data.map(h => \`
-        <tr>
-          <td>\${h.name}</td>
-          <td>\${h.type}</td>
-          <td>\${h.district}</td>
-          <td>\${h.phone}</td>
-          <td>\${h.hours}</td>
-          <td>\${h.specialties}</td>
-        </tr>
-      \`).join('');
-    }
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- 顶部导航栏 -->
+    <header class="sticky top-0 z-50 bg-white shadow-md transition-all duration-300">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <i class="fa fa-hospital-o text-primary text-3xl mr-3"></i>
+                <h1 class="text-2xl font-bold text-primary">香港醫院查詢目錄</h1>
+            </div>
+            <div class="flex items-center">
+                <button id="favorites-btn" class="p-2 rounded-full hover:bg-gray-100 transition-pro relative">
+                    <i class="fa fa-star-o text-neutral"></i>
+                    <span id="favorites-count" class="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    function filterTable() {
-      const input = document.getElementById("search").value.toLowerCase();
-      const rows = document.querySelectorAll("#tableBody tr");
-      rows.forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(input) ? "" : "none";
-      });
-    }
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 搜索和筛选区域 -->
+        <section class="mb-8 bg-white rounded-xl shadow-pro p-6">
+            <div class="mb-6">
+                <div class="relative">
+                    <i class="fa fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral"></i>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="搜索醫院名稱、服務或地址..." 
+                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro"
+                    >
+                </div>
+            </div>
 
-    loadHospitals();
-  </script>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+                <!-- 地区筛选 -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral mb-2">地區</label>
+                    <select id="district-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
+                        <option value="all">所有地區</option>
+                        <option value="hongkong">香港島</option>
+                        <option value="kowloon">九龍</option>
+                        <option value="newterritories">新界</option>
+                    </select>
+                </div>
+
+                <!-- 医院类型筛选 -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral mb-2">醫院類型</label>
+                    <select id="type-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
+                        <option value="all">所有類型</option>
+                        <option value="public">公立醫院</option>
+                        <option value="private">私家醫院</option>
+                    </select>
+                </div>
+
+                <!-- 服务筛选 -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral mb-2">主要服務</label>
+                    <select id="service-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
+                        <option value="all">所有服務</option>
+                        <option value="emergency">24小時急症室</option>
+                        <option value="children">兒童病房及服務</option>
+                        <option value="maternity">產科及婦科服務</option>
+                        <option value="cardiology">心臟科服務</option>
+                        <option value="orthopedics">骨科服務</option>
+                        <option value="oncology">腫瘤科服務</option>
+                        <option value="neurology">神經科服務</option>
+                        <option value="ophthalmology">眼科服務</option>
+                        <option value="dental">牙科服務</option>
+                        <option value="psychiatry">精神科服務</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 高级筛选按钮 -->
+            <div class="mb-6">
+                <button id="advanced-filter-btn" class="flex items-center text-secondary hover:text-primary transition-pro text-sm">
+                    <i class="fa fa-sliders mr-2"></i> 高級篩選選項
+                    <i class="fa fa-chevron-down ml-2 text-xs transition-transform duration-300" id="advanced-icon"></i>
+                </button>
+
+                <!-- 高级筛选内容 -->
+                <div id="advanced-filters" class="hidden mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div>
+                        <label class="block text-sm font-medium text-neutral mb-2">保險合作</label>
+                        <select id="insurance-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
+                            <option value="all">所有</option>
+                            <option value="ha">醫管局計劃</option>
+                            <option value="international">國際保險</option>
+                            <option value="both">兩者皆可</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-neutral mb-2">設施</label>
+                        <select id="facility-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
+                            <option value="all">所有</option>
+                            <option value="parking">停車場</option>
+                            <option value="pharmacy">24小時藥房</option>
+                            <option value="accessibility">無障礙設施</option>
+                            <option value="cafeteria">餐廳/咖啡廳</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快速筛选标签 -->
+            <div class="flex flex-wrap gap-2">
+                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="emergency">
+                    <i class="fa fa-ambulance mr-1"></i> 急症室
+                </button>
+                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="children">
+                    <i class="fa fa-child mr-1"></i> 兒童服務
+                </button>
+                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="maternity">
+                    <i class="fa fa-female mr-1"></i> 產科服務
+                </button>
+                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="public">
+                    <i class="fa fa-building mr-1"></i> 公立醫院
+                </button>
+                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="private">
+                    <i class="fa fa-hospital mr-1"></i> 私家醫院
+                </button>
+                <button id="reset-filters" class="ml-auto px-4 py-2 bg-gray-100 text-neutral rounded-full text-sm hover:bg-gray-200 transition-pro">
+                    <i class="fa fa-refresh mr-1"></i> 重置篩選
+                </button>
+            </div>
+        </section>
+
+        <!-- 统计和排序区域 -->
+        <section class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+                <h2 class="text-xl font-bold flex items-center">
+                    <span id="results-count">0</span> 間醫院
+                    <span class="ml-3 text-sm font-normal text-neutral">
+                        <span id="public-count">0</span> 公立 · <span id="private-count">0</span> 私家
+                    </span>
+                </h2>
+                <p class="text-sm text-neutral mt-1">數據最後更新: <span id="last-update">2023年10月</span></p>
+            </div>
+            <div class="flex items-center mt-4 md:mt-0">
+                <label class="text-sm text-neutral mr-2">排序:</label>
+                <select id="sort-options" class="p-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro text-sm">
+                    <option value="name">按名稱 (A-Z)</option>
+                    <option value="name-desc">按名稱 (Z-A)</option>
+                    <option value="district">按地區</option>
+                    <option value="type">按類型</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- 医院列表区域 -->
+        <section>
+            <div id="hospitals-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 医院卡片将通过JavaScript动态生成 -->
+            </div>
+
+            <!-- 加载中状态 -->
+            <div id="loading-state" class="flex flex-col items-center justify-center py-20 text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
+                <p class="text-neutral">正在載入醫院資料...</p>
+            </div>
+
+            <!-- 空状态显示 -->
+            <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-center">
+                <i class="fa fa-search text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-medium text-neutral mb-2">沒有找到符合條件的醫院</h3>
+                <p class="text-gray-400 max-w-md">請嘗試調整搜索條件或使用不同的關鍵詞</p>
+                <button id="empty-reset" class="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-pro">
+                    重置所有篩選
+                </button>
+            </div>
+        </section>
+
+        <!-- 分页控制 -->
+        <div id="pagination" class="mt-10 flex justify-center items-center hidden">
+            <button id="prev-page" class="px-4 py-2 border border-gray-300 rounded-l-lg hover:bg-gray-50 transition-pro disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <i class="fa fa-chevron-left"></i>
+            </button>
+            <div id="page-numbers" class="flex">
+                <!-- 页码将通过JavaScript动态生成 -->
+            </div>
+            <button id="next-page" class="px-4 py-2 border border-gray-300 rounded-r-lg hover:bg-gray-50 transition-pro">
+                <i class="fa fa-chevron-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- 医院详情模态框 -->
+    <div id="hospital-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="modal-backdrop"></div>
+        <div class="relative bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <button id="close-modal" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white shadow-md transition-pro">
+                <i class="fa fa-times text-neutral"></i>
+            </button>
+            <div id="modal-content" class="p-6">
+                <!-- 模态框内容将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 收藏夹模态框 -->
+    <div id="favorites-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="favorites-backdrop"></div>
+        <div class="relative bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-primary">我的收藏</h3>
+                    <button id="close-favorites" class="p-2 rounded-full hover:bg-gray-100 transition-pro">
+                        <i class="fa fa-times text-neutral"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="favorites-content" class="p-6">
+                <!-- 收藏内容将通过JavaScript动态生成 -->
+                <div id="empty-favorites" class="flex flex-col items-center justify-center py-16 text-center">
+                    <i class="fa fa-star-o text-6xl text-gray-300 mb-4"></i>
+                    <h4 class="text-lg font-medium text-neutral mb-2">您還沒有收藏任何醫院</h4>
+                    <p class="text-gray-400 max-w-md">點擊醫院卡片上的星星圖標將醫院添加到收藏夾</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 医院数据 - 包含全香港所有主要公立和私家医院
+        const hospitals = [
+            // 香港島公立醫院
+            {
+                id: 1,
+                name: "瑪麗醫院",
+                nameEn: "Queen Mary Hospital",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島薄扶林道102號",
+                phone: "2855 3838",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2417&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology", "psychiatry"],
+                facilities: ["藥房", "停車場", "輪椅租借", "便利店", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：香港大學站B2出口步行10分鐘；巴士：37A、40、40M、71、91等",
+                speciality: "肝臟移植、器官移植、神經外科"
+            },
+            {
+                id: 2,
+                name: "東區尤德夫人那打素醫院",
+                nameEn: "Pamela Youde Nethersole Eastern Hospital",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島東區柴灣樂民道30號",
+                phone: "2595 6111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2416&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：柴灣站B出口步行10分鐘；巴士：8、19、29、82、85等",
+                speciality: "燒傷中心、創傷中心"
+            },
+            {
+                id: 3,
+                name: "律敦治醫院",
+                nameEn: "Ruttonjee Hospital",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島灣仔皇后大道東266號",
+                phone: "2835 8888",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2418&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["cardiology", "oncology", "respiratory", "neurology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：灣仔站A3出口步行15分鐘；巴士：1、2、5、8、10等",
+                speciality: "胸肺科、心臟科、癌症治療"
+            },
+            {
+                id: 4,
+                name: "鄧肇堅醫院",
+                nameEn: "Tang Shiu Kin Hospital",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島灣仔摩理臣山道130號",
+                phone: "2574 6111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2419&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["orthopedics", "dental", "rehabilitation"],
+                facilities: ["藥房", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：灣仔站B2出口步行8分鐘；巴士：1、2、5、8、10等",
+                speciality: "骨科、康復科、牙科"
+            },
+            {
+                id: 5,
+                name: "大口環根德公爵夫人兒童醫院",
+                nameEn: "Duchess of Kent Children's Hospital at Sandy Bay",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島薄扶林大口環道12號",
+                phone: "2855 4333",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2442&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "orthopedics", "rehabilitation"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "巴士：5、43X、48、71、91等",
+                speciality: "兒童矯形、兒童康復治療"
+            },
+            {
+                id: 6,
+                name: "贊育醫院",
+                nameEn: "Tsan Yuk Hospital",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島中環般咸道102號",
+                phone: "2549 5111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2443&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["maternity"],
+                facilities: ["藥房", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：香港大學站A2出口步行10分鐘；巴士：13、23、40、40M等",
+                speciality: "產科、婦科、產前產後護理"
+            },
+            {
+                id: 7,
+                name: "東華東院",
+                nameEn: "Tung Wah Eastern Hospital",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島東區東院道19號",
+                phone: "2560 8933",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2444&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "orthopedics", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：北角站A1出口步行5分鐘；巴士：2、2A、18、19、23等",
+                speciality: "普通科、骨科、牙科"
+            },
+            {
+                id: 8,
+                name: "香港眼科醫院",
+                nameEn: "Hong Kong Eye Hospital",
+                type: "public",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島西環堅尼地城道19號",
+                phone: "2559 6000",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2445&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時眼科急症",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["ophthalmology"],
+                facilities: ["藥房", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：堅尼地城站C出口步行8分鐘；巴士：5、13、43X、48等",
+                speciality: "眼科專科、視力矯正、眼科手術"
+            },
+            
+            // 九龍公立醫院
+            {
+                id: 9,
+                name: "伊利沙伯醫院",
+                nameEn: "Queen Elizabeth Hospital",
+                type: "public",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍油尖旺區亞皆老街147號",
+                phone: "2958 8888",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2421&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：旺角站E1出口步行10分鐘；巴士：1、2、6、12、13D等",
+                speciality: "腎臟科、器官移植、燒傷中心"
+            },
+            {
+                id: 10,
+                name: "廣華醫院",
+                nameEn: "Kwong Wah Hospital",
+                type: "public",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍油尖旺區窩打老道25號",
+                phone: "2332 2111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2420&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "orthopedics", "maternity", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "便利店", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：油麻地站C出口步行8分鐘；巴士：1、2、6、13D、28等",
+                speciality: "中醫服務、骨科、產科"
+            },
+            {
+                id: 11,
+                name: "明愛醫院",
+                nameEn: "Caritas Medical Centre",
+                type: "public",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍深水埗區青山道113號",
+                phone: "2711 8111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2422&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics", "cardiology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：深水埗站C1出口步行15分鐘；巴士：2、6、12、212、234等",
+                speciality: "老人科、家庭醫學"
+            },
+            {
+                id: 12,
+                name: "瑪嘉烈醫院",
+                nameEn: "Princess Margaret Hospital",
+                type: "public",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍葵青區瑪嘉烈醫院道10號",
+                phone: "2990 3333",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2423&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "oncology", "infectious", "cardiology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：葵興站E出口轉乘巴士；巴士：30、37、43、44M、235等",
+                speciality: "傳染病科、癌症治療、燒傷中心"
+            },
+            {
+                id: 13,
+                name: "基督教聯合醫院",
+                nameEn: "United Christian Hospital",
+                type: "public",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍觀塘區觀塘道75號",
+                phone: "2391 1000",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2424&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：觀塘站B2出口步行10分鐘；巴士：11B、11C、13D、14、14B等",
+                speciality: "創傷中心、產科、兒科"
+            },
+            {
+                id: 14,
+                name: "九龍醫院",
+                nameEn: "Kowloon Hospital",
+                type: "public",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍油尖旺區亞皆老街145號",
+                phone: "2713 5000",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2446&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["psychiatry", "rehabilitation", "geriatrics"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：旺角站E1出口步行8分鐘；巴士：1、2、6、12、13D等",
+                speciality: "精神科、康復科、老人科"
+            },
+            {
+                id: 15,
+                name: "聖母醫院",
+                nameEn: "Queen Mary Hospital",
+                type: "public",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍九龍城區黃埔花園德安街2号",
+                phone: "2365 3311",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2447&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["maternity", "geriatrics", "rehabilitation"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：黃埔站D出口步行5分鐘；巴士：5、5C、8、11、21等",
+                speciality: "產科、老人科、康復科"
+            },
+            
+            // 新界公立醫院
+            {
+                id: 16,
+                name: "威爾斯親王醫院",
+                nameEn: "Prince of Wales Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界沙田銀城街30號",
+                phone: "2632 2211",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2426&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology", "psychiatry"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：沙田站步行15分鐘，或轉乘巴士28K、81C；巴士：80K、82K、287X等",
+                speciality: "肝臟科、腎臟科、神經外科"
+            },
+            {
+                id: 17,
+                name: "屯門醫院",
+                nameEn: "Tuen Mun Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界屯門青松觀路23號",
+                phone: "2456 8000",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2429&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics", "cardiology", "oncology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "便利店", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：屯門站轉乘輕鐵507、614；巴士：59M、60M、61M、258D等",
+                speciality: "骨科、創傷中心、產科"
+            },
+            {
+                id: 18,
+                name: "元朗醫院",
+                nameEn: "Yuen Long Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界元朗區元朗馬棠路26號",
+                phone: "2476 8888",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2430&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：元朗站B出口轉乘輕鐵610；巴士：64K、68A、76K、268B等",
+                speciality: "老人科、康復科"
+            },
+            {
+                id: 19,
+                name: "北區醫院",
+                nameEn: "North District Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界北區粉嶺聯和墟璧峰路13號",
+                phone: "2675 6000",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2427&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics", "cardiology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：粉嶺站C出口轉乘小巴52K；巴士：70K、76K、270A等",
+                speciality: "家庭醫學、產科、兒科"
+            },
+            {
+                id: 20,
+                name: "博愛醫院",
+                nameEn: "Pok Oi Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界元朗區天水圍天瑞路88號",
+                phone: "2445 3311",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2428&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：天水圍站轉乘輕鐵705、706；巴士：264M、265M、276A等",
+                speciality: "老人科、康復科、產科"
+            },
+            {
+                id: 21,
+                name: "沙田醫院",
+                nameEn: "Shatin Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界沙田圓洲角路10號",
+                phone: "2605 2111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2448&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["geriatrics", "rehabilitation", "psychiatry"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：沙田圍站A出口步行10分鐘；巴士：81K、89、281A等",
+                speciality: "康復科、老人科、精神科"
+            },
+            {
+                id: 22,
+                name: "大埔醫院",
+                nameEn: "Tai Po Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界大埔區大埔全安路11號",
+                phone: "2657 3111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2449&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["geriatrics", "rehabilitation", "psychiatry"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：大埔墟站轉乘巴士72A；巴士：72、73、74X、271等",
+                speciality: "老人科、康復科、精神科"
+            },
+            {
+                id: 23,
+                name: "雅麗氏何妙齡那打素醫院",
+                nameEn: "Alice Ho Miu Ling Nethersole Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界大埔區大埔全安路13號",
+                phone: "2656 5211",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2450&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics", "cardiology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：大埔墟站轉乘巴士72A；巴士：72、73、74X、271等",
+                speciality: "普通科、產科、兒科"
+            },
+            {
+                id: 24,
+                name: "仁濟醫院",
+                nameEn: "Yan Chai Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界荃灣區荃灣仁濟街7-11號",
+                phone: "2499 6111",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2451&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["orthopedics", "rehabilitation", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：荃灣站D出口步行10分鐘；巴士：30X、38A、42C、234X等",
+                speciality: "骨科、康復科、牙科"
+            },
+            {
+                id: 25,
+                name: "將軍澳醫院",
+                nameEn: "Tseung Kwan O Hospital",
+                type: "public",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界西貢區將軍澳坑口寶寧里2號",
+                phone: "2708 3311",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2452&Lang=CHI",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics", "cardiology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["ha"],
+                transport: "地鐵：坑口站B1出口步行5分鐘；巴士：91M、98A、296A等",
+                speciality: "普通科、產科、骨科"
+            },
+            
+            // 私家醫院
+            {
+                id: 26,
+                name: "養和醫院",
+                nameEn: "Hong Kong Sanatorium & Hospital",
+                type: "private",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島跑馬地山村道2號",
+                phone: "2572 0211",
+                website: "https://www.hksh.com/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology", "dental", "psychiatry"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "禮品店", "accessibility", "cafeteria"],
+                insurance: ["international"],
+                transport: "地鐵：銅鑼灣站F出口轉乘巴士41A、63；巴士：1、2、5B、19、23等",
+                speciality: "心臟科、腦外科、癌症治療、產科"
+            },
+            {
+                id: 27,
+                name: "港怡醫院",
+                nameEn: "Gleneagles Hospital Hong Kong",
+                type: "private",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島黃竹坑南朗山道30號",
+                phone: "2122 1333",
+                website: "https://www.gleneagleshk.com/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 14:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "咖啡廳", "accessibility", "cafeteria"],
+                insurance: ["international"],
+                transport: "地鐵：黃竹坑站D出口步行5分鐘；巴士：48、78、91、91A、94A等",
+                speciality: "微創手術、腫瘤治療、心臟科"
+            },
+            {
+                id: 28,
+                name: "聖保祿醫院",
+                nameEn: "St. Paul's Hospital",
+                type: "private",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島銅鑼灣黃泥涌道19號",
+                phone: "2890 6000",
+                website: "https://www.stpaulshospital.org.hk/",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "ophthalmology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["international"],
+                transport: "地鐵：銅鑼灣站A出口步行10分鐘；巴士：2、5、10、19、23等",
+                speciality: "產科、婦科、心臟科"
+            },
+            {
+                id: 29,
+                name: "嘉諾撒醫院",
+                nameEn: "Canossa Hospital (Caritas)",
+                type: "private",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島中環羅便臣道102號",
+                phone: "2522 2181",
+                website: "https://www.canossahospital.org.hk/",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["maternity", "cardiology", "orthopedics", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["international"],
+                transport: "地鐵：中環站D2出口步行15分鐘；巴士：12、13、23、40、103等",
+                speciality: "內科、外科、產科"
+            },
+            {
+                id: 30,
+                name: "仁安醫院",
+                nameEn: "Union Hospital",
+                type: "private",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界沙田大圍富健街18號",
+                phone: "2608 3388",
+                website: "https://www.union.org.hk/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 14:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility", "cafeteria"],
+                insurance: ["international"],
+                transport: "地鐵：大圍站B出口步行10分鐘；巴士：80、81、86、87B、281A等",
+                speciality: "心臟科、腦外科、微創手術"
+            },
+            {
+                id: 31,
+                name: "荃灣港安醫院",
+                nameEn: "Tsuen Wan Adventist Hospital",
+                type: "private",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界荃灣荃景圍199號",
+                phone: "2498 9633",
+                website: "https://www.twah.org.hk/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["international"],
+                transport: "地鐵：荃灣站A出口轉乘小巴81K；巴士：30X、43X、48X、73X等",
+                speciality: "眼科、牙科、產科"
+            },
+            {
+                id: 32,
+                name: "沙田威爾斯親王醫院(私家部)",
+                nameEn: "Prince of Wales Hospital (Private)",
+                type: "private",
+                district: "newterritories",
+                districtName: "新界",
+                address: "新界沙田銀城街30號",
+                phone: "2632 2388",
+                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2426&Lang=CHI",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 9:00 - 17:00, 星期六: 9:00 - 12:00, 星期日及公眾假期: 休息",
+                services: ["children", "cardiology", "orthopedics", "oncology", "neurology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["both"],
+                transport: "地鐵：沙田站步行15分鐘，或轉乘巴士28K、81C；巴士：80K、82K、287X等",
+                speciality: "各種專科診療服務"
+            },
+            {
+                id: 33,
+                name: "聖德肋撒醫院",
+                nameEn: "St. Teresa's Hospital",
+                type: "private",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍九龍城區太子道西327號",
+                phone: "2332 2111",
+                website: "https://www.st-teresas.org.hk/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["international"],
+                transport: "地鐵：旺角東站B出口步行10分鐘；巴士：2A、3C、5、6D、11等",
+                speciality: "內科、外科、產科"
+            },
+            {
+                id: 34,
+                name: "播道醫院",
+                nameEn: "Evangel Hospital",
+                type: "private",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍觀塘區將軍澳寶琳南路9號",
+                phone: "2706 6888",
+                website: "https://www.evangel.org.hk/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "orthopedics", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["international"],
+                transport: "地鐵：將軍澳站B出口轉乘小巴11M；巴士：91M、98A、296A等",
+                speciality: "產科、康復科、家庭醫學"
+            },
+            {
+                id: 35,
+                name: "香港港安醫院－司徒拔道",
+                nameEn: "Hong Kong Adventist Hospital - Stubbs Road",
+                type: "private",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島灣仔司徒拔道40號",
+                phone: "2521 8111",
+                website: "https://www.hkah.org.hk/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["cardiology", "oncology", "neurology", "ophthalmology"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility", "cafeteria"],
+                insurance: ["international"],
+                transport: "地鐵：灣仔站A3出口轉乘的士；巴士：15、23、26、41A、63等",
+                speciality: "心臟科、癌症治療、微創手術"
+            },
+            {
+                id: 36,
+                name: "寶血醫院",
+                nameEn: "Canossa Hospital (Caritas)",
+                type: "private",
+                district: "kowloon",
+                districtName: "九龍",
+                address: "九龍深水埗區青山道113號",
+                phone: "2711 8111",
+                website: "https://www.caritashongkong.org.hk/tc/hospital-and-health-services/hospitals-and-nursing-homes/blood-hospital",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["geriatrics", "rehabilitation", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["international"],
+                transport: "地鐵：深水埗站C1出口步行10分鐘；巴士：2、6、12、212等",
+                speciality: "老人科、康復科、牙科"
+            },
+            {
+                id: 37,
+                name: "法國醫院",
+                nameEn: "Hopital Francais de Hong Kong",
+                type: "private",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島半山羅便臣道45號",
+                phone: "2522 4343",
+                website: "https://www.hopital-francais.com/",
+                emergency: false,
+                emergencyHours: "不設急症室",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["cardiology", "orthopedics", "dental"],
+                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
+                insurance: ["international"],
+                transport: "地鐵：中環站D2出口步行15分鐘；巴士：12、13、23、40等",
+                speciality: "內科、外科、法國式醫療服務"
+            },
+            {
+                id: 38,
+                name: "明德國際醫院",
+                nameEn: "Matilda International Hospital",
+                type: "private",
+                district: "hongkong",
+                districtName: "香港島",
+                address: "香港島山頂麥當勞道102號",
+                phone: "2849 0111",
+                website: "https://www.matilda.org/",
+                emergency: true,
+                emergencyHours: "24小時",
+                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
+                services: ["children", "maternity", "cardiology", "orthopedics"],
+                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
+                insurance: ["international"],
+                transport: "巴士：15、15B、23、41A、63等",
+                speciality: "產科、外科、國際醫療服務"
+            }
+        ];
+
+        // 全局变量
+        let favorites = JSON.parse(localStorage.getItem('hospitalFavorites')) || [];
+        let currentPage = 1;
+        const itemsPerPage = 12;
+        let filteredHospitals = [];
+
+        // DOM元素
+        const hospitalsContainer = document.getElementById('hospitals-container');
+        const resultsCount = document.getElementById('results-count');
+        const publicCount = document.getElementById('public-count');
+        const privateCount = document.getElementById('private-count');
+        const emptyState = document.getElementById('empty-state');
+        const loadingState = document.getElementById('loading-state');
+        const searchInput = document.getElementById('search-input');
+        const districtFilter = document.getElementById('district-filter');
+        const typeFilter = document.getElementById('type-filter');
+        const serviceFilter = document.getElementById('service-filter');
+        const insuranceFilter = document.getElementById('insurance-filter');
+        const facilityFilter = document.getElementById('facility-filter');
+        const quickFilters = document.querySelectorAll('.quick-filter');
+        const resetFilters = document.getElementById('reset-filters');
+        const emptyReset = document.getElementById('empty-reset');
+        const sortOptions = document.getElementById('sort-options');
+        const hospitalModal = document.getElementById('hospital-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const favoritesBtn = document.getElementById('favorites-btn');
+        const favoritesModal = document.getElementById('favorites-modal');
+        const favoritesContent = document.getElementById('favorites-content');
+        const closeFavorites = document.getElementById('close-favorites');
+        const favoritesBackdrop = document.getElementById('favorites-backdrop');
+        const favoritesCount = document.getElementById('favorites-count');
+        const emptyFavorites = document.getElementById('empty-favorites');
+        const advancedFilterBtn = document.getElementById('advanced-filter-btn');
+        const advancedFilters = document.getElementById('advanced-filters');
+        const advancedIcon = document.getElementById('advanced-icon');
+        const pagination = document.getElementById('pagination');
+        const prevPage = document.getElementById('prev-page');
+        const nextPage = document.getElementById('next-page');
+        const pageNumbers = document.getElementById('page-numbers');
+        const lastUpdate = document.getElementById('last-update');
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 设置最后更新日期为当前月份
+            const now = new Date();
+            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            lastUpdate.textContent = `${now.getFullYear()}年${months[now.getMonth()]}`;
+            
+            // 模拟加载效果
+            setTimeout(() => {
+                applyFilters();
+                loadingState.classList.add('hidden');
+            }, 800);
+            
+            updateFavoritesCount();
+            checkFavoritesEmpty();
+        });
+
+        // 渲染医院列表
+        function renderHospitals(hospitalsList) {
+            hospitalsContainer.innerHTML = '';
+            
+            // 更新统计数据
+            const publicHospitals = hospitalsList.filter(h => h.type === 'public');
+            const privateHospitals = hospitalsList.filter(h => h.type === 'private');
+            publicCount.textContent = publicHospitals.length;
+            privateCount.textContent = privateHospitals.length;
+
+            if (hospitalsList.length === 0) {
+                emptyState.classList.remove('hidden');
+                pagination.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            
+            // 分页处理
+            const totalPages = Math.ceil(hospitalsList.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentItems = hospitalsList.slice(startIndex, endIndex);
+            
+            // 显示分页控件
+            if (totalPages > 1) {
+                pagination.classList.remove('hidden');
+                renderPagination(totalPages);
+                
+                // 更新分页按钮状态
+                prevPage.disabled = currentPage === 1;
+                nextPage.disabled = currentPage === totalPages;
+            } else {
+                pagination.classList.add('hidden');
+            }
+
+            currentItems.forEach(hospital => {
+                const isFavorite = favorites.includes(hospital.id);
+                const hospitalCard = document.createElement('div');
+                hospitalCard.className = 'bg-white rounded-xl shadow-pro overflow-hidden card-hover';
+                hospitalCard.dataset.id = hospital.id;
+
+                // 医院类型标签颜色
+                const typeColor = hospital.type === 'public' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800';
+                const typeText = hospital.type === 'public' ? '公立醫院' : '私家醫院';
+
+                hospitalCard.innerHTML = `
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="text-lg font-bold mb-1">${hospital.name}</h3>
+                                <p class="text-sm text-neutral mb-2">${hospital.nameEn}</p>
+                                <span class="inline-block px-2 py-1 text-xs rounded-full ${typeColor}">${typeText}</span>
+                            </div>
+                            <button class="favorite-btn p-2 rounded-full hover:bg-gray-100 transition-pro ${isFavorite ? 'text-yellow-400' : 'text-gray-300'}" data-id="${hospital.id}">
+                                <i class="fa ${isFavorite ? 'fa-star' : 'fa-star-o'}"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <p class="text-sm flex items-center text-neutral mb-1">
+                                <i class="fa fa-map-marker w-5 text-primary"></i>
+                                <a href="https://maps.google.com/maps?q=${encodeURIComponent(hospital.address)}" target="_blank" class="hover:text-primary transition-pro">
+                                    ${hospital.districtName} · ${hospital.address.substring(0, 20)}${hospital.address.length > 20 ? '...' : ''}
+                                </a>
+                            </p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex items-center mb-2">
+                                <i class="fa fa-ambulance text-red-500 mr-2"></i>
+                                <span class="text-sm font-medium">急症服務</span>
+                            </div>
+                            <p class="text-sm text-neutral ml-6">
+                                ${hospital.emergency ? hospital.emergencyHours : '不設急症室'}
+                            </p>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${hospital.services.slice(0, 3).map(service => getServiceBadge(service)).join('')}
+                            ${hospital.services.length > 3 ? `<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">+${hospital.services.length - 3}</span>` : ''}
+                        </div>
+                        
+                        <button class="view-details w-full py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-pro text-sm font-medium" data-id="${hospital.id}">
+                            查看詳情
+                        </button>
+                    </div>
+                `;
+
+                hospitalsContainer.appendChild(hospitalCard);
+            });
+
+            // 添加事件监听器
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', () => {
+                    const hospitalId = parseInt(button.dataset.id);
+                    openHospitalModal(hospitalId);
+                });
+            });
+
+            document.querySelectorAll('.favorite-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const hospitalId = parseInt(button.dataset.id);
+                    toggleFavorite(hospitalId);
+                });
+            });
+        }
+
+        // 渲染分页
+        function renderPagination(totalPages) {
+            pageNumbers.innerHTML = '';
+            
+            // 显示当前页前后各2页，加上第一页和最后一页
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+            
+            // 如果前面有更多页，显示省略号
+            if (startPage > 1) {
+                addPageNumber(1);
+                if (startPage > 2) {
+                    addEllipsis();
+                }
+            }
+            
+            // 显示页码
+            for (let i = startPage; i <= endPage; i++) {
+                addPageNumber(i);
+            }
+            
+            // 如果后面有更多页，显示省略号
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    addEllipsis();
+                }
+                addPageNumber(totalPages);
+            }
+        }
+        
+        // 添加页码
+        function addPageNumber(page) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `px-4 py-2 border-t border-b ${page === currentPage ? 'bg-primary text-white border-primary' : 'border-gray-300 hover:bg-gray-50'} transition-pro`;
+            pageBtn.textContent = page;
+            
+            // 移除第一页和最后一页的左侧/右侧边框
+            if (page === 1) {
+                pageBtn.classList.add('rounded-l-lg', 'border-l');
+            } else if (page === Math.ceil(filteredHospitals.length / itemsPerPage)) {
+                pageBtn.classList.add('rounded-r-lg', 'border-r');
+            }
+            
+            pageBtn.addEventListener('click', () => {
+                currentPage = page;
+                renderHospitals(filteredHospitals);
+            });
+            
+            pageNumbers.appendChild(pageBtn);
+        }
+        
+        // 添加省略号
+        function addEllipsis() {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'px-2 py-2 text-neutral';
+            ellipsis.textContent = '...';
+            pageNumbers.appendChild(ellipsis);
+        }
+
+        // 获取服务标签
+        function getServiceBadge(service) {
+            const serviceMap = {
+                'children': { icon: 'fa-child', text: '兒童服務', color: 'bg-purple-100 text-purple-800' },
+                'maternity': { icon: 'fa-female', text: '產科服務', color: 'bg-pink-100 text-pink-800' },
+                'cardiology': { icon: 'fa-heartbeat', text: '心臟科', color: 'bg-red-100 text-red-800' },
+                'orthopedics': { icon: 'fa-medkit', text: '骨科', color: 'bg-orange-100 text-orange-800' },
+                'oncology': { icon: 'fa-stethoscope', text: '腫瘤科', color: 'bg-indigo-100 text-indigo-800' },
+                'neurology': { icon: 'fa-brain', text: '神經科', color: 'bg-teal-100 text-teal-800' },
+                'ophthalmology': { icon: 'fa-eye', text: '眼科', color: 'bg-blue-100 text-blue-800' },
+                'dental': { icon: 'fa-tooth', text: '牙科', color: 'bg-green-100 text-green-800' },
+                'psychiatry': { icon: 'fa-user-md', text: '精神科', color: 'bg-yellow-100 text-yellow-800' },
+                'emergency': { icon: 'fa-ambulance', text: '急症室', color: 'bg-red-100 text-red-800' },
+                'respiratory': { icon: 'fa-lungs', text: '胸肺科', color: 'bg-blue-100 text-blue-800' },
+                'rehabilitation': { icon: 'fa-walking', text: '康復科', color: 'bg-green-100 text-green-800' },
+                'infectious': { icon: 'fa-bug', text: '傳染病科', color: 'bg-orange-100 text-orange-800' },
+                'geriatrics': { icon: 'fa-hands-helping', text: '老人科', color: 'bg-blue-100 text-blue-800' }
+            };
+
+            const info = serviceMap[service];
+            return `<span class="px-2 py-1 text-xs rounded-full ${info.color}"><i class="fa ${info.icon} mr-1"></i>${info.text}</span>`;
+        }
+
+        // 打开医院详情模态框
+        function openHospitalModal(hospitalId) {
+            const hospital = hospitals.find(h => h.id === hospitalId);
+            if (!hospital) return;
+
+            const isFavorite = favorites.includes(hospitalId);
+            const typeText = hospital.type === 'public' ? '公立醫院' : '私家醫院';
+            const insuranceText = hospital.insurance.includes('ha') && hospital.insurance.includes('international') 
+                ? '醫管局計劃及國際保險' 
+                : hospital.insurance.includes('ha') 
+                    ? '醫管局計劃' 
+                    : '國際保險';
+
+            modalContent.innerHTML = `
+                <div class="mb-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1">${hospital.name}</h3>
+                            <p class="text-neutral">${hospital.nameEn}</p>
+                        </div>
+                        <button class="modal-favorite-btn p-2 rounded-full hover:bg-gray-100 transition-pro ${isFavorite ? 'text-yellow-400' : 'text-gray-300'}" data-id="${hospital.id}">
+                            <i class="fa ${isFavorite ? 'fa-star' : 'fa-star-o'} text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="mt-3 inline-block px-3 py-1 rounded-full ${hospital.type === 'public' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}">
+                        ${typeText}
+                    </div>
+                    ${hospital.speciality ? `<div class="mt-3 inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">
+                        <i class="fa fa-plus-circle mr-1 text-primary"></i> 特色: ${hospital.speciality}
+                    </div>` : ''}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="text-lg font-medium mb-3 flex items-center">
+                            <i class="fa fa-map-marker text-primary mr-2"></i> 地址
+                        </h4>
+                        <p class="text-neutral mb-3">${hospital.address}</p>
+                        <p class="text-neutral">
+                            <i class="fa fa-map mr-1"></i> 
+                            <a href="https://maps.google.com/maps?q=${encodeURIComponent(hospital.address)}" target="_blank" class="text-primary hover:underline">在Google地圖查看</a>
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-medium mb-3 flex items-center">
+                            <i class="fa fa-globe text-primary mr-2"></i> 官方網站
+                        </h4>
+                        <p class="text-neutral mb-2">
+                            <a href="${hospital.website}" target="_blank" class="text-primary hover:underline break-all">${hospital.website}</a>
+                        </p>
+                        <p class="text-sm text-gray-500">點擊鏈接訪問醫院官方網站獲取最新信息</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-lg font-medium mb-3 flex items-center">
+                        <i class="fa fa-clock-o text-primary mr-2"></i> 服務時間
+                    </h4>
+                    <p class="text-neutral mb-2"><strong>門診:</strong> ${hospital.outpatientHours}</p>
+                    <p class="text-neutral">
+                        <strong>急症室:</strong> ${hospital.emergency ? hospital.emergencyHours : '不設急症室'}
+                    </p>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-lg font-medium mb-3 flex items-center">
+                        <i class="fa fa-stethoscope text-primary mr-2"></i> 主要服務
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${hospital.services.map(service => getServiceBadge(service)).join('')}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="text-lg font-medium mb-3 flex items-center">
+                            <i class="fa fa-wrench text-primary mr-2"></i> 設施
+                        </h4>
+                        <ul class="text-neutral space-y-1">
+                            ${hospital.facilities.map(facility => {
+                                let icon = 'fa-check';
+                                if (facility === '停車場') icon = 'fa-parking';
+                                else if (facility === '藥房') icon = 'fa-medkit';
+                                else if (facility === '輪椅租借') icon = 'fa-wheelchair';
+                                else if (facility === '餐廳') icon = 'fa-utensils';
+                                else if (facility === '便利店') icon = 'fa-shopping-bag';
+                                else if (facility === '禮品店') icon = 'fa-gift';
+                                else if (facility === '咖啡廳') icon = 'fa-coffee';
+                                else if (facility === 'accessibility') {
+                                    facility = '無障礙設施';
+                                    icon = 'fa-universal-access';
+                                }
+                                
+                                return `<li><i class="fa ${icon} text-green-500 mr-2"></i>${facility}</li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-medium mb-3 flex items-center">
+                            <i class="fa fa-credit-card text-primary mr-2"></i> 保險信息
+                        </h4>
+                        <p class="text-neutral">${insuranceText}</p>
+                        <p class="text-sm text-gray-500 mt-1">適用於大多數醫療保險計劃，建議事先與保險公司確認</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-medium mb-3 flex items-center">
+                        <i class="fa fa-bus text-primary mr-2"></i> 交通指南
+                    </h4>
+                    <p class="text-neutral">${hospital.transport}</p>
+                </div>
+            `;
+
+            hospitalModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // 添加收藏按钮事件
+            modalContent.querySelector('.modal-favorite-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(e.currentTarget.dataset.id);
+                toggleFavorite(id);
+            });
+        }
+
+        // 关闭医院详情模态框
+        function closeHospitalModal() {
+            hospitalModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // 切换收藏状态
+        function toggleFavorite(hospitalId) {
+            const index = favorites.indexOf(hospitalId);
+            if (index === -1) {
+                favorites.push(hospitalId);
+                showNotification('已添加到收藏夾');
+            } else {
+                favorites.splice(index, 1);
+                showNotification('已從收藏夾移除');
+            }
+
+            // 保存到本地存储
+            localStorage.setItem('hospitalFavorites', JSON.stringify(favorites));
+            
+            // 更新UI
+            updateFavoritesCount();
+            renderHospitals(filteredHospitals);
+            renderFavorites();
+            checkFavoritesEmpty();
+        }
+
+        // 显示通知
+        function showNotification(message) {
+            // 检查是否已有通知
+            let notification = document.getElementById('notification');
+            if (notification) {
+                notification.remove();
+            }
+            
+            // 创建新通知
+            notification = document.createElement('div');
+            notification.id = 'notification';
+            notification.className = 'fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-y-0';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后隐藏通知
+            setTimeout(() => {
+                notification.classList.add('translate-y-20', 'opacity-0');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // 更新收藏数量
+        function updateFavoritesCount() {
+            favoritesCount.textContent = favorites.length;
+        }
+
+        // 检查收藏是否为空
+        function checkFavoritesEmpty() {
+            if (favorites.length === 0) {
+                emptyFavorites.classList.remove('hidden');
+            } else {
+                emptyFavorites.classList.add('hidden');
+            }
+        }
+
+        // 渲染收藏列表
+        function renderFavorites() {
+            if (favorites.length === 0) return;
+
+            const favoriteHospitals = hospitals.filter(hospital => favorites.includes(hospital.id));
+            favoritesContent.innerHTML = '';
+
+            favoriteHospitals.forEach(hospital => {
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'flex justify-between items-center p-4 border-b last:border-0 hover:bg-gray-50 transition-pro';
+                
+                const typeText = hospital.type === 'public' ? '公立' : '私家';
+                const typeColor = hospital.type === 'public' ? 'text-blue-600' : 'text-green-600';
+
+                favoriteItem.innerHTML = `
+                    <div>
+                        <h4 class="font-medium">${hospital.name}</h4>
+                        <p class="text-sm text-neutral">${hospital.districtName} · <span class="${typeColor}">${typeText}</span>
+                        ${hospital.emergency ? '<span class="ml-2 text-xs bg-red-100 text-red-800 px-1.5 py-0.5 rounded">有急症室</span>' : ''}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="view-favorite-details p-2 text-primary hover:bg-primary/10 rounded-full transition-pro" data-id="${hospital.id}">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <button class="remove-favorite p-2 text-red-400 hover:bg-red-50 rounded-full transition-pro" data-id="${hospital.id}">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                `;
+
+                favoritesContent.appendChild(favoriteItem);
+            });
+
+            // 添加事件监听器
+            document.querySelectorAll('.view-favorite-details').forEach(button => {
+                button.addEventListener('click', () => {
+                    const hospitalId = parseInt(button.dataset.id);
+                    closeFavoritesModal();
+                    openHospitalModal(hospitalId);
+                });
+            });
+
+            document.querySelectorAll('.remove-favorite').forEach(button => {
+                button.addEventListener('click', () => {
+                    const hospitalId = parseInt(button.dataset.id);
+                    toggleFavorite(hospitalId);
+                });
+            });
+        }
+
+        // 打开收藏夹模态框
+        function openFavoritesModal() {
+            renderFavorites();
+            favoritesModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭收藏夹模态框
+        function closeFavoritesModal() {
+            favoritesModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // 筛选医院
+        function filterHospitals() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const district = districtFilter.value;
+            const type = typeFilter.value;
+            const service = serviceFilter.value;
+            const insurance = insuranceFilter.value;
+            const facility = facilityFilter.value;
+
+            return hospitals.filter(hospital => {
+                // 搜索词筛选
+                const matchesSearch = searchTerm === '' || 
+                    hospital.name.toLowerCase().includes(searchTerm) ||
+                    hospital.nameEn.toLowerCase().includes(searchTerm) ||
+                    hospital.address.toLowerCase().includes(searchTerm) ||
+                    hospital.speciality?.toLowerCase().includes(searchTerm) ||
+                    hospital.services.some(s => getServiceBadge(s).toLowerCase().includes(searchTerm));
+
+                // 地区筛选
+                const matchesDistrict = district === 'all' || hospital.district === district;
+
+                // 类型筛选
+                const matchesType = type === 'all' || hospital.type === type;
+
+                // 服务筛选
+                const matchesService = service === 'all' || (service === 'emergency' ? hospital.emergency : hospital.services.includes(service));
+
+                // 保险筛选
+                const matchesInsurance = insurance === 'all' ||
+                    (insurance === 'ha' && hospital.insurance.includes('ha')) ||
+                    (insurance === 'international' && hospital.insurance.includes('international')) ||
+                    (insurance === 'both' && hospital.insurance.includes('ha') && hospital.insurance.includes('international'));
+
+                // 设施筛选
+                const matchesFacility = facility === 'all' || 
+                    (facility === 'parking' && hospital.facilities.includes('停車場')) ||
+                    (facility === 'pharmacy' && hospital.facilities.includes('藥房')) ||
+                    (facility === 'accessibility' && hospital.facilities.includes('accessibility')) ||
+                    (facility === 'cafeteria' && (hospital.facilities.includes('餐廳') || hospital.facilities.includes('咖啡廳')));
+
+                return matchesSearch && matchesDistrict && matchesType && matchesService && matchesInsurance && matchesFacility;
+            });
+        }
+
+        // 排序医院
+        function sortHospitals(hospitalsList) {
+            const sortBy = sortOptions.value;
+            return [...hospitalsList].sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return a.name.localeCompare(b.name, 'zh-Hant');
+                    case 'name-desc':
+                        return b.name.localeCompare(a.name, 'zh-Hant');
+                    case 'district':
+                        return a.district.localeCompare(b.district);
+                    case 'type':
+                        return a.type.localeCompare(b.type);
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        // 应用筛选和排序
+        function applyFilters() {
+            currentPage = 1; // 重置为第一页
+            const filtered = filterHospitals();
+            filteredHospitals = sortHospitals(filtered);
+            resultsCount.textContent = filteredHospitals.length;
+            renderHospitals(filteredHospitals);
+        }
+
+        // 重置筛选
+        function resetAllFilters() {
+            searchInput.value = '';
+            districtFilter.value = 'all';
+            typeFilter.value = 'all';
+            serviceFilter.value = 'all';
+            insuranceFilter.value = 'all';
+            facilityFilter.value = 'all';
+            applyFilters();
+        }
+
+        // 事件监听器
+        searchInput.addEventListener('input', applyFilters);
+        districtFilter.addEventListener('change', applyFilters);
+        typeFilter.addEventListener('change', applyFilters);
+        serviceFilter.addEventListener('change', applyFilters);
+        insuranceFilter.addEventListener('change', applyFilters);
+        facilityFilter.addEventListener('change', applyFilters);
+        sortOptions.addEventListener('change', applyFilters);
+
+        quickFilters.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.filter;
+                
+                // 检查是服务筛选还是类型筛选
+                if (['emergency', 'children', 'maternity', 'cardiology', 'orthopedics', 'oncology', 'neurology', 'ophthalmology', 'dental', 'psychiatry'].includes(filter)) {
+                    serviceFilter.value = filter;
+                } else if (['public', 'private'].includes(filter)) {
+                    typeFilter.value = filter;
+                }
+                
+                applyFilters();
+            });
+        });
+
+        resetFilters.addEventListener('click', resetAllFilters);
+        emptyReset.addEventListener('click', resetAllFilters);
+
+        closeModal.addEventListener('click', closeHospitalModal);
+        modalBackdrop.addEventListener('click', closeHospitalModal);
+
+        favoritesBtn.addEventListener('click', openFavoritesModal);
+        closeFavorites.addEventListener('click', closeFavoritesModal);
+        favoritesBackdrop.addEventListener('click', closeFavoritesModal);
+
+        // 高级筛选切换
+        advancedFilterBtn.addEventListener('click', () => {
+            advancedFilters.classList.toggle('hidden');
+            advancedIcon.classList.toggle('rotate-180');
+        });
+
+        // 分页控制
+        prevPage.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderHospitals(filteredHospitals);
+            }
+        });
+
+        nextPage.addEventListener('click', () => {
+            if (currentPage < Math.ceil(filteredHospitals.length / itemsPerPage)) {
+                currentPage++;
+                renderHospitals(filteredHospitals);
+            }
+        });
+
+        // 键盘事件
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeHospitalModal();
+                closeFavoritesModal();
+            }
+        });
+    </script>
 </body>
 </html>
