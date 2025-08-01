@@ -1,0 +1,32 @@
+name: 每日更新醫院資料
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # 每日香港時間11am (UTC+8 = UTC+0 + 8hr)
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 下載 Repo
+      uses: actions/checkout@v3
+
+    - name: 設定 Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: 安裝必要套件
+      run: pip install requests
+
+    - name: 執行自動更新程式
+      run: python scripts/fetch_hospitals.py
+
+    - name: 提交更新
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add hospitals.json
+        git commit -m "每日自動更新醫院資料"
+        git push
