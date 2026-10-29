@@ -569,7 +569,27 @@ footer .mk-ecard{margin-top:28px}
   --mk-num:"Barlow","Noto Sans HK",system-ui,sans-serif;
   --mk-max:1320px;                        /* 內容最闊 */
   --mk-gutter:clamp(16px,3vw,32px);       /* 兩邊留白：手機 16px → 桌面 32px */
+  /* 分類色盤：主色（圓點、色條、圖表）／ -ink 白底寫字 ／ -soft 淺底 */
+  --mk-cat-1:#2A78D6; --mk-cat-1-ink:#2873CE; --mk-cat-1-soft:#E7EFF9;   /* 醫療／住院 */
+  --mk-cat-2:#6250D6; --mk-cat-2-ink:#6250D6; --mk-cat-2-soft:#E9E7F9;   /* 危疾 */
+  --mk-cat-3:#EB6834; --mk-cat-3-ink:#C94714; --mk-cat-3-soft:#F9ECE7;   /* 人壽／身故 */
+  --mk-cat-4:#0E9AA7; --mk-cat-4-ink:#0C808B; --mk-cat-4-soft:#E7F7F9;   /* 意外 */
+  --mk-cat-5:#C2417A; --mk-cat-5-ink:#C2417A; --mk-cat-5-soft:#F8E8EF;   /* 癌症 */
+  --mk-cat-6:#C99A2E; --mk-cat-6-ink:#8F6D21; --mk-cat-6-soft:#F9F3E7;   /* 儲蓄／退休／強積金 */
+  --mk-cat-7:#5B7086; --mk-cat-7-ink:#5B7086; --mk-cat-7-soft:#EDF0F3;   /* 中性／其他 */
+  --mk-cat-8:#8A5A44; --mk-cat-8-ink:#8A5A44; --mk-cat-8-soft:#F5EEEB;   /* 第8色 */
 }
+/* 分類 class：加喺元素上就用 var(--c) var(--c-ink) var(--c-soft) */
+.mk-cat-1{--c:var(--mk-cat-1);--c-ink:var(--mk-cat-1-ink);--c-soft:var(--mk-cat-1-soft)}
+.mk-cat-2{--c:var(--mk-cat-2);--c-ink:var(--mk-cat-2-ink);--c-soft:var(--mk-cat-2-soft)}
+.mk-cat-3{--c:var(--mk-cat-3);--c-ink:var(--mk-cat-3-ink);--c-soft:var(--mk-cat-3-soft)}
+.mk-cat-4{--c:var(--mk-cat-4);--c-ink:var(--mk-cat-4-ink);--c-soft:var(--mk-cat-4-soft)}
+.mk-cat-5{--c:var(--mk-cat-5);--c-ink:var(--mk-cat-5-ink);--c-soft:var(--mk-cat-5-soft)}
+.mk-cat-6{--c:var(--mk-cat-6);--c-ink:var(--mk-cat-6-ink);--c-soft:var(--mk-cat-6-soft)}
+.mk-cat-7{--c:var(--mk-cat-7);--c-ink:var(--mk-cat-7-ink);--c-soft:var(--mk-cat-7-soft)}
+.mk-cat-8{--c:var(--mk-cat-8);--c-ink:var(--mk-cat-8-ink);--c-soft:var(--mk-cat-8-soft)}
+.mk-chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;background:var(--c-soft);color:var(--c-ink);font-size:13px;font-weight:700}
+.mk-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c)}
 /* 版面外框：工具可以用自己嘅 class，但數值要一樣 */
 .mk-wrap{width:100%;max-width:calc(var(--mk-max) + 2 * var(--mk-gutter));margin:0 auto;padding-left:var(--mk-gutter);padding-right:var(--mk-gutter);box-sizing:border-box}
 /* 標題旁 icon */
@@ -614,6 +634,21 @@ footer .mk-ecard{margin-top:28px}
 /* 手機：按鈕字縮短（「分享」「列印」） */
 @media (max-width:480px){.mk-long{display:none}.mk-print-btn,.mk-share-btn{padding:0 10px}}
 /* ===== MKPA 統一標準 完 ===== */
+/* ===== MKPA 分類色盤（階段：1 申請前、2 審批、3 領取期間；其他分類按 1→8 次序）===== */
+:root{--blue:var(--mk-cat-1-ink);--blue-soft:var(--mk-cat-1-soft);--purple:var(--mk-cat-2-ink);--purple-soft:var(--mk-cat-2-soft);
+  --coral:var(--mk-cat-3-ink);--coral-fill:var(--mk-cat-3);--coral-soft:var(--mk-cat-3-soft);--teal:var(--mk-cat-4-ink);--teal-soft:var(--mk-cat-4-soft)}
+.stat:nth-child(1){--c:var(--mk-cat-1)} .stat:nth-child(2){--c:var(--mk-cat-2)} .stat:nth-child(3){--c:var(--mk-cat-3)} .stat:nth-child(4){--c:var(--mk-cat-4)}
+.pcard.sa{--sc:var(--mk-cat-1-ink);--sc-soft:var(--mk-cat-1-soft)} .pcard.sb{--sc:var(--mk-cat-4-ink);--sc-soft:var(--mk-cat-4-soft)} .pcard.sc{--sc:var(--mk-cat-3-ink);--sc-soft:var(--mk-cat-3-soft)}
+.jstep.pa{--jc:var(--mk-cat-1)} .jstep.pb{--jc:var(--mk-cat-2)} .jstep.pc{--jc:var(--mk-cat-3)}
+.phases div:first-child{border-color:var(--mk-cat-1);color:var(--mk-cat-1-ink)} .phases div:nth-child(2){border-color:var(--mk-cat-2);color:var(--mk-cat-2-ink)} .phases div:last-child{border-color:var(--mk-cat-3);color:var(--mk-cat-3-ink)}
+.tag.c-green{background:var(--mk-cat-1-soft);color:var(--mk-cat-1-ink)} .tag.c-blue{background:var(--mk-cat-2-soft);color:var(--mk-cat-2-ink)} .tag.c-purple{background:var(--mk-cat-3-soft);color:var(--mk-cat-3-ink)}
+.hd-a{background:var(--mk-cat-1)} .hd-b{background:var(--mk-cat-2)}
+.rt-row:nth-child(1){--rc:var(--mk-cat-1)} .rt-row:nth-child(2){--rc:var(--mk-cat-2)} .rt-row:nth-child(3){--rc:var(--mk-cat-3)} .rt-row:nth-child(4){--rc:var(--mk-cat-4)}
+.contact>div:nth-child(1){--cc:var(--mk-cat-1)} .contact>div:nth-child(2){--cc:var(--mk-cat-2)} .contact>div:nth-child(3){--cc:var(--mk-cat-3)}
+.lim{--lc:var(--mk-cat-2)} .lim.b{--lc:var(--mk-cat-3)}
+.ftag{background:var(--mk-cat-1-soft);color:var(--mk-cat-1-ink)} .ftag.f2{background:var(--mk-cat-2-soft);color:var(--mk-cat-2-ink)} .ftag.f3{background:var(--mk-cat-3-soft);color:var(--mk-cat-3-ink)}
+.ftag.f4{background:var(--mk-cat-4-soft);color:var(--mk-cat-4-ink)} .ftag.f5{background:var(--mk-cat-7-soft);color:var(--mk-cat-7-ink)}
+
 
 </style>
 </head>
@@ -911,14 +946,14 @@ footer .mk-ecard{margin-top:28px}
   <div class="sec-head"><div class="sec-no">07 建議</div><div><h2>申請前後的重點提醒</h2></div></div>
   <div class="grid2">
     <div class="card">
-      <div class="tip"><b>先分清「入息」與「資產」</b><span>同一筆錢，每月收到時看入息，儲起來後看資產。年金每月派發計入息，但已繳的保費不計資產。</span></div>
-      <div class="tip" style="--tp:var(--blue)"><b>保單現金價值豁免</b><span>社署沒有區分保單類別，儲蓄計劃的現金價值亦不計資產；但退保或提取出來的錢一放入銀行就計。與公屋不同：房委會會把儲蓄保單價值計作資產。安排保障前應按真正需要決定，不應只為壓低資產數字。</span></div>
-      <div class="tip" style="--tp:var(--amber-fill)"><b>貼近限額要留意</b><span>例如定期到期、收到遺產或賣樓，都可能令資產超標，要主動通知社署。</span></div>
+      <div class="tip" style="--tp:var(--mk-cat-1)"><b>先分清「入息」與「資產」</b><span>同一筆錢，每月收到時看入息，儲起來後看資產。年金每月派發計入息，但已繳的保費不計資產。</span></div>
+      <div class="tip" style="--tp:var(--mk-cat-2)"><b>保單現金價值豁免</b><span>社署沒有區分保單類別，儲蓄計劃的現金價值亦不計資產；但退保或提取出來的錢一放入銀行就計。與公屋不同：房委會會把儲蓄保單價值計作資產。安排保障前應按真正需要決定，不應只為壓低資產數字。</span></div>
+      <div class="tip" style="--tp:var(--mk-cat-3)"><b>貼近限額要留意</b><span>例如定期到期、收到遺產或賣樓，都可能令資產超標，要主動通知社署。</span></div>
     </div>
     <div class="card">
-      <div class="tip" style="--tp:var(--purple)"><b>經常北上要數日子</b><span>長期在內地生活，與其擔心在港不足 60 日，不如考慮轉用廣東或福建計劃。</span></div>
-      <div class="tip" style="--tp:var(--coral-fill)"><b>夫婦一齊計</b><span>配偶未夠 65 歲也要申報；兩人合計超標，兩人都不能領。</span></div>
-      <div class="tip"><b>70 歲後有後備</b><span>資產超出長生津限額，70 歲起仍可領毋須審查的生果金 $1,675。</span></div>
+      <div class="tip" style="--tp:var(--mk-cat-4)"><b>經常北上要數日子</b><span>長期在內地生活，與其擔心在港不足 60 日，不如考慮轉用廣東或福建計劃。</span></div>
+      <div class="tip" style="--tp:var(--mk-cat-5)"><b>夫婦一齊計</b><span>配偶未夠 65 歲也要申報；兩人合計超標，兩人都不能領。</span></div>
+      <div class="tip" style="--tp:var(--mk-cat-6)"><b>70 歲後有後備</b><span>資產超出長生津限額，70 歲起仍可領毋須審查的生果金 $1,675。</span></div>
     </div>
   </div>
 </section>
@@ -941,10 +976,10 @@ footer .mk-ecard{margin-top:28px}
   <details><summary><span class="ftag f3">離港</span>領取長生津期間，每年可以離港幾耐？</summary><div class="ans"><p>每個付款年度（由符合資格日起每 12 個月）只要在港住滿 <b>60 日</b>，便可離港最多 305 日（閏年 306 日）而照領全年津貼。住不滿 60 日，只按在港日數發放，多領的要退還。</p></div></details>
   <details><summary><span class="ftag f3">離港</span>打算搬上內地住，還可以領嗎？</summary><div class="ans"><p>住在廣東或福建，可申請廣東計劃或福建計劃，金額及限額與香港相同，每年在該省住滿 60 日即可。2026 年 7 月起可選擇把津貼直接免費存入廣東或福建的中國銀行、工商銀行港幣戶口（一類戶口）。住在其他省份則不適用。</p></div></details>
   <details><summary><span class="ftag f3">離港</span>住公屋的長者搬去廣東，要注意甚麼？</summary><div class="ans"><p>申請廣東或福建計劃，須在離港前交還公屋單位或刪除戶籍。</p></div></details>
-  <details><summary><span class="ftag">審查</span>收到覆檢通知書要怎樣做？</summary><div class="ans"><p>郵遞覆檢：填妥覆檢表（本人及配偶的入息資產），簽署後於通知書日期起一個月內寄回。全面覆檢：按約見時間帶齊表格及證明文件正本到社會保障辦事處。逾期未交，社署可考慮暫停發放。</p></div></details>
-  <details><summary><span class="ftag">審查</span>超出限額被停發，之後可以再申請嗎？</summary><div class="ans"><p>可以。日後入息及資產回落至限額內，可重新申請。年滿 70 歲期間可先領生果金。</p></div></details>
-  <details><summary><span class="ftag">其他</span>有沒有「雙糧」？</summary><div class="ans"><p>是否發放額外一個月津貼，由每年財政預算案決定，並非每年必有。2026/27 年度預算案有此安排，<mark>2026 年 5 月 22 日起</mark>自動發放，毋須申請。</p></div></details>
-  <details><summary><span class="ftag">其他</span>正領綜援，應該轉長生津嗎？</summary><div class="ans"><p>綜援與長生津不能同時領取。綜援按個人需要計算，可包括租金、特別津貼等，對沒有其他資源的長者往往較多；長生津資產限額較寬鬆、手續較簡單。建議向社署職員查詢兩者的實際差額才決定。</p></div></details>
+  <details><summary><span class="ftag f4">審查</span>收到覆檢通知書要怎樣做？</summary><div class="ans"><p>郵遞覆檢：填妥覆檢表（本人及配偶的入息資產），簽署後於通知書日期起一個月內寄回。全面覆檢：按約見時間帶齊表格及證明文件正本到社會保障辦事處。逾期未交，社署可考慮暫停發放。</p></div></details>
+  <details><summary><span class="ftag f4">審查</span>超出限額被停發，之後可以再申請嗎？</summary><div class="ans"><p>可以。日後入息及資產回落至限額內，可重新申請。年滿 70 歲期間可先領生果金。</p></div></details>
+  <details><summary><span class="ftag f5">其他</span>有沒有「雙糧」？</summary><div class="ans"><p>是否發放額外一個月津貼，由每年財政預算案決定，並非每年必有。2026/27 年度預算案有此安排，<mark>2026 年 5 月 22 日起</mark>自動發放，毋須申請。</p></div></details>
+  <details><summary><span class="ftag f5">其他</span>正領綜援，應該轉長生津嗎？</summary><div class="ans"><p>綜援與長生津不能同時領取。綜援按個人需要計算，可包括租金、特別津貼等，對沒有其他資源的長者往往較多；長生津資產限額較寬鬆、手續較簡單。建議向社署職員查詢兩者的實際差額才決定。</p></div></details>
   </div>
 </section>
 
