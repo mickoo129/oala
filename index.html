@@ -1,1658 +1,1149 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
+<!doctype html>
+<html lang="zh-Hant-HK">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>香港醫院查詢目錄</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0F3460',
-                        secondary: '#1A73E8',
-                        accent: '#E94560',
-                        neutral: '#5F6368',
-                        light: '#F8F9FA',
-                        dark: '#202124'
-                    },
-                    fontFamily: {
-                        sans: ['Noto Sans HK', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .shadow-pro {
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            }
-            .transition-pro {
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            .card-hover {
-                @apply hover:shadow-lg hover:-translate-y-1 transition-pro;
-            }
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>長者生活津貼全程指南</title>
+<meta name="description" content="長者生活津貼（長生津）申請資格、入息及資產限額、申請流程、申報要求、出入境規定及定期覆檢，附快速資格計算（2026 年 2 月 1 日起金額及限額）。">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0E5E57">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Noto+Sans+HK:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F9F8; --panel:#EEF3F1; --card:#FFFFFF; --ink:#1D2B2A; --ink2:#3C4A49; --muted:#5B6B6A; --line:#E3E9E7; --line2:#CFD8D5;
+  --brand:#00A758; --accent:#00753E; --accent-ink:#ffffff; --accent-soft:#E6F6EE; --accent-line:#B4E2C8; --brand-deep:#0E5E57;
+  --blue:#1f6fd1; --blue-soft:#eaf2fc; --amber:#9a6a00; --amber-fill:#f2b22a; --amber-soft:#fff5dc;
+  --coral:#c4502c; --coral-fill:#ec7a52; --coral-soft:#fdeee7; --purple:#6b4fb8; --purple-soft:#f1edfa;
+  --teal:#0b8793; --teal-soft:#e3f5f6;
+  --alert:#C62828; --alert-soft:#FDECEC;
+  --t1:#e6f6ee; --t2:#fff5dc; --t3:#fde7d4; --t4:#fbd7cb;
+  --radius:16px; --fs:17px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--mk-sans);
+  font-size:var(--fs);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,h4{font-family:var(--mk-sans);letter-spacing:-.015em;line-height:1.25;margin:0;font-weight:600}
+b,strong{font-weight:600;color:var(--ink)}
+.wrap{max-width:calc(1320px + 2 * var(--mk-gutter));margin:0 auto;padding:0 var(--mk-gutter)}
+.num{font-variant-numeric:tabular-nums}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:12px;height:52px}
+.brand{font-weight:600;font-size:15px;white-space:nowrap;color:var(--ink);display:flex;align-items:center;gap:8px}
+.brand i{width:8px;height:8px;border-radius:2px;background:var(--accent);display:inline-block}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:12px}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font-size:13.5px;color:var(--muted);padding:6px 10px;border-radius:8px;white-space:nowrap}
+.nav a:hover,.nav a.on{color:var(--ink);background:var(--panel);text-decoration:none}
+.tools{display:flex;gap:6px}
+.tbtn{border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:8px;height:32px;min-width:32px;padding:0 11px;font:inherit;font-size:13px;font-weight:500;cursor:pointer}
+.tbtn:hover{border-color:var(--muted)}
+
+/* hero */
+.hero{padding:72px 0 40px;border-bottom:1px solid var(--line)}
+.kicker{font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+.hero h1{font-size:clamp(38px,6vw,60px);font-weight:700;margin-top:10px;letter-spacing:-.025em}
+.hero .lead{font-size:clamp(18px,2.2vw,21px);color:var(--ink2);max-width:680px;margin:18px 0 0;line-height:1.55}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:14px;color:var(--muted)}
+.meta-row span:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--line2);margin-right:8px;vertical-align:3px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);margin:40px 0 0;border-top:1px solid var(--line)}
+.stat{padding:22px 20px 4px 0}
+.stat+.stat{padding-left:20px;border-left:1px solid var(--line)}
+.stat .k{font-size:13.5px;color:var(--muted)}
+.stat .v{font-family:var(--mk-num);font-size:34px;font-weight:600;letter-spacing:-.02em;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:17px;font-weight:500;margin-left:3px;color:var(--ink2)}
+.stat .n{font-size:13px;color:var(--muted)}
+
+/* sections */
+section{padding:72px 0 0}
+.sec-head{margin-bottom:28px;display:grid;grid-template-columns:120px 1fr;gap:0 24px;align-items:start}
+.sec-no{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.06em;padding-top:10px;border-top:2px solid var(--accent);font-variant-numeric:tabular-nums}
+.sec-head h2{font-size:clamp(28px,3.6vw,36px);font-weight:700}
+.sec-head p{color:var(--muted);font-size:17px;margin:10px 0 0;max-width:720px}
+.body-indent{margin-left:144px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+.card h3{font-size:19px;margin-bottom:10px}
+.card p{margin:0 0 10px;color:var(--ink2)}
+.card p:last-child{margin-bottom:0}
+.sub{font-size:15px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stack>*+*{margin-top:16px}
+h3.block{font-size:21px;margin:44px 0 14px}
+
+/* persona */
+.persona{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.pcard{display:block;padding:22px 24px;color:var(--ink);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .15s}
+.pcard:nth-child(3n){border-right:0}
+.pcard:nth-last-child(-n+3){border-bottom:0}
+.pcard:hover{background:var(--panel);text-decoration:none}
+.pcard .stage{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.06em}
+.pcard h3{font-size:18px;margin-top:6px}
+.pcard p{margin:6px 0 12px;color:var(--muted);font-size:15px;line-height:1.55}
+.pcard .go{font-size:14px;color:var(--accent);font-weight:500}
+
+/* journey */
+.journey{display:grid;grid-template-columns:repeat(8,1fr);position:relative}
+.journey:before{content:"";position:absolute;left:0;right:0;top:15px;height:1px;background:var(--line2)}
+.jstep{position:relative;padding-right:10px}
+.jdot{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:14px;position:relative;z-index:1;font-variant-numeric:tabular-nums;border:1px solid var(--accent);background:var(--card);color:var(--accent)}
+.jstep.solid .jdot{background:var(--accent);color:var(--accent-ink)}
+.jstep h4{font-size:15px;margin-top:12px}
+.jstep p{font-size:13px;color:var(--muted);margin:4px 0 0;line-height:1.45}
+.phases{display:grid;grid-template-columns:4fr 2fr 2fr;margin-top:18px;font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.phases div{border-top:2px solid var(--line2);padding-top:6px;margin-right:10px}
+.phases div:first-child{border-color:var(--t4)} .phases div:nth-child(2){border-color:var(--accent)} .phases div:last-child{border-color:var(--ink)}
+
+/* lists */
+.checks{list-style:none;padding:0;margin:0}
+.checks li{position:relative;padding:12px 0 12px 30px;border-top:1px solid var(--line)}
+.checks li:first-child{border-top:0;padding-top:4px}
+.checks li:before{content:"";position:absolute;left:2px;top:21px;width:12px;height:7px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+.checks li:first-child:before{top:13px}
+.checks.x li:before{width:12px;height:2px;border:0;background:var(--muted);transform:none;top:24px}
+.checks.x li:first-child:before{top:16px}
+.checks li>span{display:block;color:var(--muted);font-size:15px;line-height:1.55;margin-top:2px}
+.dots{margin:6px 0 0;padding-left:18px;color:var(--ink2)}
+.dots li{margin:5px 0}
+.dots li::marker{color:var(--muted)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:15.5px;font-variant-numeric:tabular-nums}
+th,td{padding:13px 16px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:top}
+th:first-child,td:first-child{text-align:left}
+thead th{font-weight:600;font-size:13px;color:var(--muted);background:var(--panel);letter-spacing:.02em}
+tbody tr:last-child td{border-bottom:0}
+td small,th small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.tnote{font-size:14px;color:var(--muted);margin-top:12px;line-height:1.6}
+/* text table */
+table.txt td,table.txt th{white-space:normal;text-align:left;line-height:1.55}
+table.txt td:first-child{font-weight:600;color:var(--ink);width:22%;min-width:120px}
+table.txt td{color:var(--ink2);font-size:15px}
+table.txt th{width:39%}
+table.txt th:first-child{width:22%}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);margin-right:4px;white-space:nowrap}
+
+/* tags / notes */
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px;border:1px solid var(--line2);color:var(--ink2);letter-spacing:.02em}
+.tag.acc{border-color:var(--accent-line);color:var(--accent);background:var(--accent-soft)}
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 12px 12px 0;padding:16px 20px;color:var(--ink2)}
+.note.alert{border-color:var(--alert);background:var(--alert-soft)}
+.note.plain{border-color:var(--line2);background:var(--panel)}
+.note p{margin:0}
+.note p+p{margin-top:6px}
+.note .nt{font-weight:600;color:var(--ink);display:block;margin-bottom:2px}
+
+/* steps */
+.steps{counter-reset:s;list-style:none;margin:0;padding:0}
+.steps>li{position:relative;padding:0 0 30px 60px}
+.steps>li:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:600;font-size:15px}
+.steps>li:after{content:"";position:absolute;left:17.5px;top:42px;bottom:6px;width:1px;background:var(--line2)}
+.steps>li:last-child{padding-bottom:0}
+.steps>li:last-child:after{display:none}
+.steps h4{font-size:18px;padding-top:5px}
+.steps p{margin:6px 0 0;color:var(--ink2)}
+.steps .meta{display:inline-block;margin-top:10px;font-size:13px;color:var(--muted);border:1px solid var(--line2);padding:2px 9px;border-radius:6px}
+
+/* review timeline */
+.rt{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.rt-row{display:grid;grid-template-columns:170px 1fr;border-top:1px solid var(--line)}
+.rt-row:first-child{border-top:0}
+.rt-row .when{padding:20px 22px;background:var(--panel);font-weight:600;font-size:16px}
+.rt-row .when small{display:block;font-weight:400;color:var(--muted);font-size:13px;margin-top:2px}
+.rt-row .what{padding:20px 24px}
+.rt-row .what h4{font-size:17px;margin-bottom:4px}
+.rt-row .what p{margin:0;color:var(--ink2)}
+
+/* tier ladder */
+.ladder{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.rung{display:grid;grid-template-columns:180px 1fr;border-top:1px solid var(--line)}
+.rung:first-child{border-top:0}
+.rung .lv{padding:15px 20px;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.rung .rs{padding:15px 20px;color:var(--ink2)}
+.rung .rs b{font-size:16px}
+.l1{background:var(--t1)} .l2{background:var(--t2)} .l3{background:var(--t3)} .l4{background:var(--t4)}
+.l5{background:var(--ink);color:var(--bg)!important}
+
+/* tabs + calculators */
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;margin-bottom:22px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;font:inherit;font-size:14.5px;padding:7px 16px;border-radius:7px;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.pane{display:none}.pane.on{display:block}
+.form{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 20px}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.field .hint{font-size:13px;color:var(--muted);margin-top:5px}
+.field input:not([type=checkbox]),.field select{width:100%;height:46px;border:1px solid var(--line2);border-radius:10px;padding:0 14px;font:inherit;font-size:17px;background:var(--card);color:var(--ink);-webkit-appearance:none;appearance:none}
+.field select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 20px,calc(100% - 15px) 20px;background-size:5px 5px;background-repeat:no-repeat}
+.field input:not([type=checkbox]):focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.chk{display:flex;align-items:flex-start;gap:10px;font-size:15.5px;cursor:pointer;padding:6px 0;line-height:1.45}
+.chk input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent);flex:none}
+.result{margin-top:22px;border-radius:12px;padding:18px 22px;display:none;border:1px solid var(--line);border-left-width:4px}
+.result.show{display:block}
+.result h4{font-size:18px;margin-bottom:6px}
+.result p{margin:3px 0;color:var(--ink2);font-size:15.5px}
+.r-ok{border-left-color:var(--accent);background:var(--accent-soft)}
+.r-warn{border-left-color:var(--t4);background:var(--panel)}
+.r-bad{border-left-color:var(--alert);background:var(--alert-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 22px;border-radius:10px;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-size:16px;font-weight:500;cursor:pointer;margin-top:22px}
+.btn:hover{filter:brightness(1.1)}
+
+/* faq */
+.faq{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);overflow:hidden}
+details{border-top:1px solid var(--line);padding:0 24px}
+details:first-child{border-top:0}
+summary{cursor:pointer;list-style:none;padding:18px 34px 18px 0;font-weight:600;font-size:16.5px;position:relative}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"";position:absolute;right:4px;top:24px;width:8px;height:8px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+details[open] summary:after{transform:rotate(-135deg);top:28px}
+details .ans{padding:0 0 20px;color:var(--ink2)}
+details .ans p{margin:0 0 8px}
+.ftag{font-size:12px;font-weight:600;color:var(--accent);margin-right:10px;vertical-align:1px}
+
+/* tips */
+.tip{padding:16px 0;border-top:1px solid var(--line)}
+.tip:first-of-type{border-top:0;padding-top:0}
+.tip b{display:block;font-size:16.5px;margin-bottom:3px}
+.tip span{color:var(--ink2);font-size:15.5px}
+
+.contact{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:var(--radius);background:var(--card);overflow:hidden}
+.contact>div{padding:22px 24px;border-left:1px solid var(--line)}
+.contact>div:first-child{border-left:0}
+.contact .k{font-size:13px;color:var(--muted)}
+.contact .v{font-family:var(--mk-num);font-size:24px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums}
+
+footer{margin-top:80px;padding:40px 0 70px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+footer .src a{display:block;margin:5px 0;word-break:break-all}
+
+/* ===== colour layer ===== */
+.bar{border-bottom-color:var(--line)}
+.brand i{width:10px;height:10px;border-radius:3px;background:var(--brand)}
+.nav a.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tbtn{border-color:var(--accent-line);color:var(--accent)}
+.tbtn:hover{background:var(--accent-soft);border-color:var(--accent)}
+
+.hero{position:relative;border-bottom:0;padding-bottom:48px}
+.hero:before{content:"";position:absolute;z-index:-1;left:50%;transform:translateX(-50%);top:0;bottom:0;width:100vw;
+  background:radial-gradient(1200px 420px at 85% -10%,color-mix(in srgb,var(--brand) 22%,transparent),transparent 60%),
+             radial-gradient(800px 360px at 0% 110%,color-mix(in srgb,var(--blue) 10%,transparent),transparent 60%),
+             linear-gradient(180deg,var(--accent-soft),var(--bg));}
+.kicker{display:inline-block;background:var(--brand);color:#fff;padding:5px 12px;border-radius:999px;letter-spacing:.06em;font-size:12.5px}
+.hero h1{color:var(--brand-deep)}
+.meta-row span:before{background:var(--brand)}
+
+.stats{border-top:0;gap:14px;margin-top:36px}
+.stat,.stat+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 20px 16px;border-top:4px solid var(--c,var(--brand));border-left:1px solid var(--line)}
+.stat:nth-child(1){--c:var(--brand)} .stat:nth-child(2){--c:var(--blue)} .stat:nth-child(3){--c:var(--amber-fill)} .stat:nth-child(4){--c:var(--purple)}
+.stat .v{color:var(--ink)}
+
+.sec-no{border-top:0;padding:4px 10px;background:var(--accent-soft);color:var(--accent);border-radius:8px;display:inline-block;justify-self:start;margin-top:8px}
+
+.pcard{position:relative}
+.pcard .stage{display:inline-block;padding:2px 9px;border-radius:6px;background:var(--sc-soft);color:var(--sc)}
+.pcard:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--sc)}
+.pcard.sa{--sc:var(--blue);--sc-soft:var(--blue-soft)}
+.pcard.sb{--sc:var(--amber);--sc-soft:var(--amber-soft)}
+.pcard.sc{--sc:var(--accent);--sc-soft:var(--accent-soft)}
+.pcard:hover{background:color-mix(in srgb,var(--sc-soft) 60%,var(--card))}
+.pcard .go{color:var(--sc)}
+
+.jstep .jdot{border-color:var(--jc);color:var(--jc);background:var(--card)}
+.jstep.pa{--jc:var(--blue)} .jstep.pb{--jc:var(--brand)} .jstep.pc{--jc:var(--amber-fill)}
+.jstep.pb .jdot,.jstep.pc .jdot{background:var(--jc);color:#fff}
+.phases div:first-child{border-color:var(--blue)} .phases div:nth-child(2){border-color:var(--brand)} .phases div:last-child{border-color:var(--amber-fill)}
+.phases div:first-child{color:var(--blue)} .phases div:nth-child(2){color:var(--accent)} .phases div:last-child{color:var(--amber)}
+
+.checks li:before{border-color:var(--brand)}
+.dots li::marker{color:var(--brand)}
+thead th{background:var(--accent-soft);color:var(--accent)}
+.tbl-wrap{border-color:var(--line)}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--panel) 55%,transparent)}
+
+.tag{border:0}
+.tag.c-blue{background:var(--blue-soft);color:var(--blue)}
+.tag.c-green{background:var(--accent-soft);color:var(--accent)}
+.tag.c-amber{background:var(--amber-soft);color:var(--amber)}
+.tag.c-coral{background:var(--coral-soft);color:var(--coral)}
+.tag.c-purple{background:var(--purple-soft);color:var(--purple)}
+.tag.c-teal{background:var(--teal-soft);color:var(--teal)}
+.card.top{border-top:4px solid var(--tc,var(--brand))}
+.tc-blue{--tc:var(--blue)} .tc-green{--tc:var(--brand)} .tc-amber{--tc:var(--amber-fill)} .tc-coral{--tc:var(--coral-fill)} .tc-purple{--tc:var(--purple)} .tc-teal{--tc:var(--teal)}
+
+.hd-chip{display:inline-block;padding:2px 9px;border-radius:6px;font-size:12.5px;font-weight:600;color:#fff}
+.hd-a{background:var(--blue)} .hd-b{background:var(--brand)}
+table.txt thead th{background:var(--panel);color:var(--ink2)}
+
+.steps>li:before{background:var(--brand)}
+.steps>li:nth-child(5):before,.steps>li:nth-child(6):before{background:var(--brand-deep)}
+
+.rt-row .when{border-left:4px solid var(--rc,var(--brand))}
+.rt-row:nth-child(1){--rc:var(--blue)} .rt-row:nth-child(2){--rc:var(--brand)} .rt-row:nth-child(3){--rc:var(--amber-fill)} .rt-row:nth-child(4){--rc:var(--purple)}
+
+.rung .lv{border-left:5px solid var(--lc)}
+.l1{--lc:var(--brand);color:var(--accent)!important} .l2{--lc:var(--amber-fill);color:var(--amber)!important}
+.l3{--lc:#ee8b3a;color:var(--coral)!important} .l4{--lc:var(--coral-fill);color:var(--coral)!important}
+.l5{--lc:var(--alert);background:var(--alert)!important;color:#fff!important}
+
+.note{border-left-color:var(--brand)}
+.note.alert{border-left-color:var(--alert)}
+
+/* checkbox chips */
+.chk{border:1.5px solid var(--line2);border-radius:12px;padding:11px 14px;margin:0 0 8px;background:var(--card);transition:border-color .15s,background .15s;user-select:none}
+.field label.chk{display:flex;align-items:center;gap:12px;font-weight:400;font-size:15.5px;margin-bottom:8px}
+.field label.chk.on{font-weight:600}
+.chk:hover{border-color:var(--accent-line)}
+.chk input{-webkit-appearance:none;appearance:none;width:22px;height:22px;margin:0;border:2px solid var(--line2);border-radius:6px;background:var(--card);display:grid;place-items:center;cursor:pointer;flex:none;transition:all .15s}
+.chk input:checked{background:var(--brand);border-color:var(--brand)}
+.chk input:checked:after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.chk.on{border-color:var(--brand);background:var(--accent-soft);color:var(--ink);font-weight:500}
+.chk input:focus-visible{box-shadow:0 0 0 3px var(--accent-line)}
+.seg{background:var(--accent-soft);border-color:var(--accent-line)}
+.seg button.on{color:var(--accent)}
+.btn{background:var(--brand);color:#fff}
+.r-ok{border-left-color:var(--brand);background:var(--accent-soft)} .r-ok h4{color:var(--accent)}
+.r-warn{border-left-color:var(--amber-fill);background:var(--amber-soft)} .r-warn h4{color:var(--amber)}
+.r-bad{border-left-color:var(--alert);background:var(--alert-soft)} .r-bad h4{color:var(--alert)}
+
+.tip{border-top:0;border-left:4px solid var(--tp,var(--brand));padding:4px 0 4px 16px;margin-bottom:18px}
+.tip:first-of-type{padding-top:4px}
+.ftag{background:var(--accent-soft);padding:2px 8px;border-radius:6px}
+.ftag.f2{background:var(--blue-soft);color:var(--blue)} .ftag.f3{background:var(--amber-soft);color:var(--amber)}
+
+.contact>div{border-top:4px solid var(--cc)}
+.contact>div:nth-child(1){--cc:var(--brand)} .contact>div:nth-child(2){--cc:var(--blue)} .contact>div:nth-child(3){--cc:var(--purple)}
+
+footer{background:var(--brand-deep);color:#cfe9dc;border-top:0;margin-top:90px}
+footer b{color:#fff} footer a{color:#9be3bf} footer .src p{color:#fff!important}
+
+footer .mk-copy{margin-top:28px;padding-top:18px;border-top:1px solid rgba(255,255,255,.18);color:#e6f4ec;font-size:13.5px}
+.brand .logo{width:24px;height:24px;flex:none;display:block}
+/* emphasis */
+.key{color:var(--alert);font-weight:600}
+mark{background:linear-gradient(transparent 52%,#ffe17a 52%);color:inherit;padding:0 1px;border-radius:2px}
+
+/* structured result */
+.res-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.res-top h4{font-size:21px;margin:0}
+.res-sub{font-size:15px;color:var(--ink2)}
+.res-rent{margin:14px 0 6px;padding:14px 16px;border-radius:10px;background:var(--card);border:1px solid var(--line)}
+.res-rent .k{font-size:13px;color:var(--muted)}
+.res-rent .v{font-size:22px;font-weight:700;margin-top:2px}
+.res-rent .v small{font-size:14px;font-weight:500;color:var(--ink2);margin-left:6px}
+.res-rows{margin:10px 0 4px;border-top:1px solid var(--line)}
+.res-row{display:grid;grid-template-columns:110px 1fr;gap:4px 14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.res-row .lb{font-weight:600;color:var(--ink)}
+.res-row .vl{color:var(--ink2)}
+.res-notes{margin:12px 0 0;padding-left:18px;font-size:14.5px;color:var(--ink2)}
+.res-notes li{margin:5px 0}
+.ok-t{color:var(--accent);font-weight:600} .warn-t{color:var(--amber);font-weight:600} .bad-t{color:var(--alert);font-weight:600}
+@media (max-width:680px){.res-row{grid-template-columns:1fr}}
+
+/* responsive */
+@media (max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  
+  .persona{grid-template-columns:repeat(2,1fr)}
+  .pcard{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+  .pcard:nth-child(2n){border-right:0!important}
+  .pcard:nth-last-child(-n+2){border-bottom:0!important}
+  .grid3{grid-template-columns:1fr 1fr}
+  .sec-head{grid-template-columns:1fr}
+  .sec-no{border-top:0;padding-top:0;margin-bottom:6px}
+  .body-indent{margin-left:0}
+  .journey{grid-template-columns:1fr}
+  .journey:before{left:15px;right:auto;top:8px;bottom:8px;width:1px;height:auto}
+  .jstep{display:grid;grid-template-columns:31px 1fr;column-gap:16px;padding:0 0 16px}
+  .jdot{grid-row:span 2}
+  .jstep h4{margin-top:4px}
+  .phases{display:none}
+}
+@media (max-width:680px){
+  .wrap{padding:0 16px}
+  .bar .wrap{flex-wrap:wrap;height:auto;row-gap:0;padding-top:8px}
+  .brand{flex:1;min-width:0}
+  .brand span{overflow:hidden;text-overflow:ellipsis}
+  .nav{order:3;flex-basis:100%;margin:4px 0 6px;flex:none;width:100%}
+  html{scroll-padding-top:110px}
+  .hero{padding:44px 0 28px}
+  .persona{grid-template-columns:1fr}
+  .pcard{border-right:0!important;border-bottom:1px solid var(--line)!important}
+  .pcard:last-child{border-bottom:0!important}
+  .grid2,.grid3,.form,.contact{grid-template-columns:1fr}
+  .grid3>.card{grid-column:auto!important}
+  table.txt thead{display:none}
+  table.txt,table.txt tbody,table.txt tr,table.txt td{display:block;width:auto!important}
+  table.txt tr{padding:14px 16px;border-bottom:1px solid var(--line)}
+  table.txt tr:last-child{border-bottom:0}
+  table.txt td{border:0;padding:4px 0}
+  table.txt td:first-child{font-size:16px;padding-bottom:6px}
+  table.txt td[data-label]:before{content:attr(data-label);display:block;font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.04em;margin-top:4px}
+  .contact>div{border-left:0}
+  .stat .v{font-size:27px}
+  .card{padding:20px}
+  .rt-row,.rung{grid-template-columns:1fr}
+  .rt-row .when{padding:14px 20px}
+  th,td{padding:11px 12px;font-size:14.5px}
+  table.txt td:first-child{width:auto}
+  section{padding-top:56px}
+}
+
+/* print → PDF */
+@media print{
+  :root{--bg:#fff;--card:#fff;--panel:#f4f4f6;--fs:10.5pt}
+  .bar,.tools,.btn,.seg,.no-print{display:none!important}
+  body{background:#fff}
+  section{padding:22px 0 0}
+  .hero{padding:0 0 18px}
+  .card,.tbl-wrap,.rt,.ladder,.faq{break-inside:auto}
+  .note,.contact,.stat,.pcard,details,.res-row,.jstep{break-inside:avoid}
+  .stats{grid-template-columns:repeat(4,1fr)!important;margin-top:20px}
+  .stat:nth-child(n){border-left:1px solid var(--line)}
+  .grid2{grid-template-columns:1fr 1fr!important}
+  .grid3{grid-template-columns:1fr 1fr 1fr!important}
+  .grid3>.card{grid-column:auto!important}
+  .sec-head{grid-template-columns:1fr!important;margin-bottom:14px}
+  .sec-head h2{font-size:20pt}
+  .card{padding:16px}
+  .journey{grid-template-columns:repeat(8,1fr)!important}
+  .journey:before{left:0;right:0;top:15px;bottom:auto;width:auto;height:1px}
+  .jstep{display:block!important;padding:0 6px 0 0}
+  .phases{display:grid!important}
+  .hero:before{display:none}
+  .hero{padding-bottom:10px}
+  section{padding-top:18px}
+  h3.block{margin:22px 0 10px}
+  .tbl-wrap{overflow:visible}
+  table{font-size:8.5pt}
+  th,td{padding:6px 7px;white-space:normal}
+  td small,th small{font-size:7.5pt}
+  .rt-row,.rung,tr{break-inside:avoid}
+  .sec-head{break-after:avoid}
+  details .ans{display:block!important}
+  summary:after{display:none}
+  a{color:#000}
+  @page{size:A4 landscape;margin:10mm 12mm}
+  /* 每個主題由新一頁開始（封面與總覽同頁） */
+  main>section{break-before:page;padding-top:0!important}
+  main>section#journey{break-before:avoid;padding-top:14px!important}
+  #contact{break-before:avoid!important;padding-top:20px!important}
+  /* 卡片、表格列、步驟不拆開 */
+  .card,.note,.rung,.rt-row,.steps>li,.tip,details,.stat,.contact,.grid2>*,.grid3>*{break-inside:avoid}
+  tr{break-inside:avoid}
+  thead{display:table-header-group}
+  h3.block,.sec-head,.tnote+h3{break-after:avoid}
+  .tbl-wrap,.ladder,.rt,footer .wrap,.faq details{break-inside:avoid}
+  /* 橫印緊湊版 */
+  :root{--fs:9pt}
+  body{line-height:1.5}
+  .sec-head{margin-bottom:8px!important}
+  .sec-head h2{font-size:15pt!important}
+  .sec-head p{font-size:9pt;margin-top:3px}
+  .sec-no{margin:0 0 2px!important;padding:2px 8px}
+  .card{padding:10px 14px!important;border-radius:10px}
+  .card h3{font-size:11pt;margin-bottom:5px}
+  .card p{margin-bottom:5px}
+  .sub,.tnote,.checks span{font-size:8pt!important}
+  .tnote{margin-top:5px}
+  .grid2,.grid3{gap:8px!important}
+  .stack>*+*{margin-top:8px}
+  h3.block{font-size:11.5pt!important;margin:12px 0 6px!important}
+  .checks li{padding:5px 0 5px 24px}
+  .checks li:before{top:11px}
+  .checks li:first-child{padding-top:2px}
+  .checks li:first-child:before{top:8px}
+  .dots li{margin:2px 0}
+  .note{padding:8px 12px!important}
+  th,td{padding:4px 7px!important}
+  table{font-size:8pt!important}
+  .hero h1{font-size:26pt}
+  .hero .lead{font-size:10pt;margin-top:6px}
+  .stats{margin-top:12px!important}
+  .stat .v{font-size:18pt}
+  .stat,.stat+.stat{padding:10px 12px!important}
+  .journey .jdot{width:24px;height:24px;font-size:9pt}
+  .journey:before{top:12px!important}
+  /* 流程步驟兩欄 */
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px}
+  .steps>li{padding:0 0 10px 44px}
+  .steps>li:before{width:28px;height:28px;font-size:10pt}
+  .steps>li:after{display:none}
+  .steps h4{font-size:10.5pt;padding-top:3px}
+  .steps .meta{margin-top:4px}
+  /* 常見問題兩欄 */
+  .faq{columns:2;column-gap:14px;border:0;background:none;overflow:visible}
+  .faq details{border:1px solid var(--line);border-radius:10px;padding:0 12px;margin:0 0 8px;background:var(--card);display:inline-block;width:100%}
+  .faq summary{padding:8px 0 4px;font-size:9.5pt}
+  .faq details .ans{padding-bottom:8px}
+  .faq details .ans p{margin-bottom:4px}
+  .rt-row .when,.rt-row .what{padding:8px 12px!important}
+  .rung .lv,.rung .rs{padding:6px 12px!important}
+  .rung{grid-template-columns:140px 1fr}
+  .tip{margin-bottom:8px;padding:2px 0 2px 12px}
+  footer{margin-top:16px;padding:18px 0 10px!important;font-size:8pt}
+  footer .src a{margin:1px 0}
+  .contact .v{font-size:14pt}
+  .contact>div{padding:10px 14px}
+}
+
+/* ===== 長生津指南：額外樣式 ===== */
+.journey.j6{grid-template-columns:repeat(6,1fr)}
+.phases.p6{grid-template-columns:3fr 1fr 2fr}
+.mk-title-wrap{display:flex;align-items:center;gap:10px;min-width:0;color:var(--ink)}
+.brand .logo{width:30px;height:30px}
+.brand .mk-name{font-weight:900;font-size:16.5px;color:var(--brand-deep)}
+.brand .mk-sub{color:var(--muted);opacity:1}
+.limits{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.lim{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;border-top:4px solid var(--lc,var(--brand))}
+.lim.b{--lc:var(--blue)}
+.lim .k{font-size:14px;color:var(--muted);font-weight:600}
+.lim .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.lim .row:first-of-type{border-top:0}
+.lim .row span{color:var(--ink2);font-size:15.5px}
+.lim .row b{font-family:var(--mk-num);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums}
+.lim .row b small{font-size:14px;font-weight:500;color:var(--muted);margin-left:2px}
+.sum-box{margin-top:6px;padding:12px 14px;border-radius:10px;background:var(--panel);display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:15px;color:var(--ink2)}
+.sum-box b{font-family:var(--mk-num);font-size:22px;font-weight:600}
+.fgroup{grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px;margin-top:2px}
+.fgroup>h4{font-size:16px;margin:0 0 4px}
+.fgroup>.hint{font-size:13.5px;color:var(--muted);margin:0 0 12px}
+.form.f3{grid-template-columns:repeat(3,1fr)}
+.calc-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+.res-amt{margin:14px 0 6px;padding:14px 16px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 26px}
+.res-amt .k{font-size:13px;color:var(--muted)}
+.res-amt .v{font-family:var(--mk-num);font-size:26px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.res-amt .v small{font-family:var(--mk-sans);font-size:14px;font-weight:500;color:var(--ink2);margin-left:6px}
+.bar-meter{height:8px;border-radius:99px;background:var(--panel);margin-top:6px;overflow:hidden;max-width:420px}
+.bar-meter i{display:block;height:100%;border-radius:99px;background:var(--brand)}
+.bar-meter i.w{background:var(--amber-fill)} .bar-meter i.x{background:var(--alert)}
+.calc-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn.ghost{background:var(--card);color:var(--accent);border:1px solid var(--accent-line)}
+.btn.ghost:hover{background:var(--accent-soft);filter:none}
+.print-only{display:none}
+.cmp td:first-child{font-weight:600}
+@media (max-width:900px){
+  .journey.j6{grid-template-columns:1fr}
+  .form.f3{grid-template-columns:1fr 1fr}
+}
+@media (max-width:680px){
+  .limits,.form.f3{grid-template-columns:1fr}
+  .calc-card{padding:18px}
+  .lim{padding:18px 20px}
+  .lim .row b{font-size:24px}
+  .brand .logo{width:26px;height:26px}
+  .brand .mk-name{font-size:16px}
+}
+@media print{
+  .journey.j6{grid-template-columns:repeat(6,1fr)!important}
+  .phases.p6{display:grid!important}
+  #tools .form,#tools .calc-actions,#tools .seg{display:none!important}
+  #tools .result:not(.show){display:none!important}
+  #tools.no-result{display:none!important}
+  .calc-card{border:0;padding:0}
+  .print-only{display:block}
+  .limits{grid-template-columns:1fr 1fr!important}
+  .lim .row b{font-size:16pt}
+  .lim{padding:10px 14px!important}
+}
+footer .mk-ecard b{color:var(--mk-ink)}
+footer .mk-ecard{margin-top:28px}
+
+/* ===== MKPA 統一標準（由 _standard/mkpa.css 複製，修改請先改呢份再同步到各工具）===== */
+:root{
+  --mk-brand:#00A758; --mk-brand-ink:#00753E; --mk-brand-soft:#E6F6EE; --mk-brand-line:#B4E2C8;
+  --mk-deep:#0E5E57; --mk-ink:#1D2B2A; --mk-muted:#5B6B6A;
+  --mk-bg:#F6F9F8; --mk-surface:#FFFFFF; --mk-line:#E3E9E7;
+  --mk-warn:#8A5B00; --mk-warn-soft:#FFF5DC; --mk-danger:#C62828; --mk-danger-soft:#FDECEC;
+  --mk-sans:"Noto Sans HK","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
+  --mk-num:"Barlow","Noto Sans HK",system-ui,sans-serif;
+  --mk-max:1320px;                        /* 內容最闊 */
+  --mk-gutter:clamp(16px,3vw,32px);       /* 兩邊留白：手機 16px → 桌面 32px */
+}
+/* 版面外框：工具可以用自己嘅 class，但數值要一樣 */
+.mk-wrap{width:100%;max-width:calc(var(--mk-max) + 2 * var(--mk-gutter));margin:0 auto;padding-left:var(--mk-gutter);padding-right:var(--mk-gutter);box-sizing:border-box}
+/* 標題旁 icon */
+.mk-logo{width:32px;height:32px;flex:none;display:block}
+.mk-ecard{display:flex;align-items:center;gap:16px 24px;flex-wrap:wrap;margin:28px 0 0;padding:20px 22px;border-radius:14px;border:1px solid var(--mk-brand-line);background:var(--mk-brand-soft);font-family:var(--mk-sans);color:var(--mk-ink);text-align:left}
+.mk-ecard-txt{flex:1;min-width:200px}
+.mk-ecard-txt b{display:block;font-size:17px;font-weight:700;margin-bottom:2px;color:var(--mk-ink)}
+.mk-ecard-txt span{color:var(--mk-muted);font-size:14.5px;line-height:1.55}
+.mk-ecard-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;border-radius:999px;background:var(--mk-brand);color:#fff!important;font-weight:700;font-size:16px;text-decoration:none!important;white-space:nowrap}
+.mk-ecard-btn:hover{background:var(--mk-brand-ink)}
+.mk-ecard-qr{display:none}
+.mk-copy{margin:14px 0 0;font-size:13px;color:var(--mk-muted);font-family:var(--mk-sans)}
+.mk-print-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--mk-brand);background:var(--mk-surface);color:var(--mk-brand-ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.mk-print-btn:hover{background:var(--mk-brand-soft)}
+.mk-print-head{display:none}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .mk-no-print,.mk-print-btn,.mk-share-btn,.mk-toast,.mk-ecard-btn{display:none!important}
+  .mk-header{position:static}
+  .mk-ecard{break-inside:avoid;padding:10px 14px;margin-top:14px}
+  .mk-ecard-qr{display:block}
+  .mk-ecard-qr svg{width:22mm;height:22mm;display:block}
+  .mk-ecard-txt span:after{content:"（掃描右方二維碼）"}
+  .mk-print-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:2px solid var(--mk-brand);padding:0 0 5px;margin:0 0 10px;font-family:var(--mk-sans);color:var(--mk-muted);font-size:9pt}
+  .mk-print-head b{color:var(--mk-deep);font-size:11pt}
+}
+/* 頁頭：統一鎖住喺頂；第一行 icon + 工具名 + 按鈕 */
+.mk-header{position:sticky;top:0;z-index:50}
+.mk-bar{display:flex;align-items:center;gap:12px;min-height:56px}
+.mk-title{display:flex;align-items:center;gap:10px;min-width:0;font-family:var(--mk-sans);font-weight:900;font-size:17px;white-space:nowrap}
+.mk-title span{overflow:hidden;text-overflow:ellipsis}
+/* 工具名 + 細字簡介（兩行都擠喺 56px 頁頭入面） */
+.mk-name{display:flex;flex-direction:column;justify-content:center;min-width:0;line-height:1.2}
+.mk-sub{display:block;margin-top:2px;color:inherit;font-size:12px;font-weight:500;letter-spacing:0;opacity:.78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-actions{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
+/* 分享呢個方案（同列印按鈕一樣樣式） */
+.mk-share-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--mk-brand);background:var(--mk-surface);color:var(--mk-brand-ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.mk-share-btn:hover{background:var(--mk-brand-soft)}
+.mk-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999;background:var(--mk-ink);color:#fff;font:600 14px/1.4 var(--mk-sans);padding:10px 16px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:calc(100vw - 32px)}
+.mk-share-btn>.mk-long{margin-left:-6px} /* 抵銷 gap，令「分享呢個方案」連埋 */
+.mk-print-btn>.mk-long{margin-left:-2px} /* 「列印 / 存 PDF」保留一個空格 */
+/* 手機：按鈕字縮短（「分享」「列印」） */
+@media (max-width:480px){.mk-long{display:none}.mk-print-btn,.mk-share-btn{padding:0 10px}}
+/* ===== MKPA 統一標準 完 ===== */
+
+</style>
 </head>
-<body class="bg-gray-50 font-sans text-dark">
-    <!-- 顶部导航栏 -->
-    <header class="sticky top-0 z-50 bg-white shadow-md transition-all duration-300">
-        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center mb-4 md:mb-0">
-                <i class="fa fa-hospital-o text-primary text-3xl mr-3"></i>
-                <h1 class="text-2xl font-bold text-primary">香港醫院查詢目錄</h1>
-            </div>
-            <div class="flex items-center">
-                <button id="favorites-btn" class="p-2 rounded-full hover:bg-gray-100 transition-pro relative">
-                    <i class="fa fa-star-o text-neutral"></i>
-                    <span id="favorites-count" class="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
+<body>
+<div class="mk-print-head"><b>MKPA · 長者生活津貼全程指南</b><span>列印日期：<span class="mk-print-date"></span></span></div>
 
-    <!-- 主内容区 -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- 搜索和筛选区域 -->
-        <section class="mb-8 bg-white rounded-xl shadow-pro p-6">
-            <div class="mb-6">
-                <div class="relative">
-                    <i class="fa fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral"></i>
-                    <input 
-                        type="text" 
-                        id="search-input" 
-                        placeholder="搜索醫院名稱、服務或地址..." 
-                        class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro"
-                    >
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
-                <!-- 地区筛选 -->
-                <div>
-                    <label class="block text-sm font-medium text-neutral mb-2">地區</label>
-                    <select id="district-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
-                        <option value="all">所有地區</option>
-                        <option value="hongkong">香港島</option>
-                        <option value="kowloon">九龍</option>
-                        <option value="newterritories">新界</option>
-                    </select>
-                </div>
-
-                <!-- 医院类型筛选 -->
-                <div>
-                    <label class="block text-sm font-medium text-neutral mb-2">醫院類型</label>
-                    <select id="type-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
-                        <option value="all">所有類型</option>
-                        <option value="public">公立醫院</option>
-                        <option value="private">私家醫院</option>
-                    </select>
-                </div>
-
-                <!-- 服务筛选 -->
-                <div>
-                    <label class="block text-sm font-medium text-neutral mb-2">主要服務</label>
-                    <select id="service-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
-                        <option value="all">所有服務</option>
-                        <option value="emergency">24小時急症室</option>
-                        <option value="children">兒童病房及服務</option>
-                        <option value="maternity">產科及婦科服務</option>
-                        <option value="cardiology">心臟科服務</option>
-                        <option value="orthopedics">骨科服務</option>
-                        <option value="oncology">腫瘤科服務</option>
-                        <option value="neurology">神經科服務</option>
-                        <option value="ophthalmology">眼科服務</option>
-                        <option value="dental">牙科服務</option>
-                        <option value="psychiatry">精神科服務</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- 高级筛选按钮 -->
-            <div class="mb-6">
-                <button id="advanced-filter-btn" class="flex items-center text-secondary hover:text-primary transition-pro text-sm">
-                    <i class="fa fa-sliders mr-2"></i> 高級篩選選項
-                    <i class="fa fa-chevron-down ml-2 text-xs transition-transform duration-300" id="advanced-icon"></i>
-                </button>
-
-                <!-- 高级筛选内容 -->
-                <div id="advanced-filters" class="hidden mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div>
-                        <label class="block text-sm font-medium text-neutral mb-2">保險合作</label>
-                        <select id="insurance-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
-                            <option value="all">所有</option>
-                            <option value="ha">醫管局計劃</option>
-                            <option value="international">國際保險</option>
-                            <option value="both">兩者皆可</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-neutral mb-2">設施</label>
-                        <select id="facility-filter" class="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro">
-                            <option value="all">所有</option>
-                            <option value="parking">停車場</option>
-                            <option value="pharmacy">24小時藥房</option>
-                            <option value="accessibility">無障礙設施</option>
-                            <option value="cafeteria">餐廳/咖啡廳</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 快速筛选标签 -->
-            <div class="flex flex-wrap gap-2">
-                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="emergency">
-                    <i class="fa fa-ambulance mr-1"></i> 急症室
-                </button>
-                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="children">
-                    <i class="fa fa-child mr-1"></i> 兒童服務
-                </button>
-                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="maternity">
-                    <i class="fa fa-female mr-1"></i> 產科服務
-                </button>
-                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="public">
-                    <i class="fa fa-building mr-1"></i> 公立醫院
-                </button>
-                <button class="quick-filter px-4 py-2 bg-primary/10 text-primary rounded-full text-sm hover:bg-primary/20 transition-pro" data-filter="private">
-                    <i class="fa fa-hospital mr-1"></i> 私家醫院
-                </button>
-                <button id="reset-filters" class="ml-auto px-4 py-2 bg-gray-100 text-neutral rounded-full text-sm hover:bg-gray-200 transition-pro">
-                    <i class="fa fa-refresh mr-1"></i> 重置篩選
-                </button>
-            </div>
-        </section>
-
-        <!-- 统计和排序区域 -->
-        <section class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div>
-                <h2 class="text-xl font-bold flex items-center">
-                    <span id="results-count">0</span> 間醫院
-                    <span class="ml-3 text-sm font-normal text-neutral">
-                        <span id="public-count">0</span> 公立 · <span id="private-count">0</span> 私家
-                    </span>
-                </h2>
-                <p class="text-sm text-neutral mt-1">數據最後更新: <span id="last-update">2023年10月</span></p>
-            </div>
-            <div class="flex items-center mt-4 md:mt-0">
-                <label class="text-sm text-neutral mr-2">排序:</label>
-                <select id="sort-options" class="p-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-pro text-sm">
-                    <option value="name">按名稱 (A-Z)</option>
-                    <option value="name-desc">按名稱 (Z-A)</option>
-                    <option value="district">按地區</option>
-                    <option value="type">按類型</option>
-                </select>
-            </div>
-        </section>
-
-        <!-- 医院列表区域 -->
-        <section>
-            <div id="hospitals-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 医院卡片将通过JavaScript动态生成 -->
-            </div>
-
-            <!-- 加载中状态 -->
-            <div id="loading-state" class="flex flex-col items-center justify-center py-20 text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
-                <p class="text-neutral">正在載入醫院資料...</p>
-            </div>
-
-            <!-- 空状态显示 -->
-            <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-center">
-                <i class="fa fa-search text-6xl text-gray-300 mb-4"></i>
-                <h3 class="text-xl font-medium text-neutral mb-2">沒有找到符合條件的醫院</h3>
-                <p class="text-gray-400 max-w-md">請嘗試調整搜索條件或使用不同的關鍵詞</p>
-                <button id="empty-reset" class="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-pro">
-                    重置所有篩選
-                </button>
-            </div>
-        </section>
-
-        <!-- 分页控制 -->
-        <div id="pagination" class="mt-10 flex justify-center items-center hidden">
-            <button id="prev-page" class="px-4 py-2 border border-gray-300 rounded-l-lg hover:bg-gray-50 transition-pro disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                <i class="fa fa-chevron-left"></i>
-            </button>
-            <div id="page-numbers" class="flex">
-                <!-- 页码将通过JavaScript动态生成 -->
-            </div>
-            <button id="next-page" class="px-4 py-2 border border-gray-300 rounded-r-lg hover:bg-gray-50 transition-pro">
-                <i class="fa fa-chevron-right"></i>
-            </button>
-        </div>
-    </main>
-
-    <!-- 医院详情模态框 -->
-    <div id="hospital-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="modal-backdrop"></div>
-        <div class="relative bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <button id="close-modal" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white shadow-md transition-pro">
-                <i class="fa fa-times text-neutral"></i>
-            </button>
-            <div id="modal-content" class="p-6">
-                <!-- 模态框内容将通过JavaScript动态生成 -->
-            </div>
-        </div>
+<header class="bar mk-header">
+  <div class="wrap">
+    <a class="brand" href="./"><img class="mk-logo logo" src="favicon.svg" alt="" width="30" height="30"><span class="mk-name">長者生活津貼全程指南<small class="mk-sub">長生津資格、申請及覆檢一覽</small></span></a>
+    <nav class="nav" id="nav">
+      <a href="#journey">總覽</a>
+      <a href="#eligibility">申請資格</a>
+      <a href="#types">申請類別</a>
+      <a href="#process">申請流程</a>
+      <a href="#declare">申報要求</a>
+      <a href="#review">定期審查</a>
+      <a href="#tools">快速計算</a>
+      <a href="#faq">常見問題</a>
+    </nav>
+    <div class="tools">
+      <button type="button" class="mk-share-btn" onclick="shareCalc()">分享<span class="mk-long">呢個方案</span></button>
+      <button type="button" class="mk-print-btn" onclick="window.print()">列印<span class="mk-long"> / 存 PDF</span></button>
     </div>
+  </div>
+</header>
 
-    <!-- 收藏夹模态框 -->
-    <div id="favorites-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="favorites-backdrop"></div>
-        <div class="relative bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-xl font-bold text-primary">我的收藏</h3>
-                    <button id="close-favorites" class="p-2 rounded-full hover:bg-gray-100 transition-pro">
-                        <i class="fa fa-times text-neutral"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="favorites-content" class="p-6">
-                <!-- 收藏内容将通过JavaScript动态生成 -->
-                <div id="empty-favorites" class="flex flex-col items-center justify-center py-16 text-center">
-                    <i class="fa fa-star-o text-6xl text-gray-300 mb-4"></i>
-                    <h4 class="text-lg font-medium text-neutral mb-2">您還沒有收藏任何醫院</h4>
-                    <p class="text-gray-400 max-w-md">點擊醫院卡片上的星星圖標將醫院添加到收藏夾</p>
-                </div>
-            </div>
-        </div>
+<main class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="kicker">長生津 ・ 2026 年度</div>
+  <h1>長者生活津貼全程指南</h1>
+  <p class="lead">65 歲或以上、有經濟需要的香港長者，每月可領 $4,345。由申請資格、入息資產怎樣計、申請流程，到獲批後的出入境限制及定期覆檢，一頁看清。</p>
+  <div class="meta-row"><span>資料整理：2026 年 10 月</span><span>金額及限額生效：2026 年 2 月 1 日</span><span>非官方整理，以社會福利署公布為準</span></div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">每月津貼</div><div class="v">$4,345</div><div class="n">每名合資格長者・2026 年 2 月起</div></div>
+    <div class="stat"><div class="k">單身資產上限</div><div class="v">$415,000</div><div class="n">每月入息上限 $10,900</div></div>
+    <div class="stat"><div class="k">夫婦資產上限</div><div class="v">$630,000</div><div class="n">每月入息上限 $16,680（二人合計）</div></div>
+    <div class="stat"><div class="k">申請年齡</div><div class="v">65<small>歲</small></div><div class="n">可於生日前一個月內提早申請</div></div>
+  </div>
+</div>
+
+<!-- PERSONA -->
+<section class="no-print">
+  <div class="sec-head"><div class="sec-no">START</div><div><h2>按你的情況閱讀</h2><p>選擇最接近的情況，直接跳到相關部分。</p></div></div>
+  <div class="persona">
+    <a class="pcard sa" href="#eligibility"><div class="stage">申請前</div><h3>快到 65 歲</h3><p>有甚麼條件、入息及資產上限是多少、自住樓計不計。</p><span class="go">申請資格 →</span></a>
+    <a class="pcard sa" href="#tools"><div class="stage">申請前</div><h3>有積蓄、有保單</h3><p>存款、強積金、保險現金價值、年金怎樣計算。</p><span class="go">快速計算 →</span></a>
+    <a class="pcard sa" href="#types"><div class="stage">申請前</div><h3>夫婦或同居</h3><p>兩人的入息及資產合併計算，兩人都合資格可各自領取。</p><span class="go">申請類別 →</span></a>
+    <a class="pcard sb" href="#types"><div class="stage">打算北上</div><h3>到廣東或福建養老</h3><p>廣東計劃、福建計劃照樣發放，可直接存入內地銀行戶口。</p><span class="go">廣東及福建計劃 →</span></a>
+    <a class="pcard sc" href="#review"><div class="stage">領取中</div><h3>收到覆檢通知書</h3><p>郵遞覆檢及全面覆檢要做甚麼，一個月內要交回。</p><span class="go">定期審查 →</span></a>
+    <a class="pcard sc" href="#declare"><div class="stage">領取中</div><h3>經常離港或資產有變</h3><p>每年最少在港住 60 日，入息資產超標要即時通知。</p><span class="go">申報要求 →</span></a>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey">
+  <div class="sec-head"><div class="sec-no">00 總覽</div><div><h2>由申請到持續領取的六個階段</h2><p>長生津屬入息及資產審查的津貼，獲批之後仍要遵守居港規定，並定期接受覆檢。</p></div></div>
+  <div class="journey j6">
+    <div class="jstep pa"><div class="jdot">1</div><h4>檢查資格</h4><p>65 歲、居港 7 年、申請前一年連續居港</p></div>
+    <div class="jstep pa"><div class="jdot">2</div><h4>計算入息資產</h4><p>以填表當日計算，夫婦要合併</p></div>
+    <div class="jstep pa"><div class="jdot">3</div><h4>遞交申請</h4><p>網上、郵寄、傳真或親身，生日前一個月可遞表</p></div>
+    <div class="jstep pb"><div class="jdot">4</div><h4>會面核實</h4><p>社署約見，核對身份證明、旅行證件及財務文件</p></div>
+    <div class="jstep pc"><div class="jdot">5</div><h4>每月發放</h4><p>存入申請人個人銀行戶口，由收件或合資格日起計</p></div>
+    <div class="jstep pc"><div class="jdot">6</div><h4>持續申報及覆檢</h4><p>每年在港最少 60 日，六年一個覆檢周期</p></div>
+  </div>
+  <div class="phases p6"><div>申請前</div><div>審批</div><div>領取期間</div></div>
+</section>
+
+<!-- ELIGIBILITY -->
+<section id="eligibility">
+  <div class="sec-head"><div class="sec-no">01 資格</div><div><h2>申請資格</h2><p>以下條件須<span class="key">全部符合</span>；領取期間亦須繼續符合。</p></div></div>
+  <div class="grid2">
+    <div class="card">
+      <h3>基本條件</h3>
+      <ul class="checks">
+        <li>年滿 65 歲<span>可於 65 歲生日前一個月內遞表，以生日當日作申請日期。</span></li>
+        <li>成為香港居民最少 7 年<span>非法入境者或以非定居身份來港人士（例如外地勞工、旅客）不符合資格。</span></li>
+        <li>申請前一年連續在港居住<span>該年離港合共不超過 <b>90 日</b>仍當作連續居港；因病在外地接受治療超過 90 日，可提交證明由社署酌情處理。</span></li>
+        <li>入息及資產不超過限額<span>單身與夫婦適用不同限額，見右方。</span></li>
+        <li>沒有同時領取綜援、生果金或傷殘津貼<span>正領取這些津貼的人可申請轉為長生津，但不能同時領取。</span></li>
+        <li>不在羈留或服刑中</li>
+      </ul>
     </div>
+    <div class="stack">
+      <div class="limits">
+        <div class="lim"><div class="k">單身人士</div>
+          <div class="row"><span>每月入息</span><b>$10,900</b></div>
+          <div class="row"><span>資產總值</span><b>$415,000</b></div></div>
+        <div class="lim b"><div class="k">夫婦（已婚或同居）</div>
+          <div class="row"><span>每月入息</span><b>$16,680</b></div>
+          <div class="row"><span>資產總值</span><b>$630,000</b></div></div>
+      </div>
+      <p class="tnote">2026 年 2 月 1 日起生效，香港、廣東計劃及福建計劃適用同一套限額。限額及津貼額一般每年 2 月按物價調整。</p>
+      <div class="note"><span class="nt">單身還是夫婦限額？</span><p>未婚、分居、離婚或喪偶用單身限額，只申報自己。已婚，或同居而同時符合「同住一址、共用經濟資源、同意社署取得對方資料」三項，用夫婦限額，<mark>不論對方有沒有領取津貼，都要申報對方的入息及資產</mark>。</p></div>
+    </div>
+  </div>
 
-    <script>
-        // 医院数据 - 包含全香港所有主要公立和私家医院
-        const hospitals = [
-            // 香港島公立醫院
-            {
-                id: 1,
-                name: "瑪麗醫院",
-                nameEn: "Queen Mary Hospital",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島薄扶林道102號",
-                phone: "2855 3838",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2417&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology", "psychiatry"],
-                facilities: ["藥房", "停車場", "輪椅租借", "便利店", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：香港大學站B2出口步行10分鐘；巴士：37A、40、40M、71、91等",
-                speciality: "肝臟移植、器官移植、神經外科"
-            },
-            {
-                id: 2,
-                name: "東區尤德夫人那打素醫院",
-                nameEn: "Pamela Youde Nethersole Eastern Hospital",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島東區柴灣樂民道30號",
-                phone: "2595 6111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2416&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：柴灣站B出口步行10分鐘；巴士：8、19、29、82、85等",
-                speciality: "燒傷中心、創傷中心"
-            },
-            {
-                id: 3,
-                name: "律敦治醫院",
-                nameEn: "Ruttonjee Hospital",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島灣仔皇后大道東266號",
-                phone: "2835 8888",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2418&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["cardiology", "oncology", "respiratory", "neurology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：灣仔站A3出口步行15分鐘；巴士：1、2、5、8、10等",
-                speciality: "胸肺科、心臟科、癌症治療"
-            },
-            {
-                id: 4,
-                name: "鄧肇堅醫院",
-                nameEn: "Tang Shiu Kin Hospital",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島灣仔摩理臣山道130號",
-                phone: "2574 6111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2419&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["orthopedics", "dental", "rehabilitation"],
-                facilities: ["藥房", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：灣仔站B2出口步行8分鐘；巴士：1、2、5、8、10等",
-                speciality: "骨科、康復科、牙科"
-            },
-            {
-                id: 5,
-                name: "大口環根德公爵夫人兒童醫院",
-                nameEn: "Duchess of Kent Children's Hospital at Sandy Bay",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島薄扶林大口環道12號",
-                phone: "2855 4333",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2442&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "orthopedics", "rehabilitation"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "巴士：5、43X、48、71、91等",
-                speciality: "兒童矯形、兒童康復治療"
-            },
-            {
-                id: 6,
-                name: "贊育醫院",
-                nameEn: "Tsan Yuk Hospital",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島中環般咸道102號",
-                phone: "2549 5111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2443&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["maternity"],
-                facilities: ["藥房", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：香港大學站A2出口步行10分鐘；巴士：13、23、40、40M等",
-                speciality: "產科、婦科、產前產後護理"
-            },
-            {
-                id: 7,
-                name: "東華東院",
-                nameEn: "Tung Wah Eastern Hospital",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島東區東院道19號",
-                phone: "2560 8933",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2444&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "orthopedics", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：北角站A1出口步行5分鐘；巴士：2、2A、18、19、23等",
-                speciality: "普通科、骨科、牙科"
-            },
-            {
-                id: 8,
-                name: "香港眼科醫院",
-                nameEn: "Hong Kong Eye Hospital",
-                type: "public",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島西環堅尼地城道19號",
-                phone: "2559 6000",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2445&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時眼科急症",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["ophthalmology"],
-                facilities: ["藥房", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：堅尼地城站C出口步行8分鐘；巴士：5、13、43X、48等",
-                speciality: "眼科專科、視力矯正、眼科手術"
-            },
-            
-            // 九龍公立醫院
-            {
-                id: 9,
-                name: "伊利沙伯醫院",
-                nameEn: "Queen Elizabeth Hospital",
-                type: "public",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍油尖旺區亞皆老街147號",
-                phone: "2958 8888",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2421&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：旺角站E1出口步行10分鐘；巴士：1、2、6、12、13D等",
-                speciality: "腎臟科、器官移植、燒傷中心"
-            },
-            {
-                id: 10,
-                name: "廣華醫院",
-                nameEn: "Kwong Wah Hospital",
-                type: "public",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍油尖旺區窩打老道25號",
-                phone: "2332 2111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2420&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "orthopedics", "maternity", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "便利店", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：油麻地站C出口步行8分鐘；巴士：1、2、6、13D、28等",
-                speciality: "中醫服務、骨科、產科"
-            },
-            {
-                id: 11,
-                name: "明愛醫院",
-                nameEn: "Caritas Medical Centre",
-                type: "public",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍深水埗區青山道113號",
-                phone: "2711 8111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2422&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics", "cardiology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：深水埗站C1出口步行15分鐘；巴士：2、6、12、212、234等",
-                speciality: "老人科、家庭醫學"
-            },
-            {
-                id: 12,
-                name: "瑪嘉烈醫院",
-                nameEn: "Princess Margaret Hospital",
-                type: "public",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍葵青區瑪嘉烈醫院道10號",
-                phone: "2990 3333",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2423&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "oncology", "infectious", "cardiology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：葵興站E出口轉乘巴士；巴士：30、37、43、44M、235等",
-                speciality: "傳染病科、癌症治療、燒傷中心"
-            },
-            {
-                id: 13,
-                name: "基督教聯合醫院",
-                nameEn: "United Christian Hospital",
-                type: "public",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍觀塘區觀塘道75號",
-                phone: "2391 1000",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2424&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：觀塘站B2出口步行10分鐘；巴士：11B、11C、13D、14、14B等",
-                speciality: "創傷中心、產科、兒科"
-            },
-            {
-                id: 14,
-                name: "九龍醫院",
-                nameEn: "Kowloon Hospital",
-                type: "public",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍油尖旺區亞皆老街145號",
-                phone: "2713 5000",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2446&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["psychiatry", "rehabilitation", "geriatrics"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：旺角站E1出口步行8分鐘；巴士：1、2、6、12、13D等",
-                speciality: "精神科、康復科、老人科"
-            },
-            {
-                id: 15,
-                name: "聖母醫院",
-                nameEn: "Queen Mary Hospital",
-                type: "public",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍九龍城區黃埔花園德安街2号",
-                phone: "2365 3311",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2447&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["maternity", "geriatrics", "rehabilitation"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：黃埔站D出口步行5分鐘；巴士：5、5C、8、11、21等",
-                speciality: "產科、老人科、康復科"
-            },
-            
-            // 新界公立醫院
-            {
-                id: 16,
-                name: "威爾斯親王醫院",
-                nameEn: "Prince of Wales Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界沙田銀城街30號",
-                phone: "2632 2211",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2426&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology", "psychiatry"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：沙田站步行15分鐘，或轉乘巴士28K、81C；巴士：80K、82K、287X等",
-                speciality: "肝臟科、腎臟科、神經外科"
-            },
-            {
-                id: 17,
-                name: "屯門醫院",
-                nameEn: "Tuen Mun Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界屯門青松觀路23號",
-                phone: "2456 8000",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2429&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics", "cardiology", "oncology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "便利店", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：屯門站轉乘輕鐵507、614；巴士：59M、60M、61M、258D等",
-                speciality: "骨科、創傷中心、產科"
-            },
-            {
-                id: 18,
-                name: "元朗醫院",
-                nameEn: "Yuen Long Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界元朗區元朗馬棠路26號",
-                phone: "2476 8888",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2430&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：元朗站B出口轉乘輕鐵610；巴士：64K、68A、76K、268B等",
-                speciality: "老人科、康復科"
-            },
-            {
-                id: 19,
-                name: "北區醫院",
-                nameEn: "North District Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界北區粉嶺聯和墟璧峰路13號",
-                phone: "2675 6000",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2427&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics", "cardiology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：粉嶺站C出口轉乘小巴52K；巴士：70K、76K、270A等",
-                speciality: "家庭醫學、產科、兒科"
-            },
-            {
-                id: 20,
-                name: "博愛醫院",
-                nameEn: "Pok Oi Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界元朗區天水圍天瑞路88號",
-                phone: "2445 3311",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2428&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：天水圍站轉乘輕鐵705、706；巴士：264M、265M、276A等",
-                speciality: "老人科、康復科、產科"
-            },
-            {
-                id: 21,
-                name: "沙田醫院",
-                nameEn: "Shatin Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界沙田圓洲角路10號",
-                phone: "2605 2111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2448&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["geriatrics", "rehabilitation", "psychiatry"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：沙田圍站A出口步行10分鐘；巴士：81K、89、281A等",
-                speciality: "康復科、老人科、精神科"
-            },
-            {
-                id: 22,
-                name: "大埔醫院",
-                nameEn: "Tai Po Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界大埔區大埔全安路11號",
-                phone: "2657 3111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2449&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["geriatrics", "rehabilitation", "psychiatry"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：大埔墟站轉乘巴士72A；巴士：72、73、74X、271等",
-                speciality: "老人科、康復科、精神科"
-            },
-            {
-                id: 23,
-                name: "雅麗氏何妙齡那打素醫院",
-                nameEn: "Alice Ho Miu Ling Nethersole Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界大埔區大埔全安路13號",
-                phone: "2656 5211",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2450&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics", "cardiology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：大埔墟站轉乘巴士72A；巴士：72、73、74X、271等",
-                speciality: "普通科、產科、兒科"
-            },
-            {
-                id: 24,
-                name: "仁濟醫院",
-                nameEn: "Yan Chai Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界荃灣區荃灣仁濟街7-11號",
-                phone: "2499 6111",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2451&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["orthopedics", "rehabilitation", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：荃灣站D出口步行10分鐘；巴士：30X、38A、42C、234X等",
-                speciality: "骨科、康復科、牙科"
-            },
-            {
-                id: 25,
-                name: "將軍澳醫院",
-                nameEn: "Tseung Kwan O Hospital",
-                type: "public",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界西貢區將軍澳坑口寶寧里2號",
-                phone: "2708 3311",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2452&Lang=CHI",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 8:30 - 17:30, 星期六: 8:30 - 12:30, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics", "cardiology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["ha"],
-                transport: "地鐵：坑口站B1出口步行5分鐘；巴士：91M、98A、296A等",
-                speciality: "普通科、產科、骨科"
-            },
-            
-            // 私家醫院
-            {
-                id: 26,
-                name: "養和醫院",
-                nameEn: "Hong Kong Sanatorium & Hospital",
-                type: "private",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島跑馬地山村道2號",
-                phone: "2572 0211",
-                website: "https://www.hksh.com/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology", "dental", "psychiatry"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "禮品店", "accessibility", "cafeteria"],
-                insurance: ["international"],
-                transport: "地鐵：銅鑼灣站F出口轉乘巴士41A、63；巴士：1、2、5B、19、23等",
-                speciality: "心臟科、腦外科、癌症治療、產科"
-            },
-            {
-                id: 27,
-                name: "港怡醫院",
-                nameEn: "Gleneagles Hospital Hong Kong",
-                type: "private",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島黃竹坑南朗山道30號",
-                phone: "2122 1333",
-                website: "https://www.gleneagleshk.com/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 14:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology", "ophthalmology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "咖啡廳", "accessibility", "cafeteria"],
-                insurance: ["international"],
-                transport: "地鐵：黃竹坑站D出口步行5分鐘；巴士：48、78、91、91A、94A等",
-                speciality: "微創手術、腫瘤治療、心臟科"
-            },
-            {
-                id: 28,
-                name: "聖保祿醫院",
-                nameEn: "St. Paul's Hospital",
-                type: "private",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島銅鑼灣黃泥涌道19號",
-                phone: "2890 6000",
-                website: "https://www.stpaulshospital.org.hk/",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "ophthalmology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["international"],
-                transport: "地鐵：銅鑼灣站A出口步行10分鐘；巴士：2、5、10、19、23等",
-                speciality: "產科、婦科、心臟科"
-            },
-            {
-                id: 29,
-                name: "嘉諾撒醫院",
-                nameEn: "Canossa Hospital (Caritas)",
-                type: "private",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島中環羅便臣道102號",
-                phone: "2522 2181",
-                website: "https://www.canossahospital.org.hk/",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["maternity", "cardiology", "orthopedics", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["international"],
-                transport: "地鐵：中環站D2出口步行15分鐘；巴士：12、13、23、40、103等",
-                speciality: "內科、外科、產科"
-            },
-            {
-                id: 30,
-                name: "仁安醫院",
-                nameEn: "Union Hospital",
-                type: "private",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界沙田大圍富健街18號",
-                phone: "2608 3388",
-                website: "https://www.union.org.hk/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 14:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "oncology", "neurology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility", "cafeteria"],
-                insurance: ["international"],
-                transport: "地鐵：大圍站B出口步行10分鐘；巴士：80、81、86、87B、281A等",
-                speciality: "心臟科、腦外科、微創手術"
-            },
-            {
-                id: 31,
-                name: "荃灣港安醫院",
-                nameEn: "Tsuen Wan Adventist Hospital",
-                type: "private",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界荃灣荃景圍199號",
-                phone: "2498 9633",
-                website: "https://www.twah.org.hk/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["international"],
-                transport: "地鐵：荃灣站A出口轉乘小巴81K；巴士：30X、43X、48X、73X等",
-                speciality: "眼科、牙科、產科"
-            },
-            {
-                id: 32,
-                name: "沙田威爾斯親王醫院(私家部)",
-                nameEn: "Prince of Wales Hospital (Private)",
-                type: "private",
-                district: "newterritories",
-                districtName: "新界",
-                address: "新界沙田銀城街30號",
-                phone: "2632 2388",
-                website: "https://www.ha.org.hk/visitor/ha_visitor_index.asp?Content_ID=2426&Lang=CHI",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 9:00 - 17:00, 星期六: 9:00 - 12:00, 星期日及公眾假期: 休息",
-                services: ["children", "cardiology", "orthopedics", "oncology", "neurology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["both"],
-                transport: "地鐵：沙田站步行15分鐘，或轉乘巴士28K、81C；巴士：80K、82K、287X等",
-                speciality: "各種專科診療服務"
-            },
-            {
-                id: 33,
-                name: "聖德肋撒醫院",
-                nameEn: "St. Teresa's Hospital",
-                type: "private",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍九龍城區太子道西327號",
-                phone: "2332 2111",
-                website: "https://www.st-teresas.org.hk/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["international"],
-                transport: "地鐵：旺角東站B出口步行10分鐘；巴士：2A、3C、5、6D、11等",
-                speciality: "內科、外科、產科"
-            },
-            {
-                id: 34,
-                name: "播道醫院",
-                nameEn: "Evangel Hospital",
-                type: "private",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍觀塘區將軍澳寶琳南路9號",
-                phone: "2706 6888",
-                website: "https://www.evangel.org.hk/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "orthopedics", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["international"],
-                transport: "地鐵：將軍澳站B出口轉乘小巴11M；巴士：91M、98A、296A等",
-                speciality: "產科、康復科、家庭醫學"
-            },
-            {
-                id: 35,
-                name: "香港港安醫院－司徒拔道",
-                nameEn: "Hong Kong Adventist Hospital - Stubbs Road",
-                type: "private",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島灣仔司徒拔道40號",
-                phone: "2521 8111",
-                website: "https://www.hkah.org.hk/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["cardiology", "oncology", "neurology", "ophthalmology"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility", "cafeteria"],
-                insurance: ["international"],
-                transport: "地鐵：灣仔站A3出口轉乘的士；巴士：15、23、26、41A、63等",
-                speciality: "心臟科、癌症治療、微創手術"
-            },
-            {
-                id: 36,
-                name: "寶血醫院",
-                nameEn: "Canossa Hospital (Caritas)",
-                type: "private",
-                district: "kowloon",
-                districtName: "九龍",
-                address: "九龍深水埗區青山道113號",
-                phone: "2711 8111",
-                website: "https://www.caritashongkong.org.hk/tc/hospital-and-health-services/hospitals-and-nursing-homes/blood-hospital",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["geriatrics", "rehabilitation", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["international"],
-                transport: "地鐵：深水埗站C1出口步行10分鐘；巴士：2、6、12、212等",
-                speciality: "老人科、康復科、牙科"
-            },
-            {
-                id: 37,
-                name: "法國醫院",
-                nameEn: "Hopital Francais de Hong Kong",
-                type: "private",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島半山羅便臣道45號",
-                phone: "2522 4343",
-                website: "https://www.hopital-francais.com/",
-                emergency: false,
-                emergencyHours: "不設急症室",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["cardiology", "orthopedics", "dental"],
-                facilities: ["藥房", "停車場", "輪椅租借", "accessibility"],
-                insurance: ["international"],
-                transport: "地鐵：中環站D2出口步行15分鐘；巴士：12、13、23、40等",
-                speciality: "內科、外科、法國式醫療服務"
-            },
-            {
-                id: 38,
-                name: "明德國際醫院",
-                nameEn: "Matilda International Hospital",
-                type: "private",
-                district: "hongkong",
-                districtName: "香港島",
-                address: "香港島山頂麥當勞道102號",
-                phone: "2849 0111",
-                website: "https://www.matilda.org/",
-                emergency: true,
-                emergencyHours: "24小時",
-                outpatientHours: "星期一至五: 9:00 - 18:00, 星期六: 9:00 - 13:00, 星期日及公眾假期: 休息",
-                services: ["children", "maternity", "cardiology", "orthopedics"],
-                facilities: ["藥房", "停車場", "輪椅租借", "餐廳", "accessibility"],
-                insurance: ["international"],
-                transport: "巴士：15、15B、23、41A、63等",
-                speciality: "產科、外科、國際醫療服務"
-            }
-        ];
+  <h3 class="block">甚麼要計、甚麼不計</h3>
+  <div class="grid2">
+    <div class="card top tc-amber">
+      <h3>計入入息（每月）</h3>
+      <ul class="dots">
+        <li>工資、薪金、佣金、花紅（包括兼職、自僱、執紙皮等收入）</li>
+        <li>長俸、退休金、長期服務金</li>
+        <li>淨租金收入（扣除差餉及地租）</li>
+        <li>年金計劃的固定派發（包括香港年金計劃）；按季、半年或每年派發的，平均攤分到每月</li>
+      </ul>
+      <p class="sub" style="margin-top:12px"><b>不計：</b>子女親友給的家用或零用錢；安老按揭（樓按）及保單逆按每月領取的款項。但這些錢儲起來的部分會變成資產。</p>
+    </div>
+    <div class="card top tc-coral">
+      <h3>計入資產</h3>
+      <ul class="dots">
+        <li>現金（包括放在家中或保險箱的）、銀行存款，港幣、外幣都計</li>
+        <li>股票、債券、基金等投資，以及金條、金幣</li>
+        <li>非自住的物業、土地及車位（香港、澳門、內地或海外都計，包括鄉下祖屋）</li>
+        <li>公司或生意的權益；的士、小巴等營業車輛及牌照</li>
+        <li>可提取的強積金等退休權益（以最近周年結算計）</li>
+      </ul>
+      <p class="sub" style="margin-top:12px"><b>豁免：</b>一個香港自住物業及自用車位、自用的未來骨灰龕位、<mark>保險現金價值</mark>（人壽、醫療、危疾保單）、已繳的年金保費、首飾及金牙。</p>
+    </div>
+  </div>
+</section>
 
-        // 全局变量
-        let favorites = JSON.parse(localStorage.getItem('hospitalFavorites')) || [];
-        let currentPage = 1;
-        const itemsPerPage = 12;
-        let filteredHospitals = [];
+<!-- TYPES -->
+<section id="types">
+  <div class="sec-head"><div class="sec-no">02 類別</div><div><h2>申請類別</h2><p>長生津只有一個金額（2022 年起「普通」與「高額」已合併），按居住地分三種計劃，按婚姻狀況分兩套限額。</p></div></div>
+  <div class="grid3">
+    <div class="card top tc-green">
+      <span class="tag c-green">住在香港</span>
+      <h3 style="margin-top:10px">長者生活津貼</h3>
+      <p>一般申請，由居住地區的社會保障辦事處處理。</p>
+      <p class="sub">領取期間每個「付款年度」須在港住最少 60 日。</p>
+    </div>
+    <div class="card top tc-blue">
+      <span class="tag c-blue">移居廣東</span>
+      <h3 style="margin-top:10px">廣東計劃</h3>
+      <p>在廣東省居住的長者照樣領取，金額、限額與香港相同。</p>
+      <p class="sub">每個付款年度須在廣東住最少 60 日；由社署上水辦事處處理。</p>
+    </div>
+    <div class="card top tc-purple">
+      <span class="tag c-purple">移居福建</span>
+      <h3 style="margin-top:10px">福建計劃</h3>
+      <p>安排與廣東計劃相同，適用於在福建省居住的長者。</p>
+      <p class="sub">2026 年 7 月起，可選擇直接存入廣東或福建的中國銀行、工商銀行港幣戶口。</p>
+    </div>
+  </div>
 
-        // DOM元素
-        const hospitalsContainer = document.getElementById('hospitals-container');
-        const resultsCount = document.getElementById('results-count');
-        const publicCount = document.getElementById('public-count');
-        const privateCount = document.getElementById('private-count');
-        const emptyState = document.getElementById('empty-state');
-        const loadingState = document.getElementById('loading-state');
-        const searchInput = document.getElementById('search-input');
-        const districtFilter = document.getElementById('district-filter');
-        const typeFilter = document.getElementById('type-filter');
-        const serviceFilter = document.getElementById('service-filter');
-        const insuranceFilter = document.getElementById('insurance-filter');
-        const facilityFilter = document.getElementById('facility-filter');
-        const quickFilters = document.querySelectorAll('.quick-filter');
-        const resetFilters = document.getElementById('reset-filters');
-        const emptyReset = document.getElementById('empty-reset');
-        const sortOptions = document.getElementById('sort-options');
-        const hospitalModal = document.getElementById('hospital-modal');
-        const modalContent = document.getElementById('modal-content');
-        const closeModal = document.getElementById('close-modal');
-        const modalBackdrop = document.getElementById('modal-backdrop');
-        const favoritesBtn = document.getElementById('favorites-btn');
-        const favoritesModal = document.getElementById('favorites-modal');
-        const favoritesContent = document.getElementById('favorites-content');
-        const closeFavorites = document.getElementById('close-favorites');
-        const favoritesBackdrop = document.getElementById('favorites-backdrop');
-        const favoritesCount = document.getElementById('favorites-count');
-        const emptyFavorites = document.getElementById('empty-favorites');
-        const advancedFilterBtn = document.getElementById('advanced-filter-btn');
-        const advancedFilters = document.getElementById('advanced-filters');
-        const advancedIcon = document.getElementById('advanced-icon');
-        const pagination = document.getElementById('pagination');
-        const prevPage = document.getElementById('prev-page');
-        const nextPage = document.getElementById('next-page');
-        const pageNumbers = document.getElementById('page-numbers');
-        const lastUpdate = document.getElementById('last-update');
+  <h3 class="block">夫婦及同居人士</h3>
+  <div class="grid2">
+    <div class="card">
+      <h3>兩人合併審查</h3>
+      <p>夫婦的入息及資產<b>合併</b>與夫婦限額比較。只要合計超標，<span class="key">兩人都不能領取</span>；合計不超標，兩人只要各自年滿 65 歲並符合其他條件，<mark>可各自領取 $4,345</mark>，即一家合共每月 $8,690。</p>
+      <p class="sub">配偶未滿 65 歲也要申報；其強積金權益及強制性供款可獲豁免計算。</p>
+    </div>
+    <div class="card">
+      <h3>與子女同住</h3>
+      <p>審查以長者本人（或夫婦）為單位，<b>不計同住子女</b>的入息及資產。子女定期給的家用不計入息，但長者儲起來的部分屬資產。</p>
+    </div>
+  </div>
 
-        // 初始化页面
-        document.addEventListener('DOMContentLoaded', () => {
-            // 设置最后更新日期为当前月份
-            const now = new Date();
-            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-            lastUpdate.textContent = `${now.getFullYear()}年${months[now.getMonth()]}`;
-            
-            // 模拟加载效果
-            setTimeout(() => {
-                applyFilters();
-                loadingState.classList.add('hidden');
-            }, 800);
-            
-            updateFavoritesCount();
-            checkFavoritesEmpty();
-        });
+  <h3 class="block">與其他長者津貼比較</h3>
+  <div class="tbl-wrap">
+    <table class="cmp">
+      <thead><tr><th>項目</th><th>長者生活津貼</th><th>高齡津貼（生果金）</th><th>綜援（長者）</th></tr></thead>
+      <tbody>
+        <tr><td>年齡</td><td>65 歲或以上</td><td>70 歲或以上</td><td>60 歲或以上</td></tr>
+        <tr><td>每月金額</td><td>$4,345</td><td>$1,675</td><td>按個別需要計算</td></tr>
+        <tr><td>入息及資產審查</td><td>有</td><td>沒有</td><td>有（較嚴格）</td></tr>
+        <tr><td>可否同時領取</td><td colspan="3" style="text-align:center">三者只能選其一</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">年滿 70 歲而資產超出長生津限額，可改領毋須資產審查的生果金；日後資產回落至限額內，可再申請長生津。</p>
+</section>
 
-        // 渲染医院列表
-        function renderHospitals(hospitalsList) {
-            hospitalsContainer.innerHTML = '';
-            
-            // 更新统计数据
-            const publicHospitals = hospitalsList.filter(h => h.type === 'public');
-            const privateHospitals = hospitalsList.filter(h => h.type === 'private');
-            publicCount.textContent = publicHospitals.length;
-            privateCount.textContent = privateHospitals.length;
+<!-- PROCESS -->
+<section id="process">
+  <div class="sec-head"><div class="sec-no">03 流程</div><div><h2>申請流程</h2><p>所有申請手續須在香港辦理，社署收到申請後會安排會面。</p></div></div>
+  <div class="grid2">
+    <ol class="steps">
+      <li><h4>準備：計算入息及資產</h4><p>以<mark>填寫申請表當日</mark>計算；夫婦或同居要連同對方一起計。可先用本頁「快速計算」初步評估。</p><span class="meta">申請前</span></li>
+      <li><h4>索取及填寫申請表</h4><p>在社署網頁下載或到社會保障辦事處索取申請表及指引，填妥個人資料、居港情況、入息及資產、旅行證件及銀行戶口部分，並簽署聲明。</p><span class="meta">可由親友代辦</span></li>
+      <li><h4>遞交申請</h4><p>可經網上表格、郵寄、傳真、電郵、電話，或親身交到住址所屬的社會保障辦事處；亦可由政府部門或社福機構轉介。</p><span class="meta">最早 65 歲生日前一個月</span></li>
+      <li><h4>社署會面核實</h4><p>職員約見申請人，核對身份證明、旅行證件出入境紀錄及財務文件正本。體弱或行動不便可安排家訪。</p><span class="meta">帶齊正本</span></li>
+      <li><h4>批核及開始發放</h4><p>津貼由社署<b>收到申請當日</b>或<b>符合資格當日</b>（以較遲者為準）起計，存入申請人個人銀行戶口。</p><span class="meta">不接受聯名戶口</span></li>
+      <li><h4>領取期間持續申報</h4><p>搬屋、婚姻狀況改變、入住院舍或醫院、入息資產超出限額、離港超出容許日數等，都要即時通知社署。</p><span class="meta">見「申報要求」</span></li>
+    </ol>
+    <div class="stack">
+      <div class="card">
+        <h3>要準備的文件</h3>
+        <ul class="checks">
+          <li>香港身份證（正本及副本）</li>
+          <li>所有載有個人資料的旅行證件，以及過去一年的出入境紀錄頁<span>例如回鄉證、護照。</span></li>
+          <li>本人名下銀行戶口證明<span>存摺首頁或月結單，須顯示姓名及戶口號碼；不接受聯名戶口。</span></li>
+          <li>配偶或同居伴侶的身份證明文件（如適用）</li>
+          <li>入息及資產證明<span>銀行存摺、月結單、投資及強積金結算書、租約、年金證明等。</span></li>
+          <li>聯名戶口如不是平均擁有，須雙方簽署書面聲明<span>列明戶口號碼、總額及各人所佔份額。</span></li>
+        </ul>
+      </div>
+      <div class="note"><span class="nt">申請廣東或福建計劃</span><p>同樣要在香港申請，另須提供廣東或福建住址證明及兩張近照。公屋住戶要在離港前交還單位或刪除戶籍。</p></div>
+    </div>
+  </div>
+</section>
 
-            if (hospitalsList.length === 0) {
-                emptyState.classList.remove('hidden');
-                pagination.classList.add('hidden');
-                return;
-            }
+<!-- DECLARE -->
+<section id="declare">
+  <div class="sec-head"><div class="sec-no">04 申報</div><div><h2>申報要求</h2><p>申請時如實申報入息及資產；領取期間有變要主動通知。以下按社署申請指引及常見問題整理。</p></div></div>
+  <div class="tbl-wrap">
+    <table class="txt dec">
+      <thead><tr><th>項目</th><th>怎樣計算或申報</th></tr></thead>
+      <tbody>
+        <tr><td>計算日期</td><td>入息及資產均以<mark>填表當日</mark>計算；收入不固定的，只申報填表時的收入。</td></tr>
+        <tr><td>股票、外幣、黃金</td><td>以申請日前最後一個交易日的（最高價 + 最低價）÷ 2 估值，或用最近的銀行或證券行結單。</td></tr>
+        <tr><td>聯名戶口</td><td>一般按持有人數平分；如不是平分，雙方要簽署書面聲明。</td></tr>
+        <tr><td>強積金</td><td>已滿 65 歲可提取的權益計作資產；已提取的款項亦計。配偶未滿 65 歲，其權益及強制性供款可豁免。</td></tr>
+        <tr><td>保險及年金</td><td>保單現金價值豁免；年金已繳保費豁免，但<span class="key">每月年金收入計入息</span>，退保所得計資產。</td></tr>
+        <tr><td>物業</td><td>一個香港自住物業及自用車位豁免；其他物業、出租車位、內地祖屋計資產，淨租金計入息。</td></tr>
+        <tr><td>轉移資產</td><td>為符合限額把錢轉給子女親友，不能避過審查；隱瞞屬刑事罪行，多領款項須退還。</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-            emptyState.classList.add('hidden');
-            
-            // 分页处理
-            const totalPages = Math.ceil(hospitalsList.length / itemsPerPage);
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const currentItems = hospitalsList.slice(startIndex, endIndex);
-            
-            // 显示分页控件
-            if (totalPages > 1) {
-                pagination.classList.remove('hidden');
-                renderPagination(totalPages);
-                
-                // 更新分页按钮状态
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
-            } else {
-                pagination.classList.add('hidden');
-            }
+  <h3 class="block">出入境：在港居住日數</h3>
+  <div class="rt">
+    <div class="rt-row"><div class="when">申請前一年<small>連續居港要求</small></div><div class="what"><h4>離港合共不超過 90 日</h4><p>仍當作連續在港居住。在外地受僱工作的日數，有證明可不計；因病在外地治療超過 90 日可由社署酌情處理。</p></div></div>
+    <div class="rt-row"><div class="when">領取期間<small>每個付款年度</small></div><div class="what"><h4>在港住滿 60 日，可離港最多 305 日</h4><p>付款年度由符合資格日起每 12 個月計。在港（廣東或福建計劃則為在該省）住滿 60 日，該年可離開最多 305 日（閏年 306 日）而照領全年津貼。</p></div></div>
+    <div class="rt-row"><div class="when">住不滿 60 日<small>該付款年度</small></div><div class="what"><h4>只按實際在港日數發放</h4><p>不設離港寬限，<span class="key">多領的津貼須退還社署</span>。</p></div></div>
+  </div>
 
-            currentItems.forEach(hospital => {
-                const isFavorite = favorites.includes(hospital.id);
-                const hospitalCard = document.createElement('div');
-                hospitalCard.className = 'bg-white rounded-xl shadow-pro overflow-hidden card-hover';
-                hospitalCard.dataset.id = hospital.id;
+  <h3 class="block">領取期間須即時通知社署</h3>
+  <div class="grid3">
+    <div class="card"><h3>個人狀況</h3><ul class="dots"><li>搬屋、改電話或銀行戶口</li><li>婚姻狀況改變（結婚、離婚、喪偶、開始同居）</li><li>被羈留或入獄</li></ul></div>
+    <div class="card"><h3>居住安排</h3><ul class="dots"><li>入住或離開資助院舍</li><li>入住或離開醫管局醫院</li><li>離港超出容許日數</li></ul></div>
+    <div class="card"><h3>經濟狀況</h3><ul class="dots"><li>入息或資產超出限額</li><li>出售物業、收到大筆款項（例如遺產、退保）</li></ul></div>
+  </div>
+  <div class="note alert" style="margin-top:16px"><p>提供虛假資料、故意隱瞞或不通報變動，屬刑事罪行，可被檢控；多領的津貼須全數退還。</p></div>
+</section>
 
-                // 医院类型标签颜色
-                const typeColor = hospital.type === 'public' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800';
-                const typeText = hospital.type === 'public' ? '公立醫院' : '私家醫院';
+<!-- REVIEW -->
+<section id="review">
+  <div class="sec-head"><div class="sec-no">05 審查</div><div><h2>獲批之後的定期審查</h2><p>社署由 2019 年起覆檢所有長生津個案，並持續與其他部門核對資料。</p></div></div>
+  <div class="rt">
+    <div class="rt-row"><div class="when">持續進行<small>資料核對</small></div><div class="what"><h4>與政府部門及機構核對</h4><p>包括入境處、懲教署、土地註冊處、公司註冊處、醫管局、運輸署及香港年金公司等，亦可向銀行查詢。出入境紀錄會自動核對。</p></div></div>
+    <div class="rt-row"><div class="when">每六年一次<small>郵遞覆檢</small></div><div class="what"><h4>填表寄回即可</h4><p>收到覆檢通知書及表格後，填報本人及配偶的入息及資產，簽署後於<mark>通知書日期起一個月內</mark>用回郵信封寄回。社署有需要時會再要求證明文件。</p></div></div>
+    <div class="rt-row"><div class="when">每六年一次<small>全面覆檢</small></div><div class="what"><h4>按約見時間會面</h4><p>帶同填妥的覆檢表及所有入息、資產證明正本到社會保障辦事處；體弱或行動不便可安排家訪。</p></div></div>
+    <div class="rt-row"><div class="when">隨時<small>個別跟進</small></div><div class="what"><h4>家訪或郵遞查詢</h4><p>社署可按需要抽查，受助人須全面合作。</p></div></div>
+  </div>
+  <h3 class="block">覆檢結果</h3>
+  <div class="ladder">
+    <div class="rung l1"><div class="lv">仍在限額內</div><div class="rs">繼續發放，毋須另外申請。</div></div>
+    <div class="rung l2"><div class="lv">遲交或拒絕覆檢</div><div class="rs">社署無法核實資格，可考慮<b>暫停發放</b>。收到通知書應盡快處理。</div></div>
+    <div class="rung l3"><div class="lv">超出限額</div><div class="rs">停止發放，多領款項須全數退還。年滿 70 歲會轉為生果金。</div></div>
+    <div class="rung l4"><div class="lv">日後再符合</div><div class="rs">停發不是永久，資產回落至限額內可重新申請；已領生果金或傷殘津貼的，可用簡化表格轉換。</div></div>
+  </div>
+  <p class="tnote">覆檢時入息及資產以填寫覆檢表當日計算；覆檢表可順便更新地址等個人資料。</p>
+</section>
 
-                hospitalCard.innerHTML = `
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h3 class="text-lg font-bold mb-1">${hospital.name}</h3>
-                                <p class="text-sm text-neutral mb-2">${hospital.nameEn}</p>
-                                <span class="inline-block px-2 py-1 text-xs rounded-full ${typeColor}">${typeText}</span>
-                            </div>
-                            <button class="favorite-btn p-2 rounded-full hover:bg-gray-100 transition-pro ${isFavorite ? 'text-yellow-400' : 'text-gray-300'}" data-id="${hospital.id}">
-                                <i class="fa ${isFavorite ? 'fa-star' : 'fa-star-o'}"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <p class="text-sm flex items-center text-neutral mb-1">
-                                <i class="fa fa-map-marker w-5 text-primary"></i>
-                                <a href="https://maps.google.com/maps?q=${encodeURIComponent(hospital.address)}" target="_blank" class="hover:text-primary transition-pro">
-                                    ${hospital.districtName} · ${hospital.address.substring(0, 20)}${hospital.address.length > 20 ? '...' : ''}
-                                </a>
-                            </p>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <div class="flex items-center mb-2">
-                                <i class="fa fa-ambulance text-red-500 mr-2"></i>
-                                <span class="text-sm font-medium">急症服務</span>
-                            </div>
-                            <p class="text-sm text-neutral ml-6">
-                                ${hospital.emergency ? hospital.emergencyHours : '不設急症室'}
-                            </p>
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            ${hospital.services.slice(0, 3).map(service => getServiceBadge(service)).join('')}
-                            ${hospital.services.length > 3 ? `<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">+${hospital.services.length - 3}</span>` : ''}
-                        </div>
-                        
-                        <button class="view-details w-full py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-pro text-sm font-medium" data-id="${hospital.id}">
-                            查看詳情
-                        </button>
-                    </div>
-                `;
+<!-- TOOLS -->
+<section id="tools">
+  <div class="sec-head"><div class="sec-no">06 計算</div><div><h2>快速初步評估</h2><p>輸入基本資料，即時看看是否大致符合資格及還有多少空間。只供參考，最終以社署審核為準。</p></div></div>
+  <div class="calc-card">
+    <div class="form f3">
+      <div class="field"><label for="c_age">申請人年齡</label><input id="c_age" type="number" inputmode="numeric" min="50" max="120" placeholder="例如 66"></div>
+      <div class="field"><label for="c_mar">婚姻狀況</label><select id="c_mar"><option value="0">單身／分居／離婚／喪偶</option><option value="1">已婚或同居（共用經濟資源）</option></select></div>
+      <div class="field" id="f_sp"><label for="c_sp">配偶或伴侶年齡</label><input id="c_sp" type="number" inputmode="numeric" min="18" max="120" placeholder="例如 63"></div>
+      <div class="field"><label for="c_loc">打算居住在</label><select id="c_loc"><option value="hk">香港</option><option value="gd">廣東省（廣東計劃）</option><option value="fj">福建省（福建計劃）</option></select></div>
+      <div class="field"><label for="c_now">現時領取</label><select id="c_now"><option value="none">沒有領取其他津貼</option><option value="oaa">生果金</option><option value="da">傷殘津貼</option><option value="cssa">綜援</option></select></div>
+      <div class="field"><label>居港情況</label>
+        <label class="chk on"><input type="checkbox" id="c_7" checked> 成為香港居民滿 7 年</label>
+        <label class="chk on"><input type="checkbox" id="c_1" checked> 過去一年離港合共不超過 90 日</label></div>
 
-                hospitalsContainer.appendChild(hospitalCard);
-            });
+      <div class="fgroup"><h4>每月入息</h4><p class="hint" id="h_inc">本人每月收入。不計子女家用、樓按每月款項。</p></div>
+      <div class="field"><label for="i_w">工作收入（$）</label><input id="i_w" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">包括兼職、自僱</div></div>
+      <div class="field"><label for="i_p">長俸、退休金（$）</label><input id="i_p" type="number" inputmode="numeric" min="0" placeholder="0"></div>
+      <div class="field"><label for="i_r">淨租金、年金及其他（$）</label><input id="i_r" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">租金扣差餉地租；年金按月攤分</div></div>
+      <div class="field" style="grid-column:1/-1"><div class="sum-box"><span>每月入息合計</span><b id="s_inc">$0</b></div></div>
 
-            // 添加事件监听器
-            document.querySelectorAll('.view-details').forEach(button => {
-                button.addEventListener('click', () => {
-                    const hospitalId = parseInt(button.dataset.id);
-                    openHospitalModal(hospitalId);
-                });
-            });
+      <div class="fgroup"><h4>資產</h4><p class="hint" id="h_ast">本人名下資產。豁免：自住物業及車位、保險現金價值、已繳年金保費、首飾。</p></div>
+      <div class="field"><label for="a_c">現金及銀行存款（$）</label><input id="a_c" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">港幣、外幣、定期都計</div></div>
+      <div class="field"><label for="a_i">股票、基金、債券、黃金（$）</label><input id="a_i" type="number" inputmode="numeric" min="0" placeholder="0"></div>
+      <div class="field"><label for="a_p">非自住物業及車位（$）</label><input id="a_p" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">包括內地祖屋，按市值</div></div>
+      <div class="field"><label for="a_m">可提取的強積金（$）</label><input id="a_m" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">配偶未滿 65 歲的毋須計</div></div>
+      <div class="field"><label for="a_o">其他（$）</label><input id="a_o" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">生意權益、借出未收回款項等</div></div>
+      <div class="field"><div class="sum-box" style="margin-top:27px"><span>資產合計</span><b id="s_ast">$0</b></div></div>
+    </div>
+    <div class="calc-actions"><button class="btn" id="c_go">評估</button><button class="btn ghost" id="c_reset" type="button">清除</button></div>
+    <div class="result" id="c_res"></div>
+  </div>
+</section>
 
-            document.querySelectorAll('.favorite-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const hospitalId = parseInt(button.dataset.id);
-                    toggleFavorite(hospitalId);
-                });
-            });
-        }
+<!-- ADVICE -->
+<section id="advice">
+  <div class="sec-head"><div class="sec-no">07 建議</div><div><h2>申請前後的重點提醒</h2></div></div>
+  <div class="grid2">
+    <div class="card">
+      <div class="tip"><b>先分清「入息」與「資產」</b><span>同一筆錢，每月收到時看入息，儲起來後看資產。年金每月派發計入息，但已繳的保費不計資產。</span></div>
+      <div class="tip" style="--tp:var(--blue)"><b>保單現金價值豁免</b><span>人壽、醫療、危疾保單的現金價值不計資產；但退保後拿回的現金就計。安排保障前應按真正需要決定，不應只為壓低資產數字。</span></div>
+      <div class="tip" style="--tp:var(--amber-fill)"><b>貼近限額要留意</b><span>例如定期到期、收到遺產或賣樓，都可能令資產超標，要主動通知社署。</span></div>
+    </div>
+    <div class="card">
+      <div class="tip" style="--tp:var(--purple)"><b>經常北上要數日子</b><span>長期在內地生活，與其擔心在港不足 60 日，不如考慮轉用廣東或福建計劃。</span></div>
+      <div class="tip" style="--tp:var(--coral-fill)"><b>夫婦一齊計</b><span>配偶未夠 65 歲也要申報；兩人合計超標，兩人都不能領。</span></div>
+      <div class="tip"><b>70 歲後有後備</b><span>資產超出長生津限額，70 歲起仍可領毋須審查的生果金 $1,675。</span></div>
+    </div>
+  </div>
+</section>
 
-        // 渲染分页
-        function renderPagination(totalPages) {
-            pageNumbers.innerHTML = '';
-            
-            // 显示当前页前后各2页，加上第一页和最后一页
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, currentPage + 2);
-            
-            // 如果前面有更多页，显示省略号
-            if (startPage > 1) {
-                addPageNumber(1);
-                if (startPage > 2) {
-                    addEllipsis();
-                }
-            }
-            
-            // 显示页码
-            for (let i = startPage; i <= endPage; i++) {
-                addPageNumber(i);
-            }
-            
-            // 如果后面有更多页，显示省略号
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    addEllipsis();
-                }
-                addPageNumber(totalPages);
-            }
-        }
-        
-        // 添加页码
-        function addPageNumber(page) {
-            const pageBtn = document.createElement('button');
-            pageBtn.className = `px-4 py-2 border-t border-b ${page === currentPage ? 'bg-primary text-white border-primary' : 'border-gray-300 hover:bg-gray-50'} transition-pro`;
-            pageBtn.textContent = page;
-            
-            // 移除第一页和最后一页的左侧/右侧边框
-            if (page === 1) {
-                pageBtn.classList.add('rounded-l-lg', 'border-l');
-            } else if (page === Math.ceil(filteredHospitals.length / itemsPerPage)) {
-                pageBtn.classList.add('rounded-r-lg', 'border-r');
-            }
-            
-            pageBtn.addEventListener('click', () => {
-                currentPage = page;
-                renderHospitals(filteredHospitals);
-            });
-            
-            pageNumbers.appendChild(pageBtn);
-        }
-        
-        // 添加省略号
-        function addEllipsis() {
-            const ellipsis = document.createElement('span');
-            ellipsis.className = 'px-2 py-2 text-neutral';
-            ellipsis.textContent = '...';
-            pageNumbers.appendChild(ellipsis);
-        }
+<!-- FAQ -->
+<section id="faq">
+  <div class="sec-head"><div class="sec-no">08 問答</div><div><h2>常見問題</h2></div></div>
+  <div class="faq">
+  <details><summary><span class="ftag">資格</span>可以幾時開始申請？由幾時開始計錢？</summary><div class="ans"><p>最早可於 <b>65 歲生日前一個月內</b>遞表，社署以生日當日作申請日期。津貼由社署收到申請當日或符合資格當日起計，以較遲者為準，<mark>不會追溯到申請之前</mark>，所以符合資格就應盡早申請。</p></div></details>
+  <details><summary><span class="ftag">資格</span>長生津同生果金有甚麼分別？可以兩樣都拎嗎？</summary><div class="ans"><p>長生津 65 歲起申請，每月 $4,345，要審查入息及資產；生果金 70 歲起申請，每月 $1,675，不用審查。<span class="key">兩者只能領取其一</span>，正領生果金而符合長生津資格的，可申請轉為長生津。</p></div></details>
+  <details><summary><span class="ftag">資格</span>夫婦兩個都可以領嗎？</summary><div class="ans"><p>可以。兩人入息及資產合併計，不超過夫婦限額（每月入息 $16,680、資產 $630,000），而兩人都年滿 65 歲，可各自領取 $4,345。如配偶未滿 65 歲，要待對方滿 65 歲才可領取，但現在申請時仍要申報對方的資料。</p></div></details>
+  <details><summary><span class="ftag">資格</span>以前有「普通」和「高額」長生津，現在呢？</summary><div class="ans"><p>兩者已在 2022 年合併為單一的長者生活津貼，按以往高額的金額發放，並採用較寬鬆的資產限額。</p></div></details>
+  <details><summary><span class="ftag f2">資產</span>自住樓要不要計？鄉下祖屋呢？</summary><div class="ans"><p>一個在香港的自住物業及自用車位豁免。其他物業、出租車位，以及內地鄉下祖屋，都要按市值計入資產；有出租的，淨租金亦計入息。</p></div></details>
+  <details><summary><span class="ftag f2">資產</span>儲蓄保險、人壽保單的現金價值計不計？</summary><div class="ans"><p>社署指引列明，保險的現金價值<mark>豁免計算</mark>，包括人壽、醫療及危疾保單。年金計劃已繳的保費亦豁免，但每月年金收入計入息，退保所得計資產。</p></div></details>
+  <details><summary><span class="ftag f2">資產</span>子女每月給家用，算不算入息？</summary><div class="ans"><p>不算。子女親友定期給的家用或零用錢不計入息，但儲起來的部分屬資產。</p></div></details>
+  <details><summary><span class="ftag f2">資產</span>把錢提出來放在家，或轉給子女，是否就不用計？</summary><div class="ans"><p>不是。現金放在家或保險箱一樣計資產。為符合限額而把資產轉給他人，不能避過審查，<span class="key">隱瞞資產屬刑事罪行</span>，多領的津貼要退還。借出而未收回的錢亦屬資產。</p></div></details>
+  <details><summary><span class="ftag f2">資產</span>首飾、金牙、金條要不要報？</summary><div class="ans"><p>個人佩戴的首飾（金飾、玉器）及金牙豁免；金條、金幣屬資產，要申報。</p></div></details>
+  <details><summary><span class="ftag f2">資產</span>參加了安老按揭（樓按），每月收的錢計入息嗎？</summary><div class="ans"><p>不計。安老按揭及保單逆按揭每月領取的款項不計入息，但沒有用完而儲起來的部分屬資產。</p></div></details>
+  <details><summary><span class="ftag f3">離港</span>領取長生津期間，每年可以離港幾耐？</summary><div class="ans"><p>每個付款年度（由符合資格日起每 12 個月）只要在港住滿 <b>60 日</b>，便可離港最多 305 日（閏年 306 日）而照領全年津貼。住不滿 60 日，只按在港日數發放，多領的要退還。</p></div></details>
+  <details><summary><span class="ftag f3">離港</span>打算搬上內地住，還可以領嗎？</summary><div class="ans"><p>住在廣東或福建，可申請廣東計劃或福建計劃，金額及限額與香港相同，每年在該省住滿 60 日即可。2026 年 7 月起可選擇把津貼直接免費存入廣東或福建的中國銀行、工商銀行港幣戶口（一類戶口）。住在其他省份則不適用。</p></div></details>
+  <details><summary><span class="ftag f3">離港</span>住公屋的長者搬去廣東，要注意甚麼？</summary><div class="ans"><p>申請廣東或福建計劃，須在離港前交還公屋單位或刪除戶籍。</p></div></details>
+  <details><summary><span class="ftag">審查</span>收到覆檢通知書要怎樣做？</summary><div class="ans"><p>郵遞覆檢：填妥覆檢表（本人及配偶的入息資產），簽署後於通知書日期起一個月內寄回。全面覆檢：按約見時間帶齊表格及證明文件正本到社會保障辦事處。逾期未交，社署可考慮暫停發放。</p></div></details>
+  <details><summary><span class="ftag">審查</span>超出限額被停發，之後可以再申請嗎？</summary><div class="ans"><p>可以。日後入息及資產回落至限額內，可重新申請。年滿 70 歲期間可先領生果金。</p></div></details>
+  <details><summary><span class="ftag">其他</span>有沒有「雙糧」？</summary><div class="ans"><p>是否發放額外一個月津貼，由每年財政預算案決定，並非每年必有。2026/27 年度預算案有此安排，<mark>2026 年 5 月 22 日起</mark>自動發放，毋須申請。</p></div></details>
+  <details><summary><span class="ftag">其他</span>正領綜援，應該轉長生津嗎？</summary><div class="ans"><p>綜援與長生津不能同時領取。綜援按個人需要計算，可包括租金、特別津貼等，對沒有其他資源的長者往往較多；長生津資產限額較寬鬆、手續較簡單。建議向社署職員查詢兩者的實際差額才決定。</p></div></details>
+  </div>
+</section>
 
-        // 获取服务标签
-        function getServiceBadge(service) {
-            const serviceMap = {
-                'children': { icon: 'fa-child', text: '兒童服務', color: 'bg-purple-100 text-purple-800' },
-                'maternity': { icon: 'fa-female', text: '產科服務', color: 'bg-pink-100 text-pink-800' },
-                'cardiology': { icon: 'fa-heartbeat', text: '心臟科', color: 'bg-red-100 text-red-800' },
-                'orthopedics': { icon: 'fa-medkit', text: '骨科', color: 'bg-orange-100 text-orange-800' },
-                'oncology': { icon: 'fa-stethoscope', text: '腫瘤科', color: 'bg-indigo-100 text-indigo-800' },
-                'neurology': { icon: 'fa-brain', text: '神經科', color: 'bg-teal-100 text-teal-800' },
-                'ophthalmology': { icon: 'fa-eye', text: '眼科', color: 'bg-blue-100 text-blue-800' },
-                'dental': { icon: 'fa-tooth', text: '牙科', color: 'bg-green-100 text-green-800' },
-                'psychiatry': { icon: 'fa-user-md', text: '精神科', color: 'bg-yellow-100 text-yellow-800' },
-                'emergency': { icon: 'fa-ambulance', text: '急症室', color: 'bg-red-100 text-red-800' },
-                'respiratory': { icon: 'fa-lungs', text: '胸肺科', color: 'bg-blue-100 text-blue-800' },
-                'rehabilitation': { icon: 'fa-walking', text: '康復科', color: 'bg-green-100 text-green-800' },
-                'infectious': { icon: 'fa-bug', text: '傳染病科', color: 'bg-orange-100 text-orange-800' },
-                'geriatrics': { icon: 'fa-hands-helping', text: '老人科', color: 'bg-blue-100 text-blue-800' }
-            };
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-head"><div class="sec-no">09 查詢</div><div><h2>官方查詢渠道</h2></div></div>
+  <div class="contact">
+    <div><div class="k">社會福利署熱線</div><div class="v">2343 2255</div><p class="sub" style="margin:4px 0 0">一般查詢，24 小時</p></div>
+    <div><div class="k">廣東及福建計劃查詢</div><div class="v">3105 3266</div><p class="sub" style="margin:4px 0 0">社署上水辦事處</p></div>
+    <div><div class="k">申請表及網上申請</div><div class="v" style="font-size:18px;margin-top:8px"><a href="https://www.swd.gov.hk/tc/pubsvc/socsecu/ssallowance/" target="_blank" rel="noopener">社署公共福利金計劃 →</a></div><p class="sub" style="margin:4px 0 0">或到住址所屬社會保障辦事處索取</p></div>
+  </div>
+</section>
 
-            const info = serviceMap[service];
-            return `<span class="px-2 py-1 text-xs rounded-full ${info.color}"><i class="fa ${info.icon} mr-1"></i>${info.text}</span>`;
-        }
+</main>
 
-        // 打开医院详情模态框
-        function openHospitalModal(hospitalId) {
-            const hospital = hospitals.find(h => h.id === hospitalId);
-            if (!hospital) return;
+<footer>
+  <div class="wrap">
+    <p><b>免責聲明</b>　本頁為非官方資料整理，只供一般參考，不構成法律、財務或專業意見。快速計算結果只屬初步估算。津貼金額、限額及規則會不時修訂，一切以社會福利署最新公布及個別審批結果為準。</p>
+    <div class="src">
+      <p style="margin:20px 0 6px;font-weight:600">資料來源</p>
+      <a href="https://www.swd.gov.hk/tc/pubsvc/socsecu/ssallowance/ssaec/ssaec_oala/ssaec_oala_limit/" target="_blank" rel="noopener">社會福利署：長者生活津貼的入息及資產限額（2026 年 2 月 1 日起）</a>
+      <a href="https://www.swd.gov.hk/oala/doc/2025/online_swd675_ssa_guidance_notes_chi_10_2025.pdf" target="_blank" rel="noopener">社會福利署：公共福利金計劃申請指引（2025 年 10 月）</a>
+      <a href="https://www.swd.gov.hk/oala/doc/OALAWebsiteFAQ_Income_Asset_TC.pdf" target="_blank" rel="noopener">社會福利署：長生津常見問題（入息及資產）</a>
+      <a href="https://www.swd.gov.hk/oala/doc/OALAWebsiteFAQ_Case%20Review_TC.pdf" target="_blank" rel="noopener">社會福利署：長生津常見問題（個案覆檢）</a>
+      <a href="https://www.swd.gov.hk/gds/doc/2026/GD_and_FJ_GuidanceNotesforApplication_2026_Chi.pdf" target="_blank" rel="noopener">社會福利署：廣東計劃及福建計劃申請指引（2026）</a>
+      <a href="https://www.stheadline.com/lifetips/3572757/" target="_blank" rel="noopener">星島頭條：生果金、長生津額外一個月津貼 2026 年 5 月 22 日起發放</a>
+      <a href="https://www.stheadline.com/lifetips/3590586" target="_blank" rel="noopener">星島頭條：廣東及福建計劃可存入內地銀行戶口（2026 年 7 月）</a>
+    </div>
+    <div class="mk-ecard">
+      <div class="mk-ecard-txt"><b>想進一步了解或有疑問？</b><span>歡迎查看我的電子名片，可直接 WhatsApp、加 IG 或儲存聯絡資料。</span></div>
+      <a class="mk-ecard-btn" href="https://api.portfoplus.com/api/v1/adviser/5e41564ab3b1bc00153394db?m=link&amp;r=adviser" target="_blank" rel="noopener">查看電子名片 <span aria-hidden="true">→</span></a>
+      <div class="mk-ecard-qr"><svg viewBox="0 0 41 41" width="90" height="90" shape-rendering="crispEdges" aria-label="電子名片二維碼"><rect width="41" height="41" fill="#fff"/><path d="M2,2h1v1h-1zM3,2h1v1h-1zM4,2h1v1h-1zM5,2h1v1h-1zM6,2h1v1h-1zM7,2h1v1h-1zM8,2h1v1h-1zM11,2h1v1h-1zM16,2h1v1h-1zM19,2h1v1h-1zM20,2h1v1h-1zM21,2h1v1h-1zM22,2h1v1h-1zM25,2h1v1h-1zM28,2h1v1h-1zM32,2h1v1h-1zM33,2h1v1h-1zM34,2h1v1h-1zM35,2h1v1h-1zM36,2h1v1h-1zM37,2h1v1h-1zM38,2h1v1h-1zM2,3h1v1h-1zM8,3h1v1h-1zM11,3h1v1h-1zM15,3h1v1h-1zM16,3h1v1h-1zM18,3h1v1h-1zM19,3h1v1h-1zM22,3h1v1h-1zM24,3h1v1h-1zM28,3h1v1h-1zM29,3h1v1h-1zM32,3h1v1h-1zM38,3h1v1h-1zM2,4h1v1h-1zM4,4h1v1h-1zM5,4h1v1h-1zM6,4h1v1h-1zM8,4h1v1h-1zM10,4h1v1h-1zM14,4h1v1h-1zM22,4h1v1h-1zM23,4h1v1h-1zM24,4h1v1h-1zM25,4h1v1h-1zM29,4h1v1h-1zM32,4h1v1h-1zM34,4h1v1h-1zM35,4h1v1h-1zM36,4h1v1h-1zM38,4h1v1h-1zM2,5h1v1h-1zM4,5h1v1h-1zM5,5h1v1h-1zM6,5h1v1h-1zM8,5h1v1h-1zM10,5h1v1h-1zM11,5h1v1h-1zM14,5h1v1h-1zM18,5h1v1h-1zM19,5h1v1h-1zM21,5h1v1h-1zM24,5h1v1h-1zM25,5h1v1h-1zM26,5h1v1h-1zM27,5h1v1h-1zM28,5h1v1h-1zM29,5h1v1h-1zM30,5h1v1h-1zM32,5h1v1h-1zM34,5h1v1h-1zM35,5h1v1h-1zM36,5h1v1h-1zM38,5h1v1h-1zM2,6h1v1h-1zM4,6h1v1h-1zM5,6h1v1h-1zM6,6h1v1h-1zM8,6h1v1h-1zM10,6h1v1h-1zM11,6h1v1h-1zM16,6h1v1h-1zM17,6h1v1h-1zM20,6h1v1h-1zM21,6h1v1h-1zM25,6h1v1h-1zM30,6h1v1h-1zM32,6h1v1h-1zM34,6h1v1h-1zM35,6h1v1h-1zM36,6h1v1h-1zM38,6h1v1h-1zM2,7h1v1h-1zM8,7h1v1h-1zM10,7h1v1h-1zM12,7h1v1h-1zM14,7h1v1h-1zM20,7h1v1h-1zM22,7h1v1h-1zM23,7h1v1h-1zM24,7h1v1h-1zM29,7h1v1h-1zM32,7h1v1h-1zM38,7h1v1h-1zM2,8h1v1h-1zM3,8h1v1h-1zM4,8h1v1h-1zM5,8h1v1h-1zM6,8h1v1h-1zM7,8h1v1h-1zM8,8h1v1h-1zM10,8h1v1h-1zM12,8h1v1h-1zM14,8h1v1h-1zM16,8h1v1h-1zM18,8h1v1h-1zM20,8h1v1h-1zM22,8h1v1h-1zM24,8h1v1h-1zM26,8h1v1h-1zM28,8h1v1h-1zM30,8h1v1h-1zM32,8h1v1h-1zM33,8h1v1h-1zM34,8h1v1h-1zM35,8h1v1h-1zM36,8h1v1h-1zM37,8h1v1h-1zM38,8h1v1h-1zM10,9h1v1h-1zM11,9h1v1h-1zM12,9h1v1h-1zM13,9h1v1h-1zM15,9h1v1h-1zM16,9h1v1h-1zM17,9h1v1h-1zM23,9h1v1h-1zM24,9h1v1h-1zM25,9h1v1h-1zM26,9h1v1h-1zM28,9h1v1h-1zM2,10h1v1h-1zM4,10h1v1h-1zM5,10h1v1h-1zM6,10h1v1h-1zM7,10h1v1h-1zM8,10h1v1h-1zM15,10h1v1h-1zM16,10h1v1h-1zM17,10h1v1h-1zM19,10h1v1h-1zM22,10h1v1h-1zM27,10h1v1h-1zM29,10h1v1h-1zM30,10h1v1h-1zM32,10h1v1h-1zM33,10h1v1h-1zM34,10h1v1h-1zM35,10h1v1h-1zM36,10h1v1h-1zM2,11h1v1h-1zM3,11h1v1h-1zM4,11h1v1h-1zM7,11h1v1h-1zM9,11h1v1h-1zM11,11h1v1h-1zM13,11h1v1h-1zM16,11h1v1h-1zM17,11h1v1h-1zM18,11h1v1h-1zM20,11h1v1h-1zM21,11h1v1h-1zM24,11h1v1h-1zM25,11h1v1h-1zM26,11h1v1h-1zM28,11h1v1h-1zM31,11h1v1h-1zM37,11h1v1h-1zM3,12h1v1h-1zM4,12h1v1h-1zM5,12h1v1h-1zM8,12h1v1h-1zM11,12h1v1h-1zM15,12h1v1h-1zM16,12h1v1h-1zM20,12h1v1h-1zM23,12h1v1h-1zM24,12h1v1h-1zM26,12h1v1h-1zM27,12h1v1h-1zM28,12h1v1h-1zM29,12h1v1h-1zM32,12h1v1h-1zM34,12h1v1h-1zM35,12h1v1h-1zM37,12h1v1h-1zM38,12h1v1h-1zM2,13h1v1h-1zM4,13h1v1h-1zM5,13h1v1h-1zM7,13h1v1h-1zM11,13h1v1h-1zM14,13h1v1h-1zM16,13h1v1h-1zM18,13h1v1h-1zM21,13h1v1h-1zM23,13h1v1h-1zM24,13h1v1h-1zM25,13h1v1h-1zM26,13h1v1h-1zM29,13h1v1h-1zM31,13h1v1h-1zM32,13h1v1h-1zM35,13h1v1h-1zM38,13h1v1h-1zM4,14h1v1h-1zM5,14h1v1h-1zM8,14h1v1h-1zM11,14h1v1h-1zM13,14h1v1h-1zM14,14h1v1h-1zM15,14h1v1h-1zM19,14h1v1h-1zM22,14h1v1h-1zM26,14h1v1h-1zM27,14h1v1h-1zM28,14h1v1h-1zM29,14h1v1h-1zM30,14h1v1h-1zM31,14h1v1h-1zM32,14h1v1h-1zM34,14h1v1h-1zM36,14h1v1h-1zM37,14h1v1h-1zM38,14h1v1h-1zM3,15h1v1h-1zM5,15h1v1h-1zM6,15h1v1h-1zM7,15h1v1h-1zM9,15h1v1h-1zM10,15h1v1h-1zM13,15h1v1h-1zM14,15h1v1h-1zM15,15h1v1h-1zM20,15h1v1h-1zM21,15h1v1h-1zM25,15h1v1h-1zM30,15h1v1h-1zM31,15h1v1h-1zM33,15h1v1h-1zM37,15h1v1h-1zM2,16h1v1h-1zM3,16h1v1h-1zM6,16h1v1h-1zM8,16h1v1h-1zM10,16h1v1h-1zM15,16h1v1h-1zM17,16h1v1h-1zM23,16h1v1h-1zM24,16h1v1h-1zM26,16h1v1h-1zM28,16h1v1h-1zM29,16h1v1h-1zM30,16h1v1h-1zM32,16h1v1h-1zM33,16h1v1h-1zM34,16h1v1h-1zM35,16h1v1h-1zM38,16h1v1h-1zM2,17h1v1h-1zM5,17h1v1h-1zM6,17h1v1h-1zM7,17h1v1h-1zM10,17h1v1h-1zM12,17h1v1h-1zM13,17h1v1h-1zM14,17h1v1h-1zM16,17h1v1h-1zM20,17h1v1h-1zM21,17h1v1h-1zM22,17h1v1h-1zM23,17h1v1h-1zM24,17h1v1h-1zM25,17h1v1h-1zM28,17h1v1h-1zM30,17h1v1h-1zM31,17h1v1h-1zM33,17h1v1h-1zM34,17h1v1h-1zM37,17h1v1h-1zM38,17h1v1h-1zM5,18h1v1h-1zM6,18h1v1h-1zM7,18h1v1h-1zM8,18h1v1h-1zM9,18h1v1h-1zM10,18h1v1h-1zM12,18h1v1h-1zM14,18h1v1h-1zM16,18h1v1h-1zM17,18h1v1h-1zM19,18h1v1h-1zM22,18h1v1h-1zM24,18h1v1h-1zM25,18h1v1h-1zM26,18h1v1h-1zM27,18h1v1h-1zM30,18h1v1h-1zM31,18h1v1h-1zM32,18h1v1h-1zM34,18h1v1h-1zM36,18h1v1h-1zM37,18h1v1h-1zM38,18h1v1h-1zM2,19h1v1h-1zM3,19h1v1h-1zM5,19h1v1h-1zM9,19h1v1h-1zM13,19h1v1h-1zM14,19h1v1h-1zM16,19h1v1h-1zM17,19h1v1h-1zM21,19h1v1h-1zM22,19h1v1h-1zM25,19h1v1h-1zM27,19h1v1h-1zM28,19h1v1h-1zM33,19h1v1h-1zM35,19h1v1h-1zM37,19h1v1h-1zM3,20h1v1h-1zM4,20h1v1h-1zM5,20h1v1h-1zM6,20h1v1h-1zM8,20h1v1h-1zM10,20h1v1h-1zM11,20h1v1h-1zM12,20h1v1h-1zM13,20h1v1h-1zM14,20h1v1h-1zM15,20h1v1h-1zM17,20h1v1h-1zM24,20h1v1h-1zM26,20h1v1h-1zM27,20h1v1h-1zM28,20h1v1h-1zM29,20h1v1h-1zM30,20h1v1h-1zM32,20h1v1h-1zM33,20h1v1h-1zM37,20h1v1h-1zM38,20h1v1h-1zM4,21h1v1h-1zM6,21h1v1h-1zM7,21h1v1h-1zM15,21h1v1h-1zM20,21h1v1h-1zM21,21h1v1h-1zM22,21h1v1h-1zM23,21h1v1h-1zM24,21h1v1h-1zM28,21h1v1h-1zM32,21h1v1h-1zM35,21h1v1h-1zM38,21h1v1h-1zM2,22h1v1h-1zM3,22h1v1h-1zM4,22h1v1h-1zM5,22h1v1h-1zM6,22h1v1h-1zM8,22h1v1h-1zM11,22h1v1h-1zM12,22h1v1h-1zM14,22h1v1h-1zM16,22h1v1h-1zM17,22h1v1h-1zM18,22h1v1h-1zM19,22h1v1h-1zM22,22h1v1h-1zM24,22h1v1h-1zM26,22h1v1h-1zM27,22h1v1h-1zM28,22h1v1h-1zM29,22h1v1h-1zM31,22h1v1h-1zM32,22h1v1h-1zM34,22h1v1h-1zM36,22h1v1h-1zM3,23h1v1h-1zM4,23h1v1h-1zM9,23h1v1h-1zM10,23h1v1h-1zM11,23h1v1h-1zM12,23h1v1h-1zM16,23h1v1h-1zM18,23h1v1h-1zM21,23h1v1h-1zM22,23h1v1h-1zM25,23h1v1h-1zM26,23h1v1h-1zM28,23h1v1h-1zM30,23h1v1h-1zM35,23h1v1h-1zM3,24h1v1h-1zM5,24h1v1h-1zM8,24h1v1h-1zM10,24h1v1h-1zM11,24h1v1h-1zM13,24h1v1h-1zM14,24h1v1h-1zM15,24h1v1h-1zM16,24h1v1h-1zM17,24h1v1h-1zM18,24h1v1h-1zM19,24h1v1h-1zM22,24h1v1h-1zM23,24h1v1h-1zM24,24h1v1h-1zM27,24h1v1h-1zM29,24h1v1h-1zM32,24h1v1h-1zM33,24h1v1h-1zM34,24h1v1h-1zM35,24h1v1h-1zM37,24h1v1h-1zM38,24h1v1h-1zM3,25h1v1h-1zM5,25h1v1h-1zM7,25h1v1h-1zM9,25h1v1h-1zM12,25h1v1h-1zM14,25h1v1h-1zM17,25h1v1h-1zM18,25h1v1h-1zM20,25h1v1h-1zM21,25h1v1h-1zM22,25h1v1h-1zM23,25h1v1h-1zM25,25h1v1h-1zM26,25h1v1h-1zM28,25h1v1h-1zM29,25h1v1h-1zM33,25h1v1h-1zM34,25h1v1h-1zM37,25h1v1h-1zM38,25h1v1h-1zM3,26h1v1h-1zM8,26h1v1h-1zM9,26h1v1h-1zM12,26h1v1h-1zM14,26h1v1h-1zM16,26h1v1h-1zM17,26h1v1h-1zM18,26h1v1h-1zM19,26h1v1h-1zM21,26h1v1h-1zM24,26h1v1h-1zM26,26h1v1h-1zM27,26h1v1h-1zM29,26h1v1h-1zM32,26h1v1h-1zM34,26h1v1h-1zM36,26h1v1h-1zM37,26h1v1h-1zM38,26h1v1h-1zM2,27h1v1h-1zM3,27h1v1h-1zM6,27h1v1h-1zM7,27h1v1h-1zM10,27h1v1h-1zM11,27h1v1h-1zM13,27h1v1h-1zM18,27h1v1h-1zM20,27h1v1h-1zM21,27h1v1h-1zM23,27h1v1h-1zM25,27h1v1h-1zM28,27h1v1h-1zM30,27h1v1h-1zM31,27h1v1h-1zM33,27h1v1h-1zM2,28h1v1h-1zM4,28h1v1h-1zM6,28h1v1h-1zM8,28h1v1h-1zM12,28h1v1h-1zM14,28h1v1h-1zM15,28h1v1h-1zM17,28h1v1h-1zM18,28h1v1h-1zM19,28h1v1h-1zM22,28h1v1h-1zM23,28h1v1h-1zM26,28h1v1h-1zM29,28h1v1h-1zM37,28h1v1h-1zM38,28h1v1h-1zM2,29h1v1h-1zM7,29h1v1h-1zM9,29h1v1h-1zM12,29h1v1h-1zM14,29h1v1h-1zM15,29h1v1h-1zM16,29h1v1h-1zM17,29h1v1h-1zM18,29h1v1h-1zM20,29h1v1h-1zM21,29h1v1h-1zM23,29h1v1h-1zM24,29h1v1h-1zM31,29h1v1h-1zM32,29h1v1h-1zM33,29h1v1h-1zM35,29h1v1h-1zM37,29h1v1h-1zM2,30h1v1h-1zM4,30h1v1h-1zM5,30h1v1h-1zM6,30h1v1h-1zM7,30h1v1h-1zM8,30h1v1h-1zM9,30h1v1h-1zM13,30h1v1h-1zM14,30h1v1h-1zM15,30h1v1h-1zM16,30h1v1h-1zM17,30h1v1h-1zM19,30h1v1h-1zM21,30h1v1h-1zM24,30h1v1h-1zM27,30h1v1h-1zM28,30h1v1h-1zM29,30h1v1h-1zM30,30h1v1h-1zM31,30h1v1h-1zM32,30h1v1h-1zM33,30h1v1h-1zM34,30h1v1h-1zM36,30h1v1h-1zM38,30h1v1h-1zM10,31h1v1h-1zM12,31h1v1h-1zM14,31h1v1h-1zM18,31h1v1h-1zM19,31h1v1h-1zM20,31h1v1h-1zM21,31h1v1h-1zM24,31h1v1h-1zM25,31h1v1h-1zM30,31h1v1h-1zM34,31h1v1h-1zM35,31h1v1h-1zM37,31h1v1h-1zM2,32h1v1h-1zM3,32h1v1h-1zM4,32h1v1h-1zM5,32h1v1h-1zM6,32h1v1h-1zM7,32h1v1h-1zM8,32h1v1h-1zM17,32h1v1h-1zM18,32h1v1h-1zM20,32h1v1h-1zM22,32h1v1h-1zM23,32h1v1h-1zM27,32h1v1h-1zM30,32h1v1h-1zM32,32h1v1h-1zM34,32h1v1h-1zM36,32h1v1h-1zM38,32h1v1h-1zM2,33h1v1h-1zM8,33h1v1h-1zM10,33h1v1h-1zM11,33h1v1h-1zM14,33h1v1h-1zM15,33h1v1h-1zM23,33h1v1h-1zM24,33h1v1h-1zM28,33h1v1h-1zM30,33h1v1h-1zM34,33h1v1h-1zM35,33h1v1h-1zM37,33h1v1h-1zM2,34h1v1h-1zM4,34h1v1h-1zM5,34h1v1h-1zM6,34h1v1h-1zM8,34h1v1h-1zM10,34h1v1h-1zM12,34h1v1h-1zM14,34h1v1h-1zM16,34h1v1h-1zM17,34h1v1h-1zM19,34h1v1h-1zM21,34h1v1h-1zM24,34h1v1h-1zM27,34h1v1h-1zM29,34h1v1h-1zM30,34h1v1h-1zM31,34h1v1h-1zM32,34h1v1h-1zM33,34h1v1h-1zM34,34h1v1h-1zM36,34h1v1h-1zM37,34h1v1h-1zM2,35h1v1h-1zM4,35h1v1h-1zM5,35h1v1h-1zM6,35h1v1h-1zM8,35h1v1h-1zM10,35h1v1h-1zM11,35h1v1h-1zM12,35h1v1h-1zM15,35h1v1h-1zM16,35h1v1h-1zM18,35h1v1h-1zM19,35h1v1h-1zM21,35h1v1h-1zM22,35h1v1h-1zM23,35h1v1h-1zM25,35h1v1h-1zM26,35h1v1h-1zM27,35h1v1h-1zM28,35h1v1h-1zM29,35h1v1h-1zM30,35h1v1h-1zM32,35h1v1h-1zM34,35h1v1h-1zM37,35h1v1h-1zM38,35h1v1h-1zM2,36h1v1h-1zM4,36h1v1h-1zM5,36h1v1h-1zM6,36h1v1h-1zM8,36h1v1h-1zM10,36h1v1h-1zM12,36h1v1h-1zM16,36h1v1h-1zM17,36h1v1h-1zM18,36h1v1h-1zM20,36h1v1h-1zM23,36h1v1h-1zM28,36h1v1h-1zM30,36h1v1h-1zM35,36h1v1h-1zM36,36h1v1h-1zM37,36h1v1h-1zM38,36h1v1h-1zM2,37h1v1h-1zM8,37h1v1h-1zM11,37h1v1h-1zM14,37h1v1h-1zM15,37h1v1h-1zM21,37h1v1h-1zM22,37h1v1h-1zM23,37h1v1h-1zM26,37h1v1h-1zM29,37h1v1h-1zM30,37h1v1h-1zM32,37h1v1h-1zM34,37h1v1h-1zM35,37h1v1h-1zM38,37h1v1h-1zM2,38h1v1h-1zM3,38h1v1h-1zM4,38h1v1h-1zM5,38h1v1h-1zM6,38h1v1h-1zM7,38h1v1h-1zM8,38h1v1h-1zM10,38h1v1h-1zM12,38h1v1h-1zM13,38h1v1h-1zM15,38h1v1h-1zM17,38h1v1h-1zM18,38h1v1h-1zM19,38h1v1h-1zM21,38h1v1h-1zM24,38h1v1h-1zM25,38h1v1h-1zM27,38h1v1h-1zM28,38h1v1h-1zM31,38h1v1h-1zM32,38h1v1h-1zM34,38h1v1h-1zM36,38h1v1h-1zM37,38h1v1h-1zM38,38h1v1h-1z" fill="#000"/></svg></div>
+    </div>
+    <p class="mk-copy">© <span class="mk-year">2026</span> Michael Koo Protection Alliance (MKPA). 版權所有。</p>
+  </div>
+</footer>
 
-            const isFavorite = favorites.includes(hospitalId);
-            const typeText = hospital.type === 'public' ? '公立醫院' : '私家醫院';
-            const insuranceText = hospital.insurance.includes('ha') && hospital.insurance.includes('international') 
-                ? '醫管局計劃及國際保險' 
-                : hospital.insurance.includes('ha') 
-                    ? '醫管局計劃' 
-                    : '國際保險';
+<script>
+/* 分享呢個方案：手機彈出分享選單（WhatsApp 等），電腦複製連結。
+   url 要包括客人揀嘅設定（例如放喺 # 後面），但唔可以包括客人姓名。 */
+function mkShare(url){
+  url=url||location.href;
+  if(navigator.share&&matchMedia('(pointer:coarse)').matches){navigator.share({title:document.title,url:url}).catch(function(){});return;}
+  (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(
+    function(){mkToast('已複製連結，客人撳開會見到同一個方案');},
+    function(){window.prompt('複製呢條連結：',url);});
+}
+function mkToast(msg){var t=document.createElement('div');t.className='mk-toast';t.setAttribute('role','status');t.textContent=msg;(document.querySelector('dialog[open]')||document.body).appendChild(t);setTimeout(function(){t.remove();},2400);}
+</script>
+<script>
+(function(){var d=new Date();
+document.querySelectorAll('.mk-year').forEach(function(e){e.textContent=d.getFullYear();});
+document.querySelectorAll('.mk-print-date').forEach(function(e){e.textContent=d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日';});})();
+</script>
+<script>
+/* ===== 2026 年 2 月 1 日起生效（社署公布）===== */
+const RATE = 4345;          // 長生津每月金額
+const OAA = 1675;           // 生果金每月金額
+const LIM = { 0: { inc: 10900, ast: 415000, name: "單身" }, 1: { inc: 16680, ast: 630000, name: "夫婦" } };
 
-            modalContent.innerHTML = `
-                <div class="mb-6">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-2xl font-bold mb-1">${hospital.name}</h3>
-                            <p class="text-neutral">${hospital.nameEn}</p>
-                        </div>
-                        <button class="modal-favorite-btn p-2 rounded-full hover:bg-gray-100 transition-pro ${isFavorite ? 'text-yellow-400' : 'text-gray-300'}" data-id="${hospital.id}">
-                            <i class="fa ${isFavorite ? 'fa-star' : 'fa-star-o'} text-xl"></i>
-                        </button>
-                    </div>
-                    <div class="mt-3 inline-block px-3 py-1 rounded-full ${hospital.type === 'public' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}">
-                        ${typeText}
-                    </div>
-                    ${hospital.speciality ? `<div class="mt-3 inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">
-                        <i class="fa fa-plus-circle mr-1 text-primary"></i> 特色: ${hospital.speciality}
-                    </div>` : ''}
-                </div>
+const $ = s => document.querySelector(s);
+const f = n => "$" + Math.round(n).toLocaleString("en-US");
+const v = id => { const x = parseFloat($(id).value); return isNaN(x) ? 0 : Math.max(0, x); };
+const INC = ["#i_w", "#i_p", "#i_r"], AST = ["#a_c", "#a_i", "#a_p", "#a_m", "#a_o"];
+const KEYS = { age: "#c_age", m: "#c_mar", sp: "#c_sp", loc: "#c_loc", now: "#c_now", iw: "#i_w", ip: "#i_p", ir: "#i_r", ac: "#a_c", ai: "#a_i", ap: "#a_p", am: "#a_m", ao: "#a_o" };
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <h4 class="text-lg font-medium mb-3 flex items-center">
-                            <i class="fa fa-map-marker text-primary mr-2"></i> 地址
-                        </h4>
-                        <p class="text-neutral mb-3">${hospital.address}</p>
-                        <p class="text-neutral">
-                            <i class="fa fa-map mr-1"></i> 
-                            <a href="https://maps.google.com/maps?q=${encodeURIComponent(hospital.address)}" target="_blank" class="text-primary hover:underline">在Google地圖查看</a>
-                        </p>
-                    </div>
+document.querySelectorAll('.chk input').forEach(c => c.addEventListener('change', () => c.closest('.chk').classList.toggle('on', c.checked)));
 
-                    <div>
-                        <h4 class="text-lg font-medium mb-3 flex items-center">
-                            <i class="fa fa-globe text-primary mr-2"></i> 官方網站
-                        </h4>
-                        <p class="text-neutral mb-2">
-                            <a href="${hospital.website}" target="_blank" class="text-primary hover:underline break-all">${hospital.website}</a>
-                        </p>
-                        <p class="text-sm text-gray-500">點擊鏈接訪問醫院官方網站獲取最新信息</p>
-                    </div>
-                </div>
+function syncForm() {
+  const m = $("#c_mar").value === "1";
+  $("#f_sp").style.display = m ? "" : "none";
+  $("#h_inc").textContent = m ? "你與配偶合計的每月收入。不計子女家用、樓按每月款項。" : "本人每月收入。不計子女家用、樓按每月款項。";
+  $("#h_ast").textContent = (m ? "你與配偶合計的資產。" : "本人名下資產。") + "豁免：自住物業及車位、保險現金價值、已繳年金保費、首飾。";
+  $("#s_inc").textContent = f(INC.reduce((a, id) => a + v(id), 0));
+  $("#s_ast").textContent = f(AST.reduce((a, id) => a + v(id), 0));
+}
+document.querySelectorAll("#tools input, #tools select").forEach(el => el.addEventListener("input", syncForm));
 
-                <div class="mb-6">
-                    <h4 class="text-lg font-medium mb-3 flex items-center">
-                        <i class="fa fa-clock-o text-primary mr-2"></i> 服務時間
-                    </h4>
-                    <p class="text-neutral mb-2"><strong>門診:</strong> ${hospital.outpatientHours}</p>
-                    <p class="text-neutral">
-                        <strong>急症室:</strong> ${hospital.emergency ? hospital.emergencyHours : '不設急症室'}
-                    </p>
-                </div>
+function meter(val, lim) {
+  const p = lim ? Math.min(100, val / lim * 100) : 0;
+  return `<div class="bar-meter"><i class="${val > lim ? "x" : p >= 90 ? "w" : ""}" style="width:${p}%"></i></div>`;
+}
 
-                <div class="mb-6">
-                    <h4 class="text-lg font-medium mb-3 flex items-center">
-                        <i class="fa fa-stethoscope text-primary mr-2"></i> 主要服務
-                    </h4>
-                    <div class="flex flex-wrap gap-2">
-                        ${hospital.services.map(service => getServiceBadge(service)).join('')}
-                    </div>
-                </div>
+function evaluate(scroll) {
+  syncForm();
+  const res = $("#c_res");
+  const age = parseFloat($("#c_age").value);
+  if (isNaN(age)) { res.className = "result show r-warn"; res.innerHTML = "<h4>請輸入申請人年齡</h4>"; return; }
+  const married = $("#c_mar").value === "1";
+  const spRaw = parseFloat($("#c_sp").value), sp = isNaN(spRaw) ? null : spRaw;
+  const loc = $("#c_loc").value, now = $("#c_now").value;
+  const y7 = $("#c_7").checked, y1 = $("#c_1").checked;
+  const L = LIM[married ? 1 : 0];
+  const inc = INC.reduce((a, id) => a + v(id), 0), ast = AST.reduce((a, id) => a + v(id), 0);
+  const incOk = inc <= L.inc, astOk = ast <= L.ast, meansOk = incOk && astOk;
+  const locName = { hk: "香港", gd: "廣東計劃", fj: "福建計劃" }[loc];
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <h4 class="text-lg font-medium mb-3 flex items-center">
-                            <i class="fa fa-wrench text-primary mr-2"></i> 設施
-                        </h4>
-                        <ul class="text-neutral space-y-1">
-                            ${hospital.facilities.map(facility => {
-                                let icon = 'fa-check';
-                                if (facility === '停車場') icon = 'fa-parking';
-                                else if (facility === '藥房') icon = 'fa-medkit';
-                                else if (facility === '輪椅租借') icon = 'fa-wheelchair';
-                                else if (facility === '餐廳') icon = 'fa-utensils';
-                                else if (facility === '便利店') icon = 'fa-shopping-bag';
-                                else if (facility === '禮品店') icon = 'fa-gift';
-                                else if (facility === '咖啡廳') icon = 'fa-coffee';
-                                else if (facility === 'accessibility') {
-                                    facility = '無障礙設施';
-                                    icon = 'fa-universal-access';
-                                }
-                                
-                                return `<li><i class="fa ${icon} text-green-500 mr-2"></i>${facility}</li>`;
-                            }).join('')}
-                        </ul>
-                    </div>
+  const rows = [], notes = [];
+  // 年齡
+  let ageTxt, ageOk = age >= 65;
+  if (age >= 65) ageTxt = `<span class="ok-t">${age} 歲，已達申請年齡</span>`;
+  else if (age >= 64) ageTxt = `<span class="warn-t">${age} 歲</span>，可於 65 歲生日前一個月內遞表，由生日當日起計。`;
+  else ageTxt = `<span class="bad-t">${age} 歲，未達 65 歲</span>。可先用現時資料預計，到時以填表當日的入息及資產為準。`;
+  rows.push(["年齡", ageTxt]);
+  // 居港
+  const resOk = y7 && y1;
+  rows.push(["居港", resOk ? `<span class="ok-t">符合</span>：居港滿 7 年，申請前一年離港不超過 90 日`
+    : `<span class="bad-t">未符合</span>：${!y7 ? "成為香港居民未滿 7 年" : ""}${!y7 && !y1 ? "；" : ""}${!y1 ? "申請前一年離港超過 90 日（因病在外地治療可提交證明由社署酌情處理）" : ""}`]);
+  // 入息、資產
+  const room = (val, lim) => val <= lim ? `尚有 <b>${f(lim - val)}</b> 空間` : `<span class="key">超出 ${f(val - lim)}</span>`;
+  rows.push(["每月入息", `${f(inc)}／上限 ${f(L.inc)}（${L.name}）：${room(inc, L.inc)}${meter(inc, L.inc)}`]);
+  rows.push(["資產", `${f(ast)}／上限 ${f(L.ast)}（${L.name}）：${room(ast, L.ast)}${meter(ast, L.ast)}`]);
+  rows.push(["居住地", locName + (loc === "hk" ? "：每個付款年度須在港住最少 60 日" : "：每個付款年度須在該省住最少 60 日")]);
 
-                    <div>
-                        <h4 class="text-lg font-medium mb-3 flex items-center">
-                            <i class="fa fa-credit-card text-primary mr-2"></i> 保險信息
-                        </h4>
-                        <p class="text-neutral">${insuranceText}</p>
-                        <p class="text-sm text-gray-500 mt-1">適用於大多數醫療保險計劃，建議事先與保險公司確認</p>
-                    </div>
-                </div>
+  // 金額
+  let amtHtml = "";
+  const spEligible = married && sp !== null && sp >= 65;
+  if (meansOk && resOk) {
+    const selfM = RATE, both = spEligible ? RATE * 2 : RATE;
+    amtHtml = `<div class="res-amt"><div><div class="k">${ageOk ? "本人每月" : "65 歲起本人每月"}</div><div class="v">${f(selfM)}<small>全年 ${f(selfM * 12)}</small></div></div>`
+      + (married ? `<div><div class="k">夫婦合計每月</div><div class="v">${f(both)}<small>${spEligible ? "兩人均滿 65 歲，可各自申請" : "配偶滿 65 歲後可再多 " + f(RATE)}</small></div></div>` : "")
+      + `</div>`;
+  }
 
-                <div>
-                    <h4 class="text-lg font-medium mb-3 flex items-center">
-                        <i class="fa fa-bus text-primary mr-2"></i> 交通指南
-                    </h4>
-                    <p class="text-neutral">${hospital.transport}</p>
-                </div>
-            `;
+  // 結論
+  let cls, title, sub;
+  if (!resOk) { cls = "r-bad"; title = "居港條件未符合"; sub = "入息資產即使在限額內，暫時都未能申請"; }
+  else if (!meansOk) { cls = "r-bad"; title = "超出" + (!incOk && !astOk ? "入息及資產" : !incOk ? "入息" : "資產") + "限額"; sub = "目前不符合長生津資格"; }
+  else if (!ageOk) { cls = "r-warn"; title = "入息資產符合，待年齡達標"; sub = age >= 64 ? "生日前一個月可遞表" : "65 歲時再按當時資料評估"; }
+  else { cls = "r-ok"; title = "初步符合長生津資格"; sub = "可每月領取 " + f(RATE); }
 
-            hospitalModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+  // 提示
+  if (meansOk && resOk) {
+    if (L.inc - inc < L.inc * 0.1) notes.push("入息貼近上限，收入稍有增加便可能超標，要主動通知社署。");
+    if (L.ast - ast < L.ast * 0.1) notes.push("資產貼近上限，定期到期、收到遺產或退保都可能令資產超標，要主動通知社署。");
+  }
+  if (!meansOk) {
+    if (age >= 70) notes.push(`你已年滿 70 歲，可改領<mark>毋須資產審查的生果金 ${f(OAA)}</mark>；日後入息資產回落至限額內，可再申請長生津。`);
+    else notes.push(`70 歲起可申請毋須資產審查的生果金（現時每月 ${f(OAA)}）。入息資產日後回落至限額內，可隨時再申請長生津。`);
+    if (!astOk) notes.push("保險現金價值、已繳年金保費、自住物業及車位不計入資產，請檢查有沒有把豁免項目計入。");
+  }
+  if (married) notes.push("夫婦合併計算：合計超標兩人都不能領；配偶未滿 65 歲仍須申報，其強積金權益及強制性供款可豁免。");
+  if (married && sp === null) notes.push("填寫配偶年齡，可看到夫婦合計可領取的金額。");
+  if (now === "oaa") notes.push("正領生果金：不能同時領取，符合資格可申請轉為長生津（每月多 " + f(RATE - OAA) + "）。");
+  if (now === "da") notes.push("正領傷殘津貼：不能同時領取兩者，轉換前宜向社署了解哪項較適合。");
+  if (now === "cssa") notes.push("正領綜援：不能同時領取。綜援按個人需要計算，可能包括租金及特別津貼，轉換前宜先向社署查詢實際差額。");
+  if (loc !== "hk") notes.push("廣東及福建計劃須在香港申請；公屋住戶離港前要交還單位或刪除戶籍。2026 年 7 月起可選擇存入內地中國銀行或工商銀行港幣戶口。");
+  notes.push("本評估按 2026 年 2 月 1 日起的金額及限額計算，只供參考，最終以社署審核為準。");
 
-            // 添加收藏按钮事件
-            modalContent.querySelector('.modal-favorite-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = parseInt(e.currentTarget.dataset.id);
-                toggleFavorite(id);
-            });
-        }
+  res.className = "result show " + cls;
+  res.innerHTML = `<div class="res-top"><h4>${title}</h4><span class="res-sub">${sub}</span></div>` + amtHtml
+    + `<div class="res-rows">${rows.map(r => `<div class="res-row"><div class="lb">${r[0]}</div><div class="vl">${r[1]}</div></div>`).join("")}</div>`
+    + `<ul class="res-notes">${notes.map(x => `<li>${x}</li>`).join("")}</ul>`;
+  $("#tools").classList.remove("no-result");
+  history.replaceState(null, "", "#" + encodeState());
+  if (scroll) res.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 
-        // 关闭医院详情模态框
-        function closeHospitalModal() {
-            hospitalModal.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
+/* 分享：設定放喺網址 # 後面（唔包括姓名） */
+function encodeState() {
+  const p = new URLSearchParams();
+  Object.entries(KEYS).forEach(([k, id]) => { const x = $(id).value; if (x !== "" && x !== "0") p.set(k, x); });
+  if (!$("#c_7").checked) p.set("y7", "0");
+  if (!$("#c_1").checked) p.set("y1", "0");
+  return "c&" + p.toString();
+}
+function loadState() {
+  const h = location.hash.slice(1);
+  if (!h.startsWith("c&")) return false;
+  const p = new URLSearchParams(h.slice(2));
+  Object.entries(KEYS).forEach(([k, id]) => { if (p.has(k)) $(id).value = p.get(k); });
+  [["y7", "#c_7"], ["y1", "#c_1"]].forEach(([k, id]) => { const c = $(id); c.checked = p.get(k) !== "0"; c.closest(".chk").classList.toggle("on", c.checked); });
+  return true;
+}
+function shareCalc() {
+  if ($("#c_res").classList.contains("show")) mkShare(location.href.split("#")[0] + "#" + encodeState());
+  else mkShare(location.href.split("#")[0]);
+}
 
-        // 切换收藏状态
-        function toggleFavorite(hospitalId) {
-            const index = favorites.indexOf(hospitalId);
-            if (index === -1) {
-                favorites.push(hospitalId);
-                showNotification('已添加到收藏夾');
-            } else {
-                favorites.splice(index, 1);
-                showNotification('已從收藏夾移除');
-            }
+$("#c_go").addEventListener("click", () => evaluate(true));
+$("#c_reset").addEventListener("click", () => {
+  document.querySelectorAll("#tools input[type=number]").forEach(i => i.value = "");
+  $("#c_mar").value = "0"; $("#c_loc").value = "hk"; $("#c_now").value = "none";
+  ["#c_7", "#c_1"].forEach(id => { $(id).checked = true; $(id).closest(".chk").classList.add("on"); });
+  $("#c_res").className = "result"; $("#c_res").innerHTML = ""; $("#tools").classList.add("no-result");
+  history.replaceState(null, "", location.pathname + location.search);
+  syncForm();
+});
 
-            // 保存到本地存储
-            localStorage.setItem('hospitalFavorites', JSON.stringify(favorites));
-            
-            // 更新UI
-            updateFavoritesCount();
-            renderHospitals(filteredHospitals);
-            renderFavorites();
-            checkFavoritesEmpty();
-        }
+$("#tools").classList.add("no-result");
+syncForm();
+if (loadState()) { evaluate(false); setTimeout(() => $("#tools").scrollIntoView(), 50); }
 
-        // 显示通知
-        function showNotification(message) {
-            // 检查是否已有通知
-            let notification = document.getElementById('notification');
-            if (notification) {
-                notification.remove();
-            }
-            
-            // 创建新通知
-            notification = document.createElement('div');
-            notification.id = 'notification';
-            notification.className = 'fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-y-0';
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            // 3秒后隐藏通知
-            setTimeout(() => {
-                notification.classList.add('translate-y-20', 'opacity-0');
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 3000);
-        }
-
-        // 更新收藏数量
-        function updateFavoritesCount() {
-            favoritesCount.textContent = favorites.length;
-        }
-
-        // 检查收藏是否为空
-        function checkFavoritesEmpty() {
-            if (favorites.length === 0) {
-                emptyFavorites.classList.remove('hidden');
-            } else {
-                emptyFavorites.classList.add('hidden');
-            }
-        }
-
-        // 渲染收藏列表
-        function renderFavorites() {
-            if (favorites.length === 0) return;
-
-            const favoriteHospitals = hospitals.filter(hospital => favorites.includes(hospital.id));
-            favoritesContent.innerHTML = '';
-
-            favoriteHospitals.forEach(hospital => {
-                const favoriteItem = document.createElement('div');
-                favoriteItem.className = 'flex justify-between items-center p-4 border-b last:border-0 hover:bg-gray-50 transition-pro';
-                
-                const typeText = hospital.type === 'public' ? '公立' : '私家';
-                const typeColor = hospital.type === 'public' ? 'text-blue-600' : 'text-green-600';
-
-                favoriteItem.innerHTML = `
-                    <div>
-                        <h4 class="font-medium">${hospital.name}</h4>
-                        <p class="text-sm text-neutral">${hospital.districtName} · <span class="${typeColor}">${typeText}</span>
-                        ${hospital.emergency ? '<span class="ml-2 text-xs bg-red-100 text-red-800 px-1.5 py-0.5 rounded">有急症室</span>' : ''}</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="view-favorite-details p-2 text-primary hover:bg-primary/10 rounded-full transition-pro" data-id="${hospital.id}">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="remove-favorite p-2 text-red-400 hover:bg-red-50 rounded-full transition-pro" data-id="${hospital.id}">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                `;
-
-                favoritesContent.appendChild(favoriteItem);
-            });
-
-            // 添加事件监听器
-            document.querySelectorAll('.view-favorite-details').forEach(button => {
-                button.addEventListener('click', () => {
-                    const hospitalId = parseInt(button.dataset.id);
-                    closeFavoritesModal();
-                    openHospitalModal(hospitalId);
-                });
-            });
-
-            document.querySelectorAll('.remove-favorite').forEach(button => {
-                button.addEventListener('click', () => {
-                    const hospitalId = parseInt(button.dataset.id);
-                    toggleFavorite(hospitalId);
-                });
-            });
-        }
-
-        // 打开收藏夹模态框
-        function openFavoritesModal() {
-            renderFavorites();
-            favoritesModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // 关闭收藏夹模态框
-        function closeFavoritesModal() {
-            favoritesModal.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-
-        // 筛选医院
-        function filterHospitals() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const district = districtFilter.value;
-            const type = typeFilter.value;
-            const service = serviceFilter.value;
-            const insurance = insuranceFilter.value;
-            const facility = facilityFilter.value;
-
-            return hospitals.filter(hospital => {
-                // 搜索词筛选
-                const matchesSearch = searchTerm === '' || 
-                    hospital.name.toLowerCase().includes(searchTerm) ||
-                    hospital.nameEn.toLowerCase().includes(searchTerm) ||
-                    hospital.address.toLowerCase().includes(searchTerm) ||
-                    hospital.speciality?.toLowerCase().includes(searchTerm) ||
-                    hospital.services.some(s => getServiceBadge(s).toLowerCase().includes(searchTerm));
-
-                // 地区筛选
-                const matchesDistrict = district === 'all' || hospital.district === district;
-
-                // 类型筛选
-                const matchesType = type === 'all' || hospital.type === type;
-
-                // 服务筛选
-                const matchesService = service === 'all' || (service === 'emergency' ? hospital.emergency : hospital.services.includes(service));
-
-                // 保险筛选
-                const matchesInsurance = insurance === 'all' ||
-                    (insurance === 'ha' && hospital.insurance.includes('ha')) ||
-                    (insurance === 'international' && hospital.insurance.includes('international')) ||
-                    (insurance === 'both' && hospital.insurance.includes('ha') && hospital.insurance.includes('international'));
-
-                // 设施筛选
-                const matchesFacility = facility === 'all' || 
-                    (facility === 'parking' && hospital.facilities.includes('停車場')) ||
-                    (facility === 'pharmacy' && hospital.facilities.includes('藥房')) ||
-                    (facility === 'accessibility' && hospital.facilities.includes('accessibility')) ||
-                    (facility === 'cafeteria' && (hospital.facilities.includes('餐廳') || hospital.facilities.includes('咖啡廳')));
-
-                return matchesSearch && matchesDistrict && matchesType && matchesService && matchesInsurance && matchesFacility;
-            });
-        }
-
-        // 排序医院
-        function sortHospitals(hospitalsList) {
-            const sortBy = sortOptions.value;
-            return [...hospitalsList].sort((a, b) => {
-                switch(sortBy) {
-                    case 'name':
-                        return a.name.localeCompare(b.name, 'zh-Hant');
-                    case 'name-desc':
-                        return b.name.localeCompare(a.name, 'zh-Hant');
-                    case 'district':
-                        return a.district.localeCompare(b.district);
-                    case 'type':
-                        return a.type.localeCompare(b.type);
-                    default:
-                        return 0;
-                }
-            });
-        }
-
-        // 应用筛选和排序
-        function applyFilters() {
-            currentPage = 1; // 重置为第一页
-            const filtered = filterHospitals();
-            filteredHospitals = sortHospitals(filtered);
-            resultsCount.textContent = filteredHospitals.length;
-            renderHospitals(filteredHospitals);
-        }
-
-        // 重置筛选
-        function resetAllFilters() {
-            searchInput.value = '';
-            districtFilter.value = 'all';
-            typeFilter.value = 'all';
-            serviceFilter.value = 'all';
-            insuranceFilter.value = 'all';
-            facilityFilter.value = 'all';
-            applyFilters();
-        }
-
-        // 事件监听器
-        searchInput.addEventListener('input', applyFilters);
-        districtFilter.addEventListener('change', applyFilters);
-        typeFilter.addEventListener('change', applyFilters);
-        serviceFilter.addEventListener('change', applyFilters);
-        insuranceFilter.addEventListener('change', applyFilters);
-        facilityFilter.addEventListener('change', applyFilters);
-        sortOptions.addEventListener('change', applyFilters);
-
-        quickFilters.forEach(button => {
-            button.addEventListener('click', () => {
-                const filter = button.dataset.filter;
-                
-                // 检查是服务筛选还是类型筛选
-                if (['emergency', 'children', 'maternity', 'cardiology', 'orthopedics', 'oncology', 'neurology', 'ophthalmology', 'dental', 'psychiatry'].includes(filter)) {
-                    serviceFilter.value = filter;
-                } else if (['public', 'private'].includes(filter)) {
-                    typeFilter.value = filter;
-                }
-                
-                applyFilters();
-            });
-        });
-
-        resetFilters.addEventListener('click', resetAllFilters);
-        emptyReset.addEventListener('click', resetAllFilters);
-
-        closeModal.addEventListener('click', closeHospitalModal);
-        modalBackdrop.addEventListener('click', closeHospitalModal);
-
-        favoritesBtn.addEventListener('click', openFavoritesModal);
-        closeFavorites.addEventListener('click', closeFavoritesModal);
-        favoritesBackdrop.addEventListener('click', closeFavoritesModal);
-
-        // 高级筛选切换
-        advancedFilterBtn.addEventListener('click', () => {
-            advancedFilters.classList.toggle('hidden');
-            advancedIcon.classList.toggle('rotate-180');
-        });
-
-        // 分页控制
-        prevPage.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderHospitals(filteredHospitals);
-            }
-        });
-
-        nextPage.addEventListener('click', () => {
-            if (currentPage < Math.ceil(filteredHospitals.length / itemsPerPage)) {
-                currentPage++;
-                renderHospitals(filteredHospitals);
-            }
-        });
-
-        // 键盘事件
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeHospitalModal();
-                closeFavoritesModal();
-            }
-        });
-    </script>
+/* 導覽：標示目前位置 */
+const navLinks = [...document.querySelectorAll("#nav a")];
+const secs = navLinks.map(a => document.querySelector(a.getAttribute("href")));
+addEventListener("scroll", () => {
+  let cur = 0; secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < 140) cur = i; });
+  navLinks.forEach((a, i) => a.classList.toggle("on", i === cur && scrollY > 200));
+}, { passive: true });
+</script>
 </body>
 </html>
