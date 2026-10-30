@@ -636,7 +636,7 @@ footer .mk-ecard{margin-top:28px}
 .mk-tab.on,.mk-tab.active,.mk-tab[aria-selected="true"],.mk-tab[aria-pressed="true"],.mk-tab[aria-current="page"]{background:#fff;color:var(--c-ink);font-weight:700}
 .mk-tab.on::before,.mk-tab.active::before,.mk-tab[aria-selected="true"]::before,.mk-tab[aria-pressed="true"]::before,.mk-tab[aria-current="page"]::before{box-shadow:none}
 /* 平板同手機（≤1023px）：分頁掣落第二行，一行過左右捲 */
-@media (max-width:1023px){.mk-bar{flex-wrap:wrap;row-gap:0;column-gap:10px;padding-top:8px}.mk-bar>.mk-title{flex:1}.mk-bar>.mk-tabs{order:3;flex:none;width:100%;margin:2px 0 6px}}
+@media (max-width:1023px){.mk-header .mk-bar,.mk-header.mk-bar{flex-wrap:wrap;height:auto;min-height:0;align-content:flex-start;row-gap:8px;column-gap:10px;padding-top:10px;padding-bottom:8px}.mk-bar>.mk-title{flex:1}.mk-header .mk-bar>.mk-tabs,.mk-header.mk-bar>.mk-tabs{order:3;flex:none;width:100%;margin:0}}
 .mk-actions{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
 /* 分享呢個方案（同列印按鈕一樣樣式） */
 .mk-share-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--mk-brand);background:var(--mk-surface);color:var(--mk-brand-ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
@@ -651,7 +651,7 @@ footer .mk-ecard{margin-top:28px}
 @media (max-width:480px){.mk-long{display:none}.mk-print-btn,.mk-share-btn{padding:0 10px}}
 /* ===== MKPA 統一標準 完 ===== */
 /* 平板同手機：導覽落第二行（跟 MKPA 標準頁頭） */
-@media (max-width:1023px){.bar .wrap{flex-wrap:wrap;height:auto;row-gap:0;padding-top:8px}.bar .brand{flex:1;min-width:0}.bar .wrap>.nav{order:3;flex:none;width:100%;margin:2px 0 6px}}
+@media (max-width:1023px){.bar .brand{flex:1;min-width:0}}
 /* ===== 章節顏色（長篇指南＝第三級）：每個章節按 1→8 次序一隻色，只用喺章節編號標籤、導覽色點同選中導覽掣；
    章節底色唔用分類色，用白色同淺灰白交替分隔 ===== */
 .c0{--c:var(--mk-brand);--c-ink:var(--mk-brand-ink);--c-soft:var(--mk-brand-soft)}
@@ -699,7 +699,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
 <div class="mk-print-head"><b>MKPA · 長者生活津貼全程指南</b><span>列印日期：<span class="mk-print-date"></span></span></div>
 
 <header class="bar mk-header">
-  <div class="wrap">
+  <div class="wrap mk-bar">
     <a class="brand" href="./"><img class="mk-logo logo" src="favicon.svg" alt="" width="30" height="30"><span class="mk-name">長者生活津貼全程指南<small class="mk-sub">長生津資格、申請及覆檢一覽</small></span></a>
     <nav class="nav mk-tabs" id="nav">
       <a href="#journey" class="mk-tab c0">總覽</a>
