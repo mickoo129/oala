@@ -38,13 +38,9 @@ b,strong{font-weight:600;color:var(--ink)}
 
 /* top bar */
 .bar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
-.bar .wrap{display:flex;align-items:center;gap:12px;height:52px}
+.bar .wrap{display:flex;align-items:center;gap:16px;height:60px}
 .brand{font-weight:600;font-size:15px;white-space:nowrap;color:var(--ink);display:flex;align-items:center;gap:8px}
 .brand i{width:8px;height:8px;border-radius:2px;background:var(--accent);display:inline-block}
-.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:12px}
-.nav::-webkit-scrollbar{display:none}
-.nav a{font-size:13.5px;color:var(--muted);padding:6px 10px;border-radius:8px;white-space:nowrap}
-.nav a:hover,.nav a.on{color:var(--ink);background:var(--panel);text-decoration:none}
 .tools{display:flex;gap:6px}
 .tbtn{border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:8px;height:32px;min-width:32px;padding:0 11px;font:inherit;font-size:13px;font-weight:500;cursor:pointer}
 .tbtn:hover{border-color:var(--muted)}
@@ -230,7 +226,6 @@ footer .src a{display:block;margin:5px 0;word-break:break-all}
 /* ===== colour layer ===== */
 .bar{border-bottom-color:var(--line)}
 .brand i{width:10px;height:10px;border-radius:3px;background:var(--brand)}
-.nav a.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
 .tbtn{border-color:var(--accent-line);color:var(--accent)}
 .tbtn:hover{background:var(--accent-soft);border-color:var(--accent)}
 
@@ -374,7 +369,7 @@ mark{background:linear-gradient(transparent 52%,#ffe17a 52%);color:inherit;paddi
   .bar .wrap{flex-wrap:wrap;height:auto;row-gap:0;padding-top:8px}
   .brand{flex:1;min-width:0}
   .brand span{overflow:hidden;text-overflow:ellipsis}
-  .nav{order:3;flex-basis:100%;margin:4px 0 6px;flex:none;width:100%}
+  .bar .wrap>.nav{order:3;flex:none;width:100%;margin:6px 0}
   html{scroll-padding-top:110px}
   .hero{padding:44px 0 28px}
   .persona{grid-template-columns:1fr}
@@ -621,23 +616,42 @@ footer .mk-ecard{margin-top:28px}
   .mk-print-head b{color:var(--mk-deep);font-size:11pt}
 }
 /* 頁頭：統一鎖住喺頂；第一行 icon + 工具名 + 按鈕 */
-.mk-header{position:sticky;top:0;z-index:50}
-.mk-bar{display:flex;align-items:center;gap:12px;min-height:56px}
-.mk-title{display:flex;align-items:center;gap:10px;min-width:0;font-family:var(--mk-sans);font-weight:900;font-size:17px;white-space:nowrap}
+/* 頁頭：深青綠底、白字（分頁掣擺法跟 claimsreport）；第一行 icon＋工具名 → 分頁掣（名右邊）→ 右邊按鈕；平板同手機分頁掣落第二行、左右捲 */
+.mk-header{position:sticky;top:0;z-index:50;background:var(--mk-deep);color:#fff;border-bottom:0}
+.mk-bar{display:flex;align-items:center;gap:16px;min-height:60px}
+.mk-title{display:flex;align-items:center;gap:10px;min-width:0;font-family:var(--mk-sans);font-weight:900;font-size:17px;white-space:nowrap;color:var(--mk-deep);text-decoration:none}
 .mk-title span{overflow:hidden;text-overflow:ellipsis}
 /* 工具名 + 細字簡介（兩行都擠喺 56px 頁頭入面） */
 .mk-name{display:flex;flex-direction:column;justify-content:center;min-width:0;line-height:1.2}
 .mk-sub{display:block;margin-top:2px;color:inherit;font-size:12px;font-weight:500;letter-spacing:0;opacity:.78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-header .mk-title,.mk-header .mk-name{color:#fff}
+.mk-header .mk-sub{color:#C9DDD8;opacity:1}
+/* 分頁掣／導覽：每粒加 .mk-tab 同 .mk-cat-N（或者自己設 --c、--c-ink）；選中用 .on／.active／aria-selected／aria-pressed／aria-current */
+.mk-tabs{--c:var(--mk-brand);--c-ink:var(--mk-brand-ink);display:flex;align-items:center;gap:4px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.mk-tabs::-webkit-scrollbar{display:none}
+.mk-tab{display:inline-flex;align-items:center;gap:6px;flex:none;padding:6px 10px;border:0;border-radius:999px;background:none;color:#D7E7E3;font-family:var(--mk-sans);font-size:14px;font-weight:500;line-height:1.4;white-space:nowrap;text-decoration:none;cursor:pointer;box-shadow:none}
+.mk-tab::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.35);margin:0}
+.mk-tab:hover{background:rgba(255,255,255,.1);color:#fff;text-decoration:none}
+/* 選中：白色膠囊、字用該分類文字色，色點保留分類色 */
+.mk-tab.on,.mk-tab.active,.mk-tab[aria-selected="true"],.mk-tab[aria-pressed="true"],.mk-tab[aria-current="page"]{background:#fff;color:var(--c-ink);font-weight:700}
+.mk-tab.on::before,.mk-tab.active::before,.mk-tab[aria-selected="true"]::before,.mk-tab[aria-pressed="true"]::before,.mk-tab[aria-current="page"]::before{box-shadow:none}
+/* 平板同手機（≤1023px）：分頁掣落第二行，一行過左右捲 */
+@media (max-width:1023px){.mk-bar{flex-wrap:wrap;row-gap:0;column-gap:10px;padding-top:8px}.mk-bar>.mk-title{flex:1}.mk-bar>.mk-tabs{order:3;flex:none;width:100%;margin:2px 0 6px}}
 .mk-actions{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
 /* 分享呢個方案（同列印按鈕一樣樣式） */
 .mk-share-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--mk-brand);background:var(--mk-surface);color:var(--mk-brand-ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
 .mk-share-btn:hover{background:var(--mk-brand-soft)}
 .mk-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999;background:var(--mk-ink);color:#fff;font:600 14px/1.4 var(--mk-sans);padding:10px 16px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.18);max-width:calc(100vw - 32px)}
+/* 頁頭入面嘅掣：透明底、白字白框 */
+.mk-header .mk-share-btn,.mk-header .mk-print-btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+.mk-header .mk-share-btn:hover,.mk-header .mk-print-btn:hover{background:rgba(255,255,255,.12)}
 .mk-share-btn>.mk-long{margin-left:-6px} /* 抵銷 gap，令「分享呢個方案」連埋 */
 .mk-print-btn>.mk-long{margin-left:-2px} /* 「列印 / 存 PDF」保留一個空格 */
 /* 手機：按鈕字縮短（「分享」「列印」） */
 @media (max-width:480px){.mk-long{display:none}.mk-print-btn,.mk-share-btn{padding:0 10px}}
 /* ===== MKPA 統一標準 完 ===== */
+/* 平板同手機：導覽落第二行（跟 MKPA 標準頁頭） */
+@media (max-width:1023px){.bar .wrap{flex-wrap:wrap;height:auto;row-gap:0;padding-top:8px}.bar .brand{flex:1;min-width:0}.bar .wrap>.nav{order:3;flex:none;width:100%;margin:2px 0 6px}}
 /* ===== 章節顏色（長篇指南＝第三級）：每個章節按 1→8 次序一隻色，只用喺章節編號標籤、導覽色點同選中導覽掣；
    章節底色唔用分類色，用白色同淺灰白交替分隔 ===== */
 .c0{--c:var(--mk-brand);--c-ink:var(--mk-brand-ink);--c-soft:var(--mk-brand-soft)}
@@ -652,10 +666,6 @@ footer .mk-ecard{margin-top:28px}
 main>section{margin-top:0;padding:56px 0 60px}
 main>section.alt{background:#fff;box-shadow:0 0 0 100vmax #fff;clip-path:inset(0 -100vmax)}
 section.ph .sec-no{background:var(--c-ink);color:#fff}
-.nav a[class^="c"]{display:inline-flex;align-items:center;gap:6px}
-.nav a[class^="c"]::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
-.nav a[class^="c"].on{background:var(--c-ink);color:#fff;font-weight:700}
-.nav a[class^="c"].on::before{background:#fff}
 @media print{main>section,main>section.alt{background:none;box-shadow:none;clip-path:none;padding:0;margin:0}section.ph .sec-no{background:var(--accent-soft);color:var(--accent)}}
 
 /* ===== MKPA 分類色盤（階段：1 申請前、2 審批、3 領取期間；其他分類按 1→8 次序）===== */
@@ -691,15 +701,15 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
 <header class="bar mk-header">
   <div class="wrap">
     <a class="brand" href="./"><img class="mk-logo logo" src="favicon.svg" alt="" width="30" height="30"><span class="mk-name">長者生活津貼全程指南<small class="mk-sub">長生津資格、申請及覆檢一覽</small></span></a>
-    <nav class="nav" id="nav">
-      <a href="#journey" class="c0">總覽</a>
-      <a href="#eligibility" class="c1">申請資格</a>
-      <a href="#types" class="c2">申請類別</a>
-      <a href="#process" class="c3">申請流程</a>
-      <a href="#declare" class="c4">申報要求</a>
-      <a href="#review" class="c5">定期審查</a>
-      <a href="#tools" class="c6">快速計算</a>
-      <a href="#faq" class="c7">常見問題</a>
+    <nav class="nav mk-tabs" id="nav">
+      <a href="#journey" class="mk-tab c0">總覽</a>
+      <a href="#eligibility" class="mk-tab mk-cat-1 c1">申請資格</a>
+      <a href="#types" class="mk-tab mk-cat-2 c2">申請類別</a>
+      <a href="#process" class="mk-tab mk-cat-3 c3">申請流程</a>
+      <a href="#declare" class="mk-tab mk-cat-4 c4">申報要求</a>
+      <a href="#review" class="mk-tab mk-cat-5 c5">定期審查</a>
+      <a href="#tools" class="mk-tab mk-cat-6 c6">快速計算</a>
+      <a href="#faq" class="mk-tab mk-cat-7 c7">常見問題</a>
     </nav>
     <div class="tools">
       <button type="button" class="mk-share-btn" onclick="shareCalc()">分享<span class="mk-long">呢個方案</span></button>
