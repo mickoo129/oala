@@ -649,16 +649,14 @@ footer .mk-ecard{margin-top:28px}
 .c6{--c:var(--mk-cat-6);--c-ink:var(--mk-cat-6-ink);--c-soft:var(--mk-cat-6-soft)}
 .c7{--c:var(--mk-cat-7);--c-ink:var(--mk-cat-7-ink);--c-soft:var(--mk-cat-7-soft)}
 .c8{--c:var(--mk-cat-8);--c-ink:var(--mk-cat-8-ink);--c-soft:var(--mk-cat-8-soft)}
-section.ph{margin-top:0;padding:56px 0 60px}
-section.ph:nth-of-type(odd){background:#fff;box-shadow:0 0 0 100vmax #fff;clip-path:inset(0 -100vmax)}
+main>section{margin-top:0;padding:56px 0 60px}
+main>section.alt{background:#fff;box-shadow:0 0 0 100vmax #fff;clip-path:inset(0 -100vmax)}
 section.ph .sec-no{background:var(--c-ink);color:#fff}
-section:not(.ph) + section.ph{margin-top:56px}
-section.ph + section:not(.ph){padding-top:72px}
 .nav a[class^="c"]{display:inline-flex;align-items:center;gap:6px}
 .nav a[class^="c"]::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
 .nav a[class^="c"].on{background:var(--c-ink);color:#fff;font-weight:700}
 .nav a[class^="c"].on::before{background:#fff}
-@media print{section.ph,section.ph:nth-of-type(odd){background:none;box-shadow:none;clip-path:none;padding:0;margin:0}section.ph .sec-no{background:var(--accent-soft);color:var(--accent)}}
+@media print{main>section,main>section.alt{background:none;box-shadow:none;clip-path:none;padding:0;margin:0}section.ph .sec-no{background:var(--accent-soft);color:var(--accent)}}
 
 /* ===== MKPA 分類色盤（階段：1 申請前、2 審批、3 領取期間；其他分類按 1→8 次序）===== */
 :root{--blue:var(--mk-cat-1-ink);--blue-soft:var(--mk-cat-1-soft);--purple:var(--mk-cat-2-ink);--purple-soft:var(--mk-cat-2-soft);
@@ -676,6 +674,15 @@ section.ph + section:not(.ph){padding-top:72px}
 .ftag.f4{background:var(--mk-cat-4-soft);color:var(--mk-cat-4-ink)} .ftag.f5{background:var(--mk-cat-7-soft);color:var(--mk-cat-7-ink)}
 
 
+/* ===== 好壞／警示用標準語意色；其餘分類按 1→8 次序（2026 年 10 月同步標準）===== */
+:root{--amber:var(--mk-warn);--amber-fill:var(--mk-warn);--amber-soft:var(--mk-warn-soft);--alert:var(--mk-danger);--alert-soft:var(--mk-danger-soft)}
+.l1{--lc:var(--mk-brand);background:var(--mk-brand-soft);color:var(--mk-brand-ink)!important}
+.l2{--lc:var(--mk-warn);background:var(--mk-warn-soft);color:var(--mk-warn)!important}
+.l3{--lc:var(--mk-danger);background:var(--mk-danger-soft);color:var(--mk-danger)!important}
+.l4{--lc:var(--mk-cat-7);background:var(--mk-cat-7-soft);color:var(--mk-cat-7-ink)!important}
+.tc-1{--tc:var(--mk-cat-1)} .tc-2{--tc:var(--mk-cat-2)} .tc-3{--tc:var(--mk-cat-3)}
+.hero:before{background:radial-gradient(1200px 420px at 85% -10%,color-mix(in srgb,var(--mk-brand) 22%,transparent),transparent 60%),
+  radial-gradient(800px 360px at 0% 110%,color-mix(in srgb,var(--mk-deep) 8%,transparent),transparent 60%),linear-gradient(180deg,var(--mk-brand-soft),var(--mk-bg))}
 </style>
 </head>
 <body>
@@ -732,7 +739,7 @@ section.ph + section:not(.ph){padding-top:72px}
 </section>
 
 <!-- JOURNEY -->
-<section id="journey">
+<section id="journey" class="alt">
   <div class="sec-head"><div class="sec-no">00 總覽</div><div><h2>由申請到持續領取的六個階段</h2><p>長生津屬入息及資產審查的津貼，獲批之後仍要遵守居港規定，並定期接受覆檢。</p></div></div>
   <div class="journey j6">
     <div class="jstep pa"><div class="jdot">1</div><h4>檢查資格</h4><p>65 歲、居港 7 年、申請前一年連續居港</p></div>
@@ -776,7 +783,7 @@ section.ph + section:not(.ph){padding-top:72px}
 
   <h3 class="block">甚麼要計、甚麼不計</h3>
   <div class="grid2">
-    <div class="card top tc-amber">
+    <div class="card top tc-1">
       <h3>計入入息（每月）</h3>
       <ul class="dots">
         <li>工資、薪金、佣金、花紅（包括兼職、自僱、執紙皮等收入）</li>
@@ -786,7 +793,7 @@ section.ph + section:not(.ph){padding-top:72px}
       </ul>
       <p class="sub" style="margin-top:12px"><b>不計：</b>子女親友給的家用或零用錢；安老按揭（樓按）及保單逆按每月領取的款項。但這些錢儲起來的部分會變成資產。</p>
     </div>
-    <div class="card top tc-coral">
+    <div class="card top tc-2">
       <h3>計入資產</h3>
       <ul class="dots">
         <li>現金（包括放在家中或保險箱的）、銀行存款，港幣、外幣都計</li>
@@ -801,22 +808,22 @@ section.ph + section:not(.ph){padding-top:72px}
 </section>
 
 <!-- TYPES -->
-<section id="types" class="ph c2">
+<section id="types" class="ph c2 alt">
   <div class="sec-head"><div class="sec-no">02 類別</div><div><h2>申請類別</h2><p>長生津只有一個金額（2022 年起「普通」與「高額」已合併），按居住地分三種計劃，按婚姻狀況分兩套限額。</p></div></div>
   <div class="grid3">
-    <div class="card top tc-green">
+    <div class="card top tc-1">
       <span class="tag c-green">住在香港</span>
       <h3 style="margin-top:10px">長者生活津貼</h3>
       <p>一般申請，由居住地區的社會保障辦事處處理。</p>
       <p class="sub">領取期間每個「付款年度」須在港住最少 60 日。</p>
     </div>
-    <div class="card top tc-blue">
+    <div class="card top tc-2">
       <span class="tag c-blue">移居廣東</span>
       <h3 style="margin-top:10px">廣東計劃</h3>
       <p>在廣東省居住的長者照樣領取，金額、限額與香港相同。</p>
       <p class="sub">每個付款年度須在廣東住最少 60 日；由社署上水辦事處處理。</p>
     </div>
-    <div class="card top tc-purple">
+    <div class="card top tc-3">
       <span class="tag c-purple">移居福建</span>
       <h3 style="margin-top:10px">福建計劃</h3>
       <p>安排與廣東計劃相同，適用於在福建省居住的長者。</p>
@@ -882,7 +889,7 @@ section.ph + section:not(.ph){padding-top:72px}
 </section>
 
 <!-- DECLARE -->
-<section id="declare" class="ph c4">
+<section id="declare" class="ph c4 alt">
   <div class="sec-head"><div class="sec-no">04 申報</div><div><h2>申報要求</h2><p>申請時如實申報入息及資產；領取期間有變要主動通知。以下按社署申請指引及常見問題整理。</p></div></div>
   <div class="tbl-wrap">
     <table class="txt dec">
@@ -935,7 +942,7 @@ section.ph + section:not(.ph){padding-top:72px}
 </section>
 
 <!-- TOOLS -->
-<section id="tools" class="ph c6">
+<section id="tools" class="ph c6 alt">
   <div class="sec-head"><div class="sec-no">06 計算</div><div><h2>快速初步評估</h2><p>輸入基本資料，即時看看是否大致符合資格及還有多少空間。只供參考，最終以社署審核為準。</p></div></div>
   <div class="calc-card">
     <div class="form f3">
@@ -985,7 +992,7 @@ section.ph + section:not(.ph){padding-top:72px}
 </section>
 
 <!-- FAQ -->
-<section id="faq" class="ph c7">
+<section id="faq" class="ph c7 alt">
   <div class="sec-head"><div class="sec-no">08 問答</div><div><h2>常見問題</h2></div></div>
   <div class="faq">
   <details><summary><span class="ftag">資格</span>可以幾時開始申請？由幾時開始計錢？</summary><div class="ans"><p>最早可於 <b>65 歲生日前一個月內</b>遞表，社署以生日當日作申請日期。津貼由社署收到申請當日或符合資格當日起計，以較遲者為準，<mark>不會追溯到申請之前</mark>，所以符合資格就應盡早申請。</p></div></details>
