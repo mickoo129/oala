@@ -426,6 +426,7 @@ mark{background:linear-gradient(transparent 52%,#ffe17a 52%);color:inherit;paddi
   .rt-row,.rung,tr{break-inside:avoid}
   .sec-head{break-after:avoid}
   details .ans{display:block!important}
+  details::details-content{content-visibility:visible;display:block}
   summary:after{display:none}
   a{color:#000}
   @page{size:A4 landscape;margin:10mm 12mm}
@@ -772,7 +773,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
         <li>年滿 65 歲<span>可於 65 歲生日前一個月內遞表，以生日當日作申請日期。</span></li>
         <li>成為香港居民最少 7 年<span>非法入境者或以非定居身份來港人士（例如外地勞工、旅客）不符合資格。</span></li>
         <li>申請前一年連續在港居住<span>該年離港合共不超過 <b>90 日</b>仍當作連續居港；因病在外地接受治療超過 90 日，可提交證明由社署酌情處理。</span></li>
-        <li>入息及資產不超過限額<span>單身與夫婦適用不同限額，見右方。</span></li>
+        <li>入息及資產不超過限額<span>單身與夫婦適用不同限額，見限額卡。</span></li>
         <li>沒有同時領取綜援、生果金或傷殘津貼<span>正領取這些津貼的人可申請轉為長生津，但不能同時領取。</span></li>
         <li>不在羈留或服刑中</li>
       </ul>
@@ -859,7 +860,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
     <table class="cmp">
       <thead><tr><th>項目</th><th>長者生活津貼</th><th>高齡津貼（生果金）</th><th>綜援（長者）</th></tr></thead>
       <tbody>
-        <tr><td>年齡</td><td>65 歲或以上</td><td>70 歲或以上</td><td>60 歲或以上</td></tr>
+        <tr><td>年齡</td><td>65 歲或以上</td><td>70 歲或以上</td><td>65 歲或以上<small>2019 年 2 月起由 60 歲提高</small></td></tr>
         <tr><td>每月金額</td><td>$4,345</td><td>$1,675</td><td>按個別需要計算</td></tr>
         <tr><td>入息及資產審查</td><td>有</td><td>沒有</td><td>有（較嚴格）</td></tr>
         <tr><td>可否同時領取</td><td colspan="3" style="text-align:center">三者只能選其一</td></tr>
@@ -1101,7 +1102,10 @@ function syncForm() {
   $("#s_inc").textContent = f(INC.reduce((a, id) => a + v(id), 0));
   $("#s_ast").textContent = f(AST.reduce((a, id) => a + v(id), 0));
 }
-document.querySelectorAll("#tools input, #tools select").forEach(el => el.addEventListener("input", syncForm));
+document.querySelectorAll("#tools input, #tools select").forEach(el => el.addEventListener("input", () => {
+  syncForm();
+  if ($("#c_res").classList.contains("show")) evaluate(false);   // 已經計過：改數即時重新計，分享連結同畫面一致
+}));
 
 function meter(val, lim) {
   const p = lim ? Math.min(100, val / lim * 100) : 0;
@@ -1145,7 +1149,7 @@ function evaluate(scroll) {
   if (meansOk && resOk) {
     const selfM = RATE, both = spEligible ? RATE * 2 : RATE;
     amtHtml = `<div class="res-amt"><div><div class="k">${ageOk ? "本人每月" : "65 歲起本人每月"}</div><div class="v">${f(selfM)}<small>全年 ${f(selfM * 12)}</small></div></div>`
-      + (married ? `<div><div class="k">夫婦合計每月</div><div class="v">${f(both)}<small>${spEligible ? "兩人均滿 65 歲，可各自申請" : "配偶滿 65 歲後可再多 " + f(RATE)}</small></div></div>` : "")
+      + (married && sp !== null ? `<div><div class="k">夫婦合計每月</div><div class="v">${f(both)}<small>${spEligible ? "兩人均滿 65 歲，可各自申請" : "配偶滿 65 歲後可再多 " + f(RATE)}</small></div></div>` : "")
       + `</div>`;
   }
 
@@ -1199,6 +1203,11 @@ function loadState() {
   [["y7", "#c_7"], ["y1", "#c_1"]].forEach(([k, id]) => { const c = $(id); c.checked = p.get(k) !== "0"; c.closest(".chk").classList.toggle("on", c.checked); });
   return true;
 }
+/* 列印：摺埋嘅常見問題要展開先印到答案，印完還原 */
+let mkOpened = [];
+addEventListener("beforeprint", () => { const c = [...document.querySelectorAll("details:not([open])")]; c.forEach(d => d.open = true); mkOpened = mkOpened.concat(c); });
+addEventListener("afterprint", () => { mkOpened.forEach(d => d.open = false); mkOpened = []; });
+
 function shareCalc() {
   if ($("#c_res").classList.contains("show")) mkShare(location.href.split("#")[0] + "#" + encodeState());
   else mkShare(location.href.split("#")[0]);
