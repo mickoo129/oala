@@ -434,6 +434,7 @@ mark{background:linear-gradient(transparent 52%,#ffe17a 52%);color:inherit;paddi
   main>section{break-before:page;padding-top:0!important}
   main>section#journey{break-before:avoid;padding-top:14px!important}
   #contact{break-before:avoid!important;padding-top:20px!important}
+  #review,#tools{break-before:auto!important;padding-top:18px!important}
   /* 卡片、表格列、步驟不拆開 */
   .card,.note,.rung,.rt-row,.steps>li,.tip,details,.stat,.contact,.grid2>*,.grid3>*{break-inside:avoid}
   tr{break-inside:avoid}
@@ -694,6 +695,24 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
 .tc-1{--tc:var(--mk-cat-1)} .tc-2{--tc:var(--mk-cat-2)} .tc-3{--tc:var(--mk-cat-3)}
 .hero:before{background:radial-gradient(1200px 420px at 85% -10%,color-mix(in srgb,var(--mk-brand) 22%,transparent),transparent 60%),
   radial-gradient(800px 360px at 0% 110%,color-mix(in srgb,var(--mk-deep) 8%,transparent),transparent 60%),linear-gradient(180deg,var(--mk-brand-soft),var(--mk-bg))}
+/* ===== 用家測試後微調（2026 年 11 月）===== */
+.nb{display:inline-block}
+.hero .lead,.sec-head p{text-wrap:pretty}
+table.cmp th,table.cmp td{text-align:center}
+table.cmp th:first-child,table.cmp td:first-child{text-align:left}
+.res-next{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:15px;color:var(--ink2)}
+@media (max-width:680px){
+  table.cmp thead{display:none}
+  table.cmp,table.cmp tbody,table.cmp tr,table.cmp td{display:block;width:auto}
+  table.cmp tr{padding:12px 16px;border-bottom:1px solid var(--line)}
+  table.cmp tr:last-child{border-bottom:0}
+  table.cmp td{border:0;padding:3px 0;text-align:left!important;white-space:normal;display:flex;justify-content:space-between;gap:12px}
+  table.cmp td:first-child{font-size:16px;padding-bottom:6px}
+  table.cmp td[data-label]::before{content:attr(data-label);color:var(--muted);font-weight:500}
+  table.cmp td .cv{text-align:right}
+  table.cmp td small{display:block}
+  table.cmp td[colspan]{justify-content:flex-start}
+}
 </style>
 </head>
 <body>
@@ -724,7 +743,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
 <!-- HERO -->
 <div class="hero">
   <div class="kicker">長生津 ・ 2026 年度</div>
-  <h1>長者生活津貼全程指南</h1>
+  <h1><span class="nb">長者生活津貼</span><span class="nb">全程指南</span></h1>
   <p class="lead">65 歲或以上、有經濟需要的香港長者，每月可領 $4,345。由申請資格、入息資產怎樣計、申請流程，到獲批後的出入境限制及定期覆檢，一頁看清。</p>
   <div class="meta-row"><span>資料整理：2026 年 10 月</span><span>金額及限額生效：2026 年 2 月 1 日</span><span>非官方整理，以社會福利署公布為準</span></div>
 
@@ -741,7 +760,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
   <div class="sec-head"><div class="sec-no">START</div><div><h2>按你的情況閱讀</h2><p>選擇最接近的情況，直接跳到相關部分。</p></div></div>
   <div class="persona">
     <a class="pcard sa" href="#eligibility"><div class="stage">申請前</div><h3>快到 65 歲</h3><p>有甚麼條件、入息及資產上限是多少、自住樓計不計。</p><span class="go">申請資格 →</span></a>
-    <a class="pcard sa" href="#tools"><div class="stage">申請前</div><h3>有積蓄、有保單</h3><p>存款、強積金、保險現金價值、年金怎樣計算。</p><span class="go">快速計算 →</span></a>
+    <a class="pcard sa" href="#counts"><div class="stage">申請前</div><h3>有積蓄、有保單</h3><p>存款、強積金、保險現金價值、年金怎樣計算。</p><span class="go">甚麼要計、甚麼不計 →</span></a>
     <a class="pcard sa" href="#types"><div class="stage">申請前</div><h3>夫婦或同居</h3><p>兩人的入息及資產合併計算，兩人都合資格可各自領取。</p><span class="go">申請類別 →</span></a>
     <a class="pcard sb" href="#types"><div class="stage">打算北上</div><h3>到廣東或福建養老</h3><p>廣東計劃、福建計劃照樣發放，可直接存入內地銀行戶口。</p><span class="go">廣東及福建計劃 →</span></a>
     <a class="pcard sc" href="#review"><div class="stage">領取中</div><h3>收到覆檢通知書</h3><p>郵遞覆檢及全面覆檢要做甚麼，一個月內要交回。</p><span class="go">定期審查 →</span></a>
@@ -792,7 +811,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
     </div>
   </div>
 
-  <h3 class="block">甚麼要計、甚麼不計</h3>
+  <h3 class="block" id="counts">甚麼要計、甚麼不計</h3>
   <div class="grid2">
     <div class="card top tc-1">
       <h3>計入入息（每月）</h3>
@@ -860,7 +879,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
     <table class="cmp">
       <thead><tr><th>項目</th><th>長者生活津貼</th><th>高齡津貼（生果金）</th><th>綜援（長者）</th></tr></thead>
       <tbody>
-        <tr><td>年齡</td><td>65 歲或以上</td><td>70 歲或以上</td><td>65 歲或以上<small>2019 年 2 月起由 60 歲提高</small></td></tr>
+        <tr><td>年齡</td><td>65 歲或以上</td><td>70 歲或以上</td><td><span class="cv">65 歲或以上<small>2019 年 2 月起由 60 歲提高</small></span></td></tr>
         <tr><td>每月金額</td><td>$4,345</td><td>$1,675</td><td>按個別需要計算</td></tr>
         <tr><td>入息及資產審查</td><td>有</td><td>沒有</td><td>有（較嚴格）</td></tr>
         <tr><td>可否同時領取</td><td colspan="3" style="text-align:center">三者只能選其一</td></tr>
@@ -967,23 +986,23 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
         <label class="chk on"><input type="checkbox" id="c_1" checked> 過去一年離港合共不超過 90 日</label></div>
 
       <div class="fgroup"><h4>每月入息</h4><p class="hint" id="h_inc">本人每月收入。不計子女家用、樓按每月款項。</p></div>
-      <div class="field"><label for="i_w">工作收入（$）</label><input id="i_w" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">包括兼職、自僱</div></div>
-      <div class="field"><label for="i_p">長俸、退休金（$）</label><input id="i_p" type="number" inputmode="numeric" min="0" placeholder="0"></div>
-      <div class="field"><label for="i_r">淨租金、年金及其他（$）</label><input id="i_r" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">租金扣差餉地租；年金按月攤分</div></div>
+      <div class="field"><label for="i_w">工作收入（$）</label><input id="i_w" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"><div class="hint">包括兼職、自僱</div></div>
+      <div class="field"><label for="i_p">長俸、退休金（$）</label><input id="i_p" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"></div>
+      <div class="field"><label for="i_r">淨租金、年金及其他（$）</label><input id="i_r" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"><div class="hint">租金扣差餉地租；年金按月攤分</div></div>
       <div class="field" style="grid-column:1/-1"><div class="sum-box"><span>每月入息合計</span><b id="s_inc">$0</b></div></div>
 
       <div class="fgroup"><h4>資產</h4><p class="hint" id="h_ast">本人名下資產。豁免：自住物業及車位、保險現金價值、已繳年金保費、首飾。</p></div>
-      <div class="field"><label for="a_c">現金及銀行存款（$）</label><input id="a_c" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">港幣、外幣、定期都計</div></div>
-      <div class="field"><label for="a_i">股票、基金、債券、黃金（$）</label><input id="a_i" type="number" inputmode="numeric" min="0" placeholder="0"></div>
-      <div class="field"><label for="a_p">非自住物業及車位（$）</label><input id="a_p" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">包括內地祖屋，按市值</div></div>
-      <div class="field"><label for="a_m">可提取的強積金（$）</label><input id="a_m" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">配偶未滿 65 歲的毋須計</div></div>
-      <div class="field"><label for="a_o">其他（$）</label><input id="a_o" type="number" inputmode="numeric" min="0" placeholder="0"><div class="hint">生意權益、借出未收回款項等</div></div>
+      <div class="field"><label for="a_c">現金及銀行存款（$）</label><input id="a_c" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"><div class="hint">港幣、外幣、定期都計</div></div>
+      <div class="field"><label for="a_i">股票、基金、債券、黃金（$）</label><input id="a_i" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"></div>
+      <div class="field"><label for="a_p">非自住物業及車位（$）</label><input id="a_p" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"><div class="hint">包括內地祖屋，按市值</div></div>
+      <div class="field"><label for="a_m">可提取的強積金（$）</label><input id="a_m" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"><div class="hint" id="h_mpf">本人可提取的權益；配偶未滿 65 歲的毋須計</div></div>
+      <div class="field"><label for="a_o">其他（$）</label><input id="a_o" type="number" inputmode="numeric" min="0" placeholder="沒有可留空"><div class="hint">生意權益、借出未收回款項等</div></div>
       <div class="field"><div class="sum-box" style="margin-top:27px"><span>資產合計</span><b id="s_ast">$0</b></div></div>
     </div>
     <div class="calc-actions"><button class="btn" id="c_go">評估</button><button class="btn ghost" id="c_reset" type="button">清除</button></div>
     <div class="result" id="c_res"></div>
   </div>
-  <div class="note mk-no-print" style="margin-top:16px"><p><span class="nt">住緊公屋，或者打算申請公屋？</span>長生津同公屋嘅入息資產計法唔同。用「長者公屋＋長生津計算機」一次過睇兩邊資格同差幾多。 <a href="https://elderly-housing-calc.netlify.app/" target="_blank" rel="noopener"><b>開啟計算機 ↗</b></a></p></div>
+  <div class="note mk-no-print" style="margin-top:16px"><p><span class="nt">正住公屋，或打算申請公屋？</span>長生津與公屋的入息及資產計法不同。可用「長者公屋＋長生津計算機」一次過查看兩邊資格及相差多少。 <a href="https://elderly-housing-calc.netlify.app/" target="_blank" rel="noopener"><b>開啟計算機 ↗</b></a></p></div>
 </section>
 
 <!-- ADVICE -->
@@ -1008,7 +1027,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
   <div class="sec-head"><div class="sec-no">08 問答</div><div><h2>常見問題</h2></div></div>
   <div class="faq">
   <details><summary><span class="ftag">資格</span>可以幾時開始申請？由幾時開始計錢？</summary><div class="ans"><p>最早可於 <b>65 歲生日前一個月內</b>遞表，社署以生日當日作申請日期。津貼由社署收到申請當日或符合資格當日起計，以較遲者為準，<mark>不會追溯到申請之前</mark>，所以符合資格就應盡早申請。</p></div></details>
-  <details><summary><span class="ftag">資格</span>長生津同生果金有甚麼分別？可以兩樣都拎嗎？</summary><div class="ans"><p>長生津 65 歲起申請，每月 $4,345，要審查入息及資產；生果金 70 歲起申請，每月 $1,675，不用審查。<span class="key">兩者只能領取其一</span>，正領生果金而符合長生津資格的，可申請轉為長生津。</p></div></details>
+  <details><summary><span class="ftag">資格</span>長生津同生果金有甚麼分別？可以兩樣都領取嗎？</summary><div class="ans"><p>長生津 65 歲起申請，每月 $4,345，要審查入息及資產；生果金 70 歲起申請，每月 $1,675，不用審查。<span class="key">兩者只能領取其一</span>，正領生果金而符合長生津資格的，可申請轉為長生津。</p></div></details>
   <details><summary><span class="ftag">資格</span>夫婦兩個都可以領嗎？</summary><div class="ans"><p>可以。兩人入息及資產合併計，不超過夫婦限額（每月入息 $16,680、資產 $630,000），而兩人都年滿 65 歲，可各自領取 $4,345。如配偶未滿 65 歲，要待對方滿 65 歲才可領取，但現在申請時仍要申報對方的資料。</p></div></details>
   <details><summary><span class="ftag">資格</span>以前有「普通」和「高額」長生津，現在呢？</summary><div class="ans"><p>兩者已在 2022 年合併為單一的長者生活津貼，按以往高額的金額發放，並採用較寬鬆的資產限額。</p></div></details>
   <details><summary><span class="ftag f2">資產</span>自住樓要不要計？鄉下祖屋呢？</summary><div class="ans"><p>一個在香港的自住物業及自用車位豁免。其他物業、出租車位，以及內地鄉下祖屋，都要按市值計入資產；有出租的，淨租金亦計入息。</p></div></details>
@@ -1018,7 +1037,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
   <details><summary><span class="ftag f2">資產</span>把錢提出來放在家，或轉給子女，是否就不用計？</summary><div class="ans"><p>不是。現金放在家或保險箱一樣計資產。為符合限額而把資產轉給他人，不能避過審查，<span class="key">隱瞞資產屬刑事罪行</span>，多領的津貼要退還。借出而未收回的錢亦屬資產。</p></div></details>
   <details><summary><span class="ftag f2">資產</span>首飾、金牙、金條要不要報？</summary><div class="ans"><p>個人佩戴的首飾（金飾、玉器）及金牙豁免；金條、金幣屬資產，要申報。</p></div></details>
   <details><summary><span class="ftag f2">資產</span>參加了安老按揭（樓按），每月收的錢計入息嗎？</summary><div class="ans"><p>不計。安老按揭及保單逆按揭每月領取的款項不計入息，但沒有用完而儲起來的部分屬資產。</p></div></details>
-  <details><summary><span class="ftag f3">離港</span>領取長生津期間，每年可以離港幾耐？</summary><div class="ans"><p>每個付款年度（由符合資格日起每 12 個月）只要在港住滿 <b>60 日</b>，便可離港最多 305 日（閏年 306 日）而照領全年津貼。住不滿 60 日，只按在港日數發放，多領的要退還。</p></div></details>
+  <details><summary><span class="ftag f3">離港</span>領取長生津期間，每年可以離港多久？</summary><div class="ans"><p>每個付款年度（由符合資格日起每 12 個月）只要在港住滿 <b>60 日</b>，便可離港最多 305 日（閏年 306 日）而照領全年津貼。住不滿 60 日，只按在港日數發放，多領的要退還。</p></div></details>
   <details><summary><span class="ftag f3">離港</span>打算搬上內地住，還可以領嗎？</summary><div class="ans"><p>住在廣東或福建，可申請廣東計劃或福建計劃，金額及限額與香港相同，每年在該省住滿 60 日即可。2026 年 7 月起可選擇把津貼直接免費存入廣東或福建的中國銀行、工商銀行港幣戶口（一類戶口）。住在其他省份則不適用。</p></div></details>
   <details><summary><span class="ftag f3">離港</span>住公屋的長者搬去廣東，要注意甚麼？</summary><div class="ans"><p>申請廣東或福建計劃，須在離港前交還公屋單位或刪除戶籍。</p></div></details>
   <details><summary><span class="ftag f4">審查</span>收到覆檢通知書要怎樣做？</summary><div class="ans"><p>郵遞覆檢：填妥覆檢表（本人及配偶的入息資產），簽署後於通知書日期起一個月內寄回。全面覆檢：按約見時間帶齊表格及證明文件正本到社會保障辦事處。逾期未交，社署可考慮暫停發放。</p></div></details>
@@ -1034,7 +1053,7 @@ section.ph .sec-no{background:var(--c-ink);color:#fff}
   <div class="contact">
     <div><div class="k">社會福利署熱線</div><div class="v">2343 2255</div><p class="sub" style="margin:4px 0 0">一般查詢，24 小時</p></div>
     <div><div class="k">廣東及福建計劃查詢</div><div class="v">3105 3266</div><p class="sub" style="margin:4px 0 0">社署上水辦事處</p></div>
-    <div><div class="k">申請表及網上申請</div><div class="v" style="font-size:18px;margin-top:8px"><a href="https://www.swd.gov.hk/tc/pubsvc/socsecu/ssallowance/" target="_blank" rel="noopener">社署公共福利金計劃 →</a></div><p class="sub" style="margin:4px 0 0">或到住址所屬社會保障辦事處索取</p></div>
+    <div><div class="k">申請表及網上申請</div><div class="v" style="font-size:18px;margin-top:8px"><a href="https://www.swd.gov.hk/tc/pubsvc/socsecu/ssallowance/" target="_blank" rel="noopener">社署公共福利金計劃 →</a></div><p class="sub" style="margin:4px 0 0">或到住址所屬社會保障辦事處索取；填表前可先看<a href="https://www.swd.gov.hk/oala/doc/2025/online_swd675_ssa_guidance_notes_chi_10_2025.pdf" target="_blank" rel="noopener">申請指引（PDF）</a></p></div>
   </div>
 </section>
 
@@ -1097,6 +1116,7 @@ document.querySelectorAll('.chk input').forEach(c => c.addEventListener('change'
 function syncForm() {
   const m = $("#c_mar").value === "1";
   $("#f_sp").style.display = m ? "" : "none";
+  $("#h_mpf").textContent = m ? "兩人可提取的權益；配偶未滿 65 歲的毋須計" : "本人已滿 65 歲可提取的權益";
   $("#h_inc").textContent = m ? "你與配偶合計的每月收入。不計子女家用、樓按每月款項。" : "本人每月收入。不計子女家用、樓按每月款項。";
   $("#h_ast").textContent = (m ? "你與配偶合計的資產。" : "本人名下資產。") + "豁免：自住物業及車位、保險現金價值、已繳年金保費、首飾。";
   $("#s_inc").textContent = f(INC.reduce((a, id) => a + v(id), 0));
@@ -1117,8 +1137,9 @@ function evaluate(scroll) {
   const res = $("#c_res");
   const age = parseFloat($("#c_age").value);
   if (isNaN(age)) { res.className = "result show r-warn"; res.innerHTML = "<h4>請輸入申請人年齡</h4>"; return; }
+  if (age < 18 || age > 120) { res.className = "result show r-warn"; res.innerHTML = "<h4>請輸入 18 至 120 歲之間的年齡</h4>"; return; }
   const married = $("#c_mar").value === "1";
-  const spRaw = parseFloat($("#c_sp").value), sp = isNaN(spRaw) ? null : spRaw;
+  const spRaw = parseFloat($("#c_sp").value), sp = (isNaN(spRaw) || spRaw < 18 || spRaw > 120) ? null : spRaw;
   const loc = $("#c_loc").value, now = $("#c_now").value;
   const y7 = $("#c_7").checked, y1 = $("#c_1").checked;
   const L = LIM[married ? 1 : 0];
@@ -1177,11 +1198,18 @@ function evaluate(scroll) {
   if (now === "cssa") notes.push("正領綜援：不能同時領取。綜援按個人需要計算，可能包括租金及特別津貼，轉換前宜先向社署查詢實際差額。");
   if (loc !== "hk") notes.push("廣東及福建計劃須在香港申請；公屋住戶離港前要交還單位或刪除戶籍。2026 年 7 月起可選擇存入內地中國銀行或工商銀行港幣戶口。");
   notes.push("本評估按 2026 年 2 月 1 日起的金額及限額計算，只供參考，最終以社署審核為準。");
+  // 下一步
+  let next = "";
+  if (resOk && meansOk && ageOk) next = `準備<a href="#process">申請文件</a>，按<a href="#process">申請流程</a>遞表；津貼由社署收到申請當日起計，宜盡早申請。`;
+  else if (resOk && meansOk) next = age >= 64 ? `可於 65 歲生日前一個月內遞表，先準備<a href="#process">申請文件</a>。` : `65 歲前如資產有變，可再用本計算評估；先了解<a href="#eligibility">甚麼要計、甚麼不計</a>。`;
+  else if (!resOk) next = `了解<a href="#declare">居港日數的計算方法</a>；因病在外地治療可向社署查詢酌情處理。`;
+  else next = (age >= 70 ? `可改為申請生果金；` : ``) + `檢查有沒有把<a href="#counts">豁免項目</a>計入，入息資產日後回落可再申請。`;
 
   res.className = "result show " + cls;
   res.innerHTML = `<div class="res-top"><h4>${title}</h4><span class="res-sub">${sub}</span></div>` + amtHtml
     + `<div class="res-rows">${rows.map(r => `<div class="res-row"><div class="lb">${r[0]}</div><div class="vl">${r[1]}</div></div>`).join("")}</div>`
-    + `<ul class="res-notes">${notes.map(x => `<li>${x}</li>`).join("")}</ul>`;
+    + `<ul class="res-notes">${notes.map(x => `<li>${x}</li>`).join("")}</ul>`
+    + `<p class="res-next"><b>下一步：</b>${next}</p>`;
   $("#tools").classList.remove("no-result");
   history.replaceState(null, "", "#" + encodeState());
   if (scroll) res.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -1203,6 +1231,12 @@ function loadState() {
   [["y7", "#c_7"], ["y1", "#c_1"]].forEach(([k, id]) => { const c = $(id); c.checked = p.get(k) !== "0"; c.closest(".chk").classList.toggle("on", c.checked); });
   return true;
 }
+/* 比較表：手機逐行顯示，每格前面加欄名 */
+(function(){ const t = document.querySelector("table.cmp"); if (!t) return;
+  const heads = [...t.querySelectorAll("thead th")].map(th => th.textContent);
+  t.querySelectorAll("tbody tr").forEach(tr => [...tr.children].forEach((td, i) => { if (i > 0 && !td.hasAttribute("colspan")) td.dataset.label = heads[i]; }));
+})();
+
 /* 列印：摺埋嘅常見問題要展開先印到答案，印完還原 */
 let mkOpened = [];
 addEventListener("beforeprint", () => { const c = [...document.querySelectorAll("details:not([open])")]; c.forEach(d => d.open = true); mkOpened = mkOpened.concat(c); });
@@ -1214,6 +1248,8 @@ function shareCalc() {
 }
 
 $("#c_go").addEventListener("click", () => evaluate(true));
+document.querySelectorAll("#tools input").forEach(i => { i.setAttribute("enterkeyhint", "go");
+  i.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); i.blur(); evaluate(true); } }); });
 $("#c_reset").addEventListener("click", () => {
   document.querySelectorAll("#tools input[type=number]").forEach(i => i.value = "");
   $("#c_mar").value = "0"; $("#c_loc").value = "hk"; $("#c_now").value = "none";
