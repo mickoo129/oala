@@ -21,7 +21,7 @@ MKPA 工具之一。呢個 repo 只放呢一個工具，獨立部署去 Netlify�
 - 字體：內文 Noto Sans HK，數字 Barlow；唔用襯線字。
 - 聯絡資料**只用電子名片連結**（`https://api.portfoplus.com/api/v1/adviser/5e41564ab3b1bc00153394db?m=link&r=adviser`），唔好加電話、WhatsApp 號碼、電郵或顧問資料輸入欄。
 - 頁尾電子名片下面有「MKPA 工具箱」連結（`https://mkpa.netlify.app/`，開新分頁）。
-- 一定要有「列印 / 存 PDF」掣；列印版有工具名、列印日期、電子名片二維碼同版權行。
+- 一定要有「列印 / 存 PDF」掣（class `mk-print-btn`）；列印版有工具名、列印日期、電子名片二維碼同版權行。`</body>` 前要有標準「列印保護」script；`site.webmanifest` 用 `"display": "browser"`（iPhone 主畫面 app 模式唔支援列印）。
 - 有「分享呢個方案」掣（快速計算係客人個人化設定）。
 - 唔做深色模式。
 - 輸入欄、下拉選單唔加陰影（灰邊，focus 轉綠邊）；標題前面唔加豎線。
